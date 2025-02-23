@@ -1,0 +1,16 @@
+{
+  "name": "Prod Calculator - Optimalkan Produktivitas Pertambangan Anda",
+  "short_name": "Prod Calculator",
+  "description": "Hitung dan optimalkan produktivitas pertambangan Anda dengan Prod Calculator.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#283442",
+  "theme_color": "#f0ad4e",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
