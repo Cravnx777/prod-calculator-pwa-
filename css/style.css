@@ -1,1 +1,489 @@
+/* style.css */
 
+/* Import Tailwind base styles (jika Anda ingin menyesuaikan gaya dasar Tailwind) */
+/* @import 'tailwindcss/base'; */
+
+/* Import Tailwind components (jika Anda ingin menggunakan komponen Tailwind) */
+/* @import 'tailwindcss/components'; */
+
+/* Import Tailwind utilities (INI PENTING) */
+@import 'tailwindcss/utilities';
+
+/* ==========================================================================
+   Dark Mode and Base Styles
+   ========================================================================== */
+
+/* Default Dark Mode */
+:root {
+    --bg-mining: #283442;
+    --text-mining: #f0ad4e;
+    --border-mining: #f0ad4e;
+    --bg-mining-light: #34495e;
+    --text-mining-light: #d0d8e0;
+    --text-warning: #f39c12;
+    --text-success: #2ecc71;
+    --bg-orange: #f0ad4e;
+    --bg-orange-dark: #e09a3a;
+    --bg-blue: #3498db;
+    --bg-blue-dark: #2980b9;
+    --body-bg: var(--bg-mining);
+    --body-text: var(--text-mining-light);
+}
+
+/* Light Mode Override */
+body.light-mode {
+    --bg-mining: #f0f0f0;
+    --text-mining: #333;
+    --border-mining: #ccc;
+    --bg-mining-light: #fff;
+    --text-mining-light: #555;
+    --body-bg: var(--bg-mining);
+    --body-text: var(--text-mining-light);
+}
+
+body {
+    background-color: var(--body-bg);
+    font-family: 'Inter', sans-serif;
+    color: var(--body-text);
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 16px;
+}
+
+/* ==========================================================================
+   General Layout
+   ========================================================================== */
+
+.container {
+    max-width: 100%;
+    padding: 1rem;
+    margin: 0;
+    padding-bottom: 5rem; /* Space above bottom navbar */
+    box-sizing: border-box;
+}
+
+h1, h2, h3 {
+    color: var(--text-mining);
+    font-weight: 700;
+    text-align: center;
+}
+
+h1 {
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+h3 {
+    font-size: 1.25rem;
+}
+
+/* ==========================================================================
+   Form Elements
+   ========================================================================== */
+
+.form-label {
+    font-weight: 600;
+    margin-bottom: 0.375rem;
+    color: var(--text-mining-light);
+    display: block;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-mining);
+    border-radius: 0.375rem;
+    background-color: var(--bg-mining-light);
+    color: var(--text-mining-light);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    border-color: var(--text-mining);
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(240, 173, 78, 0.25);
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+button[type="submit"],
+#exportPdfBtn {
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--bg-orange); /* Hitung button color */
+}
+
+#exportPdfBtn {
+    background-color: var(--bg-blue); /* Export button color */
+}
+
+#exportPdfBtn:hover {
+    background-color: var(--bg-blue-dark);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   Results Section
+   ========================================================================== */
+
+#results {
+    background-color: var(--bg-mining-light);
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    margin-top: 0.75rem;
+}
+
+#results h2 {
+    color: var(--text-mining);
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+#results p {
+    color: var(--text-mining-light);
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   Warnings and Success Messages
+   ========================================================================== */
+
+#warnings {
+    margin-top: 0.75rem;
+}
+
+.text-warning {
+    color: var(--text-warning) !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.text-warning i {
+    color: var(--text-warning) !important;
+}
+
+.text-success {
+    color: var(--text-success) !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.text-success i {
+    color: var(--text-success) !important;
+}
+
+/* ==========================================================================
+   Charts
+   ========================================================================== */
+
+#ritaseChart,
+#produktivitasChart {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+/* ==========================================================================
+   Bottom Navbar
+   ========================================================================== */
+
+.navbar-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--bg-mining-light);
+    padding: 0.5rem;
+    border-top: 1px solid var(--border-mining);
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+    box-sizing: border-box;
+}
+
+.nav-item-bottom {
+    text-align: center;
+}
+
+.nav-link-bottom {
+    color: var(--text-mining-light);
+    text-decoration: none;
+    display: block;
+    transition: color 0.2s ease-in-out;
+    font-size: 0.85rem;
+}
+
+.nav-link-bottom:hover,
+.nav-link-bottom.active {
+    color: var(--text-mining);
+}
+
+.nav-icon-bottom {
+    display: block;
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+}
+
+/* ==========================================================================
+   Utility Classes (Hidden, Pages, Fade In Animation)
+   ========================================================================== */
+
+.hidden {
+    display: none !important;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ==========================================================================
+   Table Styles
+   ========================================================================== */
+
+.egi-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.75rem;
+}
+
+.egi-table th,
+.egi-table td {
+    border: 1px solid var(--border-mining);
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.egi-table th {
+    background-color: var(--bg-mining-light);
+    color: var(--text-mining);
+}
+
+/* ==========================================================================
+   Splash Screen
+   ========================================================================== */
+
+#splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-mining);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#splash-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+#splash-screen h1 {
+    color: var(--text-mining);
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+}
+
+#splash-screen p {
+    color: var(--text-mining-light);
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   Modal Styles
+   ========================================================================== */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: var(--bg-mining-light);
+    margin: 15% auto;
+    padding: 1rem;
+    border: 1px solid var(--border-mining);
+    width: 80%;
+    color: var(--text-mining-light);
+    border-radius: 0.5rem;
+}
+
+.close {
+    color: var(--text-mining);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   History Styles
+   ========================================================================== */
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border-mining);
+}
+
+.history-item:last-child {
+    border-bottom: none;
+}
+
+.history-item-details {
+    flex-grow: 1;
+}
+
+.history-item-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.history-item-details p {
+    margin-bottom: 0.25rem;
+}
+
+.history-item-details p:last-child {
+    margin-bottom: 0;
+}
+
+.history-button {
+    background-color: var(--bg-orange);
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    font-size: 0.85rem;
+}
+
+.history-button:hover {
+    background-color: var(--bg-orange-dark);
+}
+
+#historyDetailModal {
+    display: none;
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.history-detail-content {
+    background-color: var(--bg-mining-light);
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid var(--border-mining);
+    width: 80%;
+    border-radius: 5px;
+    color: var(--text-mining-light);
+}
+
+.history-detail-content .close {
+    color: var(--text-mining);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* NEW: Style untuk container tombol history */
+.history-button-container {
+    position: fixed;
+    bottom: 3.5rem; /* Sesuaikan dengan tinggi navbar-bottom Anda */
+    left: 0;
+    width: 100%;
+    background-color: rgba(40, 52, 66, 0.9); /* Warna latar belakang semi-transparan */
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 99; /* Pastikan di atas konten lain */
+    box-sizing: border-box;
+}
+
+/* Sembunyikan secara default */
+.history-button-container {
+    display: none;
+}
+
+/* Tampilkan hanya di history page */
+body #historyPage.active+.history-button-container {
+    display: flex;
+}
+
+/* ==========================================================================
+   Responsiveness (Contoh)
+   ========================================================================== */
+
+/* Small screens */
+@media (max-width: 640px) {
+  h1 { font-size: 1.5rem; }
+  .navbar-bottom { padding: 0.25rem; }
+  .nav-link-bottom { font-size: 0.75rem; }
+  .nav-icon-bottom { font-size: 1rem; }
+}
