@@ -340,6 +340,7 @@
             float: right;
             font-size: 28px;
             font-weight: bold;
+            cursor: pointer;
         }
 
         .close:hover,
@@ -456,6 +457,59 @@
         /* Tampilkan hanya di history page */
         body #historyPage.active+.history-button-container {
             display: flex;
+        }
+
+          /* Tombol Switch Mode (Matahari/Bulan) */
+        #themeToggleBtn {
+            width: 3rem;
+            height: 1.5rem;
+            position: relative;
+        }
+
+        #themeToggleBtn .fas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+        }
+
+        #themeToggleBtn .fa-sun {
+            opacity: 0; /* Sembunyikan matahari secara default */
+        }
+
+        #themeToggleBtn .fa-moon {
+            opacity: 1; /* Tampilkan bulan secara default */
+        }
+
+        #themeToggleBtn.light-mode .fa-sun {
+            opacity: 1; /* Tampilkan matahari saat mode terang aktif */
+        }
+
+        #themeToggleBtn.light-mode .fa-moon {
+            opacity: 0; /* Sembunyikan bulan saat mode terang aktif */
+        }
+
+        #toggleThumb {
+          width: 1.125rem; /* 18px */
+          height: 1.125rem; /* 18px */
+          top: 0.1875rem; /* 3px */
+          left: 0.1875rem; /* 3px */
+          position: absolute;
+        }
+
+        #themeToggleBtn.light-mode #toggleThumb {
+            transform: translateX(1.5rem); /* Pindahkan jempol ke kanan saat mode terang */
+        }
+
+        /* Light Mode Override khusus untuk tombol toggle */
+        body.light-mode #themeToggleBtn {
+            background-color: #ddd; /* Warna latar belakang yang lebih terang */
+        }
+
+        #themeToggleBtn:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2); /* Efek fokus yang lebih halus */
         }
 
     </style>
@@ -686,12 +740,14 @@
         <!-- Settings Page -->
         <div id="settingsPage" class="page">
             <h2 class="text-xl font-bold mb-4 text-mining">Pengaturan</h2>
-            <div class="mb-4">
+            <!-- Tombol Switch Mode Gelap/Terang -->
+            <div class="mb-4 flex items-center justify-between">
                 <label for="themeToggle" class="form-label">Mode Tampilan</label>
-                <select id="themeToggle" class="form-input">
-                    <option value="dark">Gelap</option>
-                    <option value="light">Terang</option>
-                </select>
+                <button id="themeToggleBtn" class="bg-gray-200 rounded-full p-1 shadow-inner focus:outline-none transition-colors duration-300" aria-label="Toggle Light/Dark Mode">
+                    <div class="w-5 h-5 rounded-full bg-white shadow-md transform transition-transform duration-300 ease-in-out" id="toggleThumb"></div>
+                    <i class="fas fa-sun absolute text-yellow-500" style="display: none;"></i>
+                    <i class="fas fa-moon absolute text-gray-700"></i>
+                </button>
             </div>
             <!-- Tambahkan bagian ini -->
             <div class="mb-4">
@@ -706,7 +762,7 @@
 
         <!-- Modal -->
         <div id="infoModal" class="modal">
-            <div class="modal-content">
+            <div class="modal-            content">
                 <span class="close" onclick="closeInfoModal()">×</span>
                 <h2 class="text-xl font-bold mb-4 text-mining">Informasi Target EGI</h2>
                 <div id="egiInfoModal"></div>
@@ -1552,7 +1608,7 @@ function formatNumber(num) {
                                 <thead>
                                     <tr>
                                         <th>Jenis EGI</th>
-                                        <th>Ritase (Target)</th>
+                                        <th>Target Ritase</th>
                                         <th>Waktu Kerja Efektif (menit)</th>
                                         <th>CT HD (menit)</th>
                                         <th>Spotting Time (detik)</th>
@@ -1585,29 +1641,35 @@ function formatNumber(num) {
             document.getElementById('infoModal').style.display = 'block'; // Show the modal
         }
 
-        // Fungsi untuk mengatur tema (terang/gelap)
+      // Fungsi untuk mengatur tema (terang/gelap)
         function setTheme(theme) {
             const body = document.body;
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
             if (theme === 'light') {
                 body.classList.add('light-mode');
+                themeToggleBtn.classList.add('light-mode');  // Tambahkan class ke tombol
             } else {
                 body.classList.remove('light-mode');
+                themeToggleBtn.classList.remove('light-mode'); // Hapus class dari tombol
             }
             localStorage.setItem('theme', theme); // Simpan preferensi tema
         }
 
-        // Event listener untuk pilihan tema
-        document.getElementById('themeToggle').addEventListener('change', function () {
-            setTheme(this.value);
-        });
-
-        // Inisialisasi saat halaman dimuat
+        // Kode inisialisasi dan event listener untuk tombol switch mode
         document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme) {
-                setTheme(savedTheme);
-                document.getElementById('themeToggle').value = savedTheme;
-            }
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const toggleThumb = document.getElementById('toggleThumb');
+
+            // Cek tema yang tersimpan di localStorage saat halaman dimuat
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            setTheme(savedTheme);
+
+            // Tambahkan event listener ke tombol
+            themeToggleBtn.addEventListener('click', () => {
+                const currentTheme = localStorage.getItem('theme') || 'dark';
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
 
             const splashScreen = document.getElementById('splash-screen');
             setTimeout(() => {
@@ -1616,6 +1678,7 @@ function formatNumber(num) {
 
             loadHistory();
         });
+
         document.getElementById('exportPdfBtn').addEventListener('click', function () {
     console.log("Tombol Export PDF diklik");
 
