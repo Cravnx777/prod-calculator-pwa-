@@ -597,3 +597,21 @@ body.light-mode #themeToggleBtn {
     outline: none;
     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2); /* Efek fokus yang lebih halus */
 }
+#splash-logo {
+  width: 100px;
+  height: auto;
+  opacity: 0;
+  transform: scale(0.8);
+  animation: logoFadeIn 1.2s ease-out forwards;
+}
+
+@keyframes logoFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
