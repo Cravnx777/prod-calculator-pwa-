@@ -149,6 +149,14 @@ button[type="submit"],
     padding: 1rem;
     margin-top: 0.75rem;
 }
+#results {
+    display: none;
+    background-color: var(--bg-mining-light);
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    margin-top: 0.75rem;
+}
 
 #results h2 {
     color: var(--text-mining);
