@@ -201,41 +201,72 @@
 
         /* Bottom Navbar - FIXED */
         .navbar-bottom {
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          /* Background dengan gradien linear */
-          background: linear-gradient(to right, var(--bg-mining-light), #283442);
-          padding: 0.75rem; /* Padding sedikit ditingkatkan */
-          border-top: 1px solid var(--border-mining);
-          /* Efek shadow yang lebih jelas */
-          box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
-          display: flex;
-          justify-content: space-around;
-          align-items: center;
-          z-index: 100;
-          box-sizing: border-box;
-          transition: background-color 0.3s ease;
-          border-radius: 12px 12px 0 0; /* Rounded corners di bagian atas */
-        }
-        
-        .nav-item-bottom {
-          text-align: center;
-        }
-        
-        .nav-link-bottom:hover {
-          color: var(--bg-orange); /* Warna teks saat di-hover */
-          /* Efek bayangan halus */
-          text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-          transform: translateY(-2px); /* Efek naik sedikit */
-        }
-        
-        .nav-icon-bottom {
-          display: block;
-          font-size: 1.25rem;
-          margin-bottom: 0.25rem;
-        }
+    position: fixed;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(40, 52, 66, 0.9), rgba(20, 30, 40, 1));
+    padding: 0.75rem;
+    border-top: 1px solid var(--border-mining);
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+    box-sizing: border-box;
+    backdrop-filter: blur(8px); /* Efek transparan */
+}
+
+.nav-item-bottom {
+    text-align: center;
+}
+
+.nav-link-bottom {
+    color: var(--text-mining-light);
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s ease-in-out;
+    font-size: 0.85rem;
+    padding-bottom: 4px;
+    position: relative;
+}
+
+.nav-link-bottom:hover {
+    color: var(--bg-orange);
+    transform: scale(1.05);
+}
+.nav-link-bottom.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 50%;
+    height: 2px;
+    background-color: var(--bg-orange);
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.nav-icon-bottom {
+    display: block;
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    padding: 8px; /* Menambah area klik */
+    border-radius: 50%;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.nav-item-bottom:hover .nav-icon-bottom {
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+    transform: scale(1.1);
+}
+@media screen and (max-height: 400px) and (max-width: 768px) {
+    .navbar-bottom {
+        opacity: 0;
+        pointer-events: none;
+    }
+}
 
         /* Utility Classes */
         .hidden {
