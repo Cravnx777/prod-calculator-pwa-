@@ -487,3 +487,25 @@ body #historyPage.active+.history-button-container {
   .nav-link-bottom { font-size: 0.75rem; }
   .nav-icon-bottom { font-size: 1rem; }
 }
+
+/* ==========================================================================
+   Fade Out Animation
+   ========================================================================== */
+
+/* Animasi Fade Out */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.page.fading-out {
+    animation: fadeOut 0.3s ease-in-out;
+}
+
+.page.hidden {
+    display: none !important; /* Pastikan halaman benar-benar hilang setelah animasi */
+}
