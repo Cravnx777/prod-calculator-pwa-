@@ -421,6 +421,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+document.getElementById("prodForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Mencegah reload halaman
+
+    // Sembunyikan tombol dan tampilkan loading spinner
+    document.getElementById("btnText").classList.add("hidden");
+    document.getElementById("btnLoader").classList.remove("hidden");
+
+    setTimeout(() => {
+        document.getElementById("btnText").classList.remove("hidden");
+        document.getElementById("btnLoader").classList.add("hidden");
+
+        // Pastikan #results hanya muncul setelah perhitungan selesai
+        document.getElementById("results").style.display = "block";
+    }, 2000); // Simulasi loading 2 detik
+});
+
 
 // ==========================================================================
 // Warnings and Suggestions
