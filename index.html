@@ -571,24 +571,31 @@
             </div>
         </div>
 
-        <!-- History Page -->
         <div id="historyPage" class="page">
             <h2 class="text-xl font-bold mb-4 text-mining">Riwayat Perhitungan</h2>
-            <div id="historyList">
-                <!-- Riwayat akan ditampilkan di sini -->
-            </div>
-
-            <!-- Container untuk tombol paginasi dan hapus riwayat -->
-            <!-- Container untuk tombol paginasi dan hapus riwayat -->
-        </div>
-
-        <!-- History Detail Modal -->
-        <div id="historyDetailModal" class="modal">
-            <div class="history-detail-content">
-                <span class="close" onclick="closeHistoryDetailModal()">×</span>
-                <h2 class="text-xl font-bold mb-4 text-mining">Detail Perhitungan</h2>
-                <div id="historyDetailContent">
-                    <!-- Detail riwayat akan ditampilkan di sini -->
+        
+            <!-- Kontrol Penyortiran dan Pemfilteran -->
+            <div class="mb-4 flex justify-between items-center">
+                <div>
+                    <label for="sortOrder" class="form-label inline-block mr-2">Urutkan Berdasarkan:</label>
+                    <select id="sortOrder" class="form-input inline-block w-auto">
+                        <option value="timestamp_desc">Terbaru</option>
+                        <option value="timestamp_asc">Terlama</option>
+                        <option value="vehicleType_asc">Jenis EGI (A-Z)</option>
+                        <option value="vehicleType_desc">Jenis EGI (Z-A)</option>
+                        <!-- Tambahkan opsi penyortiran lain -->
+                    </select>
+                </div>
+                <div>
+                    <label for="filterType" class="form-label inline-block mr-2">Filter Jenis EGI:</label>
+                    <select id="filterType" class="form-input inline-block w-auto">
+                        <option value="all">Semua</option>
+                        <option value="PC1250">PC1250</option>
+                        <option value="PC2000-8">PC2000-8</option>
+                        <option value="PC2000-11R">PC2000-11R</option>
+                        <option value="EX2600">EX2600</option>
+                        <!-- Tambahkan opsi filter lain -->
+                    </select>
                 </div>
             </div>
         </div>
