@@ -280,21 +280,32 @@ button[type="submit"],
    ========================================================================== */
 
 .egi-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 0.75rem;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.egi-table th,
-.egi-table td {
-    border: 1px solid var(--border-mining);
-    padding: 0.5rem;
-    text-align: left;
+.egi-table th, .egi-table td {
+  padding: 12px 16px;
+  text-align: left;
 }
 
 .egi-table th {
-    background-color: var(--bg-mining-light);
-    color: var(--text-mining);
+  background: linear-gradient(to right, var(--bg-orange), var(--bg-orange-dark));
+  color: white;
+  font-weight: bold;
+}
+
+.egi-table tbody tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.egi-table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: background-color 0.3s ease;
 }
 
 /* ==========================================================================
