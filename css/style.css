@@ -509,3 +509,55 @@ body #historyPage.active+.history-button-container {
 .page.hidden {
     display: none !important; /* Pastikan halaman benar-benar hilang setelah animasi */
 }
+/* Tombol Switch Mode (Matahari/Bulan) */
+#themeToggleBtn {
+    width: 3rem;
+    height: 1.5rem;
+    position: relative;
+}
+
+#themeToggleBtn .fas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+}
+
+#themeToggleBtn .fa-sun {
+    opacity: 0; /* Sembunyikan matahari secara default */
+}
+
+#themeToggleBtn .fa-moon {
+    opacity: 1; /* Tampilkan bulan secara default */
+}
+
+#themeToggleBtn.light-mode .fa-sun {
+    opacity: 1; /* Tampilkan matahari saat mode terang aktif */
+}
+
+#themeToggleBtn.light-mode .fa-moon {
+    opacity: 0; /* Sembunyikan bulan saat mode terang aktif */
+}
+
+#toggleThumb {
+  width: 1.125rem; /* 18px */
+  height: 1.125rem; /* 18px */
+  top: 0.1875rem; /* 3px */
+  left: 0.1875rem; /* 3px */
+  position: absolute;
+}
+
+#themeToggleBtn.light-mode #toggleThumb {
+    transform: translateX(1.5rem); /* Pindahkan jempol ke kanan saat mode terang */
+}
+
+/* Light Mode Override khusus untuk tombol toggle */
+body.light-mode #themeToggleBtn {
+    background-color: #ddd; /* Warna latar belakang yang lebih terang */
+}
+
+#themeToggleBtn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2); /* Efek fokus yang lebih halus */
+}
