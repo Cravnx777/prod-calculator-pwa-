@@ -201,42 +201,40 @@
 
         /* Bottom Navbar - FIXED */
         .navbar-bottom {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: var(--bg-mining-light);
-            padding: 0.5rem;
-            border-top: 1px solid var(--border-mining);
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 100;
-            box-sizing: border-box; /* Tambahkan box-sizing */
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          /* Background dengan gradien linear */
+          background: linear-gradient(to right, var(--bg-mining-light), #283442);
+          padding: 0.75rem; /* Padding sedikit ditingkatkan */
+          border-top: 1px solid var(--border-mining);
+          /* Efek shadow yang lebih jelas */
+          box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          z-index: 100;
+          box-sizing: border-box;
+          transition: background-color 0.3s ease;
+          border-radius: 12px 12px 0 0; /* Rounded corners di bagian atas */
         }
-
+        
         .nav-item-bottom {
-            text-align: center;
+          text-align: center;
         }
-
-        .nav-link-bottom {
-            color: var(--text-mining-light);
-            text-decoration: none;
-            display: block;
-            transition: color 0.2s ease-in-out;
-            font-size: 0.85rem;
+        
+        .nav-link-bottom:hover {
+          color: var(--bg-orange); /* Warna teks saat di-hover */
+          /* Efek bayangan halus */
+          text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+          transform: translateY(-2px); /* Efek naik sedikit */
         }
-
-        .nav-link-bottom:hover,
-        .nav-link-bottom.active {
-            color: var(--text-mining);
-        }
-
+        
         .nav-icon-bottom {
-            display: block;
-            font-size: 1.25rem;
-            margin-bottom: 0.25rem;
+          display: block;
+          font-size: 1.25rem;
+          margin-bottom: 0.25rem;
         }
 
         /* Utility Classes */
