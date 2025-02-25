@@ -409,6 +409,18 @@ function displayResults(results) {
     document.getElementById('produktivitas').innerHTML = `<i class="fas fa-mountain mr-2"></i>Produktivitas: ${results.produktivitas} Bcm/Jam`;
     document.getElementById('results').classList.remove('hidden');
 }
+document.addEventListener("DOMContentLoaded", function () {
+    const splashScreen = document.getElementById("splash-screen");
+
+    if (splashScreen) {
+        setTimeout(() => {
+            splashScreen.classList.add("hidden");
+        }, 3000); // Splash screen akan hilang setelah 3 detik
+    } else {
+        console.warn("Element #splash-screen tidak ditemukan.");
+    }
+});
+
 
 // ==========================================================================
 // Warnings and Suggestions
@@ -719,3 +731,4 @@ function createCharts(results) {
             animation: {
                 duration: 1500,
                 easing: 'easeInOutQuad
+    
