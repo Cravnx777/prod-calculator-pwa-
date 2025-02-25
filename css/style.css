@@ -674,4 +674,18 @@ body.light-mode #themeToggleBtn {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+document.getElementById("prodForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+  
+  const btnText = document.getElementById("btnText");
+  const btnLoader = document.getElementById("btnLoader");
+  
+  btnText.classList.add("hidden");
+  btnLoader.classList.remove("hidden");
+
+  setTimeout(() => {
+    btnLoader.classList.add("hidden"); 
+    btnText.classList.remove("hidden");
+  }, 2000);
+});
 
