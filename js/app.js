@@ -264,23 +264,26 @@ function clearHistory() {
 
 // Fungsi untuk mengurutkan riwayat
 function sortHistory(sortOrder) {
+    let sortedHistory = [...calculationHistory];
+
     switch (sortOrder) {
         case 'timestamp_desc':
-            calculationHistory.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            sortedHistory.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             break;
         case 'timestamp_asc':
-            calculationHistory.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+            sortedHistory.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
             break;
         case 'vehicleType_asc':
-            calculationHistory.sort((a, b) => a.formData.vehicleType.localeCompare(b.formData.vehicleType));
+            sortedHistory.sort((a, b) => a.formData.vehicleType.localeCompare(b.formData.vehicleType));
             break;
         case 'vehicleType_desc':
-            calculationHistory.sort((a, b) => b.formData.vehicleType.localeCompare(a.formData.vehicleType));
+            sortedHistory.sort((a, b) => b.formData.vehicleType.localeCompare(a.formData.vehicleType));
             break;
-        // Tambahkan case lain untuk opsi penyortiran lain
     }
-    updateHistoryList();
+
+    updateHistoryList(sortedHistory);
 }
+
 
 // Fungsi untuk memfilter riwayat
 function filterHistory(filterType) {
