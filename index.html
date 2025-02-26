@@ -115,29 +115,43 @@
         }
 
         button[type="submit"],
-        #exportPdfBtn {
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.375rem;
-            font-weight: 600;
-            transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            width: 100%;
-            box-sizing: border-box;
-            background-color: var(--bg-orange); /* Tambahkan atau ganti ini */
-        }
+#exportPdfBtn {
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem; /* Tambahkan border-radius lebih smooth */
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--bg-orange);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-        #exportPdfBtn {
-            background-color: var(--bg-blue);
-        }
+button[type="submit"]:hover,
+#exportPdfBtn:hover {
+    background-color: var(--bg-orange-dark);
+    transform: translateY(-3px); /* Tambahkan efek hover mengangkat tombol */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
 
-        #exportPdfBtn:hover {
-            background-color: var(--bg-blue-dark);
-            transform: translateY(-2px);
-        }
+#exportPdfBtn {
+    background-color: var(--bg-blue);
+}
+
+#exportPdfBtn:hover {
+    background-color: var(--bg-blue-dark);
+    transform: translateY(-3px);
+}
+button[type="submit"]:active,
+#exportPdfBtn:active {
+    transform: scale(0.98);
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
+}
+
 
         #results {
             background-color: var(--bg-mining-light);
