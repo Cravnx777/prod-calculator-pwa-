@@ -188,21 +188,29 @@ function saveToHistory(formData, results) {
   };
 
   // Periksa apakah item yang sama sudah ada
-  const alreadyExists = calculationHistory.some(item => {
-      return (
-          item.timestamp === historyItem.timestamp &&
-          JSON.stringify(item.formData) === JSON.stringify(historyItem.formData) &&
-          JSON.stringify(item.results) === JSON.stringify(historyItem.results)
-      );
-  });
+   const alreadyExists = calculationHistory.some(item => {
+        return (
+            item.formData.vehicleType === historyItem.formData.vehicleType &&
+            item.formData.wke === historyItem.formData.wke &&
+            item.formData.n === historyItem.formData.n &&
+            item.formData.st === historyItem.formData.st &&
+            item.formData.lt === historyItem.formData.lt &&
+            item.formData.ct === historyItem.formData.ct &&
+            item.formData.s === historyItem.formData.s &&
+            item.formData.v === historyItem.formData.v &&
+            item.results.ritase === historyItem.results.ritase &&
+            item.results.produktivitas === historyItem.results.produktivitas
+        );
+    });
 
   if (!alreadyExists) {
-      calculationHistory.push(historyItem);
-      localStorage.setItem('calculationHistory', JSON.stringify(calculationHistory));
-      updateHistoryList();
-  } else {
-      console.log("Riwayat sudah ada, tidak disimpan lagi.");
-  }
+        calculationHistory.push(historyItem);
+        localStorage.setItem('calculationHistory', JSON.stringify(calculationHistory));
+        updateHistoryList(); // Perbarui tampilan setelah penyimpanan
+        console.log("Riwayat disimpan:", calculationHistory); // Debug log
+    } else {
+        console.log("Riwayat sudah ada, tidak disimpan lagi.");
+    }
 }
 
 let historyLoaded = false; // Flag baru
@@ -221,8 +229,8 @@ function loadHistory() {
         
         if (storedHistory) {
             calculationHistory = JSON.parse(storedHistory);
+            console.log("Riwayat dimuat dari localStorage:", calculationHistory); // Debug log
 
-            // Pastikan data valid (array)
             if (!Array.isArray(calculationHistory)) {
                 console.warn("Data riwayat tidak valid, menginisialisasi ulang.");
                 calculationHistory = [];
@@ -242,42 +250,57 @@ function loadHistory() {
 
 // Fungsi untuk menampilkan detail riwayat dalam modal
 function showHistoryDetail(index) {
+  // Validasi index
+  if (index >= 0 && index < calculationHistory.length) {
     const item = calculationHistory[index];
     const detailContent = `
-        <p><strong>Waktu:</strong> ${item.timestamp}</p>
-        <p><strong>Jenis EGI:</strong> ${item.formData.vehicleType}</p>
-        <p><strong>Waktu Kerja Efektif:</strong> ${item.formData.wke}</p>
-        <p><strong>Spotting Time:</strong> ${item.formData.st}</p>
-        <p><strong>Loading Time:</strong> ${item.formData.lt}</p>
-        <p><strong>CT HD:</strong> ${item.formData.ct}</p>
-        <p><strong>Jumlah HD:</strong> ${item.formData.n}</p>
-        <p><strong>Jarak Front Ke Disposal:</strong> ${item.formData.s}</p>
-        <p><strong>Kecepatan HD:</strong> ${item.formData.v}</p>
-        <hr>
-        <p><strong>Ritase:</strong> ${item.results.ritase} Rit/Jam</p>
-        <p><strong>Produktivitas:</strong> ${item.results.produktivitas} Bcm/Jam</p>
+      <p><strong>Waktu:</strong> ${item.timestamp}</p>
+      <p><strong>Jenis EGI:</strong> ${item.formData.vehicleType}</p>
+      <p><strong>Waktu Kerja Efektif:</strong> ${item.formData.wke}</p>
+      <p><strong>Spotting Time:</strong> ${item.formData.st}</p>
+      <p><strong>Loading Time:</strong> ${item.formData.lt}</p>
+      <p><strong>CT HD:</strong> ${item.formData.ct}</p>
+      <p><strong>Jumlah HD:</strong> ${item.formData.n}</p>
+      <p><strong>Jarak Front Ke Disposal:</strong> ${item.formData.s}</p>
+      <p><strong>Kecepatan HD:</strong> ${item.formData.v}</p>
+      <hr>
+      <p><strong>Ritase:</strong> ${item.results.ritase} Rit/Jam</p>
+      <p><strong>Produktivitas:</strong> ${item.results.produktivitas} Bcm/Jam</p>
     `;
     document.getElementById('historyDetailContent').innerHTML = detailContent;
     document.getElementById('historyDetailModal').style.display = 'block';
+  } else {
+    console.error("Index riwayat tidak valid:", index);
+    // Tambahkan penanganan kesalahan yang sesuai, misalnya menampilkan pesan kesalahan kepada pengguna
+    alert("Detail riwayat tidak dapat ditampilkan karena index tidak valid.");
+  }
 }
-
 // Fungsi untuk menutup modal detail riwayat
 function closeHistoryDetailModal() {
     document.getElementById('historyDetailModal').style.display = 'none';
 }
 
-// Fungsi untuk menghapus item riwayat
 function deleteHistoryItem(index) {
+  // Validasi index
+  if (index >= 0 && index < calculationHistory.length) {
     calculationHistory.splice(index, 1);
     localStorage.setItem('calculationHistory', JSON.stringify(calculationHistory));
     updateHistoryList();
+  } else {
+    console.error("Index riwayat tidak valid:", index);
+    // Tambahkan penanganan kesalahan yang sesuai, misalnya menampilkan pesan kesalahan kepada pengguna
+    alert("Tidak dapat menghapus riwayat karena index tidak valid.");
+  }
 }
 
 // Fungsi untuk menghapus semua riwayat
 function clearHistory() {
+  // Konfirmasi sebelum menghapus semua riwayat (opsional)
+  if (confirm("Apakah Anda yakin ingin menghapus semua riwayat?")) {
     calculationHistory = [];
     localStorage.removeItem('calculationHistory');
     updateHistoryList();
+  }
 }
 
 // Fungsi untuk mengurutkan riwayat
@@ -319,53 +342,73 @@ function filterHistory(filterType) {
 
 // Fungsi untuk mengupdate tampilan daftar riwayat dengan paginasi
 function updateHistoryList() {
-    const historyList = document.getElementById('historyList');
-    if (!historyList) {
-        console.error("historyList element not found");
-        return;
-    }
-    historyList.innerHTML = '';
+  const historyList = document.getElementById('historyList');
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentHistory = calculationHistory.slice(startIndex, endIndex);
+  if (!historyList) {
+    console.error("historyList element not found");
+    return;
+  }
 
-    currentHistory.forEach((item, index) => {
-        const globalIndex = startIndex + index;  // index dalam array calculationHistory
+  if (typeof historyList.innerHTML === 'undefined') {
+    console.error("historyList is not a valid element");
+    return;
+  }
 
-        const historyItemElement = document.createElement('div');
-        historyItemElement.classList.add('history-item');
+  if (!Array.isArray(calculationHistory)) {
+    console.error("calculationHistory is not a valid array");
+    historyList.innerHTML = "<p>Riwayat tidak tersedia.</p>"; // Pesan kesalahan
+    updatePaginationButtons(); // Tetap perbarui tombol paginasi
+    return;
+  }
 
-        const historyItemDetails = document.createElement('div');
-        historyItemDetails.classList.add('history-item-details');
-        historyItemDetails.innerHTML = `
-            <p><strong>Waktu:</strong> ${item.timestamp}</p>
-            <p><strong>Jenis EGI:</strong> ${item.formData.vehicleType}, <strong>WKE:</strong> ${item.formData.wke}, <strong>Jumlah HD:</strong> ${item.formData.n}</p>
-            <p><strong>Ritase:</strong> ${item.results.ritase} Rit/Jam, <strong>Produktivitas:</strong> ${item.results.produktivitas} Bcm/Jam</p>
-        `;
-        historyItemElement.appendChild(historyItemDetails);
+  historyList.innerHTML = '';
 
-        const historyItemActions = document.createElement('div');
-        historyItemActions.classList.add('history-item-actions');
+  if (calculationHistory.length === 0) {
+    historyList.innerHTML = "<p>Tidak ada riwayat perhitungan.</p>";
+    updatePaginationButtons(); // Tetap perbarui tombol paginasi
+    return;
+  }
 
-        const detailButton = document.createElement('button');
-        detailButton.textContent = 'Detail';
-        detailButton.classList.add('history-delete-btn'); // Menggunakan style yang sama dengan tombol delete
-        detailButton.onclick = () => showHistoryDetail(globalIndex);
-        historyItemActions.appendChild(detailButton);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, calculationHistory.length); // Pastikan endIndex tidak melebihi panjang array
+  const currentHistory = calculationHistory.slice(startIndex, endIndex);
 
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Hapus';
-        deleteButton.classList.add('history-delete-btn');
-        deleteButton.onclick = () => deleteHistoryItem(globalIndex);
-        historyItemActions.appendChild(deleteButton);
+  currentHistory.forEach((item, index) => {
+    const globalIndex = startIndex + index; // index dalam array calculationHistory
 
-        historyItemElement.appendChild(historyItemActions);
+    const historyItemElement = document.createElement('div');
+    historyItemElement.classList.add('history-item');
 
-        historyList.appendChild(historyItemElement);
-    });
+    const historyItemDetails = document.createElement('div');
+    historyItemDetails.classList.add('history-item-details');
+    historyItemDetails.innerHTML = `
+      <p><strong>Waktu:</strong> ${item.timestamp}</p>
+      <p><strong>Jenis EGI:</strong> ${item.formData.vehicleType}, <strong>WKE:</strong> ${item.formData.wke}, <strong>Jumlah HD:</strong> ${item.formData.n}</p>
+      <p><strong>Ritase:</strong> ${item.results.ritase} Rit/Jam, <strong>Produktivitas:</strong> ${item.results.produktivitas} Bcm/Jam</p>
+    `;
+    historyItemElement.appendChild(historyItemDetails);
 
-    updatePaginationButtons();
+    const historyItemActions = document.createElement('div');
+    historyItemActions.classList.add('history-item-actions');
+
+    const detailButton = document.createElement('button');
+    detailButton.textContent = 'Detail';
+    detailButton.classList.add('history-delete-btn'); // Menggunakan style yang sama dengan tombol delete
+    detailButton.onclick = () => showHistoryDetail(globalIndex);
+    historyItemActions.appendChild(detailButton);
+
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Hapus';
+    deleteButton.classList.add('history-delete-btn');
+    deleteButton.onclick = () => deleteHistoryItem(globalIndex);
+    historyItemActions.appendChild(deleteButton);
+
+    historyItemElement.appendChild(historyItemActions);
+
+    historyList.appendChild(historyItemElement);
+  });
+
+  updatePaginationButtons();
 }
 
 // Fungsi untuk mengupdate tombol paginasi
