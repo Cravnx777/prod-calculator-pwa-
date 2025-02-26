@@ -1,4 +1,18 @@
+//locales/id/translation.json
 {
-  "title": "Kalkulator Prod",
-  "description": "Kalkulator Produksi"
+    "title": "Prod Calculator",
+    "home": "Beranda",
+    "history": "Riwayat",
+    "infoEgi": "Info EGI",
+    "settings": "Pengaturan",
+    "selectLanguage": "Pilih Bahasa",
+    "vehicleTypeLabel": "Jenis EGI",
+    "wkeLabel": "Waktu Kerja Efektif (menit)",
+    "stLabel": "Spotting Time (detik)",
+    "ltLabel": "Loading Time (menit)",
+    "ctLabel": "CT HD (menit)",
+    "nLabel": "Jumlah HD (unit)",
+    "sLabel": "Jarak Front Ke Disposal (km)",
+    "vLabel": "Kecepatan HD (km/jam)",
+    "calculate": "Hitung"
 }
