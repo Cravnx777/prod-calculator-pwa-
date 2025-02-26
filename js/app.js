@@ -18,6 +18,21 @@ toastr.options = {
     "showMethod": "fadeIn",
     "hideMethod": "fadeOut"
 };
+document.getElementById("prodForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+  
+    const btnText = document.getElementById("btnText");
+    const btnLoader = document.getElementById("btnLoader");
+  
+    btnText.classList.add("hidden");
+    btnLoader.classList.remove("hidden");
+
+    setTimeout(() => {
+        btnLoader.classList.add("hidden"); 
+        btnText.classList.remove("hidden");
+    }, 2000);
+});
+
 
 // ==========================================================================
 // i18next Initialization (Tambahkan di sini)
