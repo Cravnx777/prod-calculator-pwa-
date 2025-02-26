@@ -1,5 +1,8 @@
 console.log("App.js loaded");
 
+// Import SQLite functions
+import { insertCalculation, updateCalculation, getCalculations } from './db.js';
+
 // Konfigurasi Toastr (Pindahkan ke sini agar tersedia di seluruh kode)
 toastr.options = {
     "closeButton": true,
