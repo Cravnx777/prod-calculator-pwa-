@@ -93,21 +93,34 @@ h3 {
 
 .form-input {
     width: 100%;
-    padding: 0.75rem;
-    border: 1px solid var(--border-mining);
-    border-radius: 0.375rem;
+    padding: 12px 16px;
+    border: 2px solid var(--border-mining);
+    border-radius: 8px;
     background-color: var(--bg-mining-light);
     color: var(--text-mining-light);
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
     margin-bottom: 1rem;
     box-sizing: border-box;
 }
 
+.form-input::placeholder {
+    color: rgba(255, 255, 255, 0.5); /* Warna placeholder lebih soft */
+    font-style: italic;
+}
+
+.form-input:hover {
+    border-color: var(--bg-orange);
+}
+
 .form-input:focus {
     border-color: var(--text-mining);
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(240, 173, 78, 0.25);
+    background-color: #ffffff;
+    color: #333;
+    box-shadow: 0 0 8px rgba(240, 173, 78, 0.4);
+    outline: none;
 }
+
 
 /* ==========================================================================
    Buttons
