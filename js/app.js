@@ -970,96 +970,125 @@ function createOrUpdateChart(chartId, chartData, options) {
 // History Management
 // ==========================================================================
 
-// Array untuk menyimpan riwayat perhitungan
-let calculationHistory = [];
-const itemsPerPage = 5; // Jumlah item per halaman
-let currentPage = 1;     // Halaman saat ini
+   // Array untuk menyimpan riwayat perhitungan
+   let calculationHistory = [];
+   const itemsPerPage = 5; // Jumlah item per halaman
+   let currentPage = 1;     // Halaman saat ini
 
-// Fungsi untuk menyimpan perhitungan ke dalam riwayat
-function saveToHistory(formData, results) {
+   // Fungsi untuk menyimpan perhitungan ke dalam riwayat
+   function saveToHistory(formData, results) {
     const historyItem = {
-        timestamp: new Date().toLocaleString(),
-        formData: formData,
-        results: results
+     timestamp: new Date().toLocaleString(),
+     formData: formData,
+     results: results
     };
-        
+
     // Periksa apakah item yang sama sudah ada
     const alreadyExists = calculationHistory.some(item => {
-        return (
-            item.timestamp === historyItem.timestamp &&
-            JSON.stringify(item.formData) === JSON.stringify(historyItem.formData) &&
-            JSON.stringify(item.results) === JSON.stringify(historyItem.results)
-        );
+     return (
+      item.formData.vehicleType === historyItem.formData.vehicleType &&
+      item.formData.wke === historyItem.formData.wke &&
+      item.formData.n === historyItem.formData.n &&
+      item.formData.st === historyItem.formData.st &&
+      item.formData.lt === historyItem.formData.lt &&
+      item.formData.ct === historyItem.formData.ct &&
+      item.formData.s === historyItem.formData.s &&
+      item.formData.v === historyItem.formData.v &&
+      item.results.ritase === historyItem.results.ritase &&
+      item.results.produktivitas === historyItem.results.produktivitas
+     );
     });
-        
-    if (!alreadyExists) {
-        calculationHistory.push(historyItem);
-        localStorage.setItem('calculationHistory', JSON.stringify(calculationHistory));
-        updateHistoryList();
-    } else {
-        console.log("Riwayat sudah ada, tidak disimpan lagi.");
-    }
-}
-        
-let historyLoaded = false; // Flag baru
-        
-// Fungsi untuk memuat riwayat dari localStorage saat halaman dimuat
-function loadHistory() {
-    console.log("loadHistory() dipanggil");
-    if (!historyLoaded) {
-        const storedHistory = localStorage.getItem('calculationHistory');
-        if (storedHistory) {
-            calculationHistory = JSON.parse(storedHistory);
-        }
-        updateHistoryList();
-        historyLoaded = true; // Set flag ke true
-    } else {
-        console.log("loadHistory() diabaikan: sudah dimuat sebelumnya");
-    }
-}
 
-// Fungsi untuk menampilkan detail riwayat dalam modal
-function showHistoryDetail(index) {
+    if (!alreadyExists) {
+     calculationHistory.push(historyItem);
+     localStorage.setItem('calculationHistory', JSON.stringify(calculationHistory));
+     updateHistoryList();
+     console.log("Riwayat disimpan:", calculationHistory);
+    } else {
+     console.log("Riwayat sudah ada, tidak disimpan lagi.");
+    }
+   }
+
+   // Flag baru untuk memastikan loadHistory hanya dipanggil sekali
+   let historyLoaded = false;
+
+   // Fungsi untuk memuat riwayat dari localStorage saat halaman dimuat
+   function loadHistory() {
+    console.log("loadHistory() dipanggil");
+
+    if (historyLoaded) {
+     console.log("loadHistory() diabaikan: sudah dimuat sebelumnya");
+     return;
+    }
+
+    try {
+     const storedHistory = localStorage.getItem('calculationHistory');
+
+     if (storedHistory) {
+      calculationHistory = JSON.parse(storedHistory);
+      console.log("Riwayat dimuat dari localStorage:", calculationHistory);
+
+      // Pastikan data valid (array)
+      if (!Array.isArray(calculationHistory)) {
+       console.warn("Data riwayat tidak valid, menginisialisasi ulang.");
+       calculationHistory = [];
+      }
+     } else {
+      console.log("Tidak ada riwayat tersimpan, memulai dengan array kosong.");
+      calculationHistory = [];
+     }
+    } catch (error) {
+     console.error("Gagal memuat riwayat dari localStorage:", error);
+     calculationHistory = []; // Inisialisasi ke array kosong jika terjadi kesalahan
+    }
+
+    updateHistoryList(); // Perbarui tampilan setelah pemuatan
+    historyLoaded = true; // Set flag setelah pemuatan
+   }
+
+   // Fungsi untuk menampilkan detail riwayat dalam modal
+   function showHistoryDetail(index) {
     const item = calculationHistory[index];
     const detailContent = `
-        <p><strong>Waktu:</strong> ${item.timestamp}</p>
-        <p><strong>Jenis EGI:</strong> ${item.formData.vehicleType}</p>
-        <p><strong>Waktu Kerja Efektif:</strong> ${item.formData.wke}</p>
-        <p><strong>Spotting Time:</strong> ${item.formData.st}</p>
-        <p><strong>Loading Time:</strong> ${item.formData.lt}</p>
-        <p><strong>CT HD:</strong> ${item.formData.ct}</p>
-        <p><strong>Jumlah HD:</strong> ${item.formData.n}</p>
-        <p><strong>Jarak Front Ke Disposal:</strong> ${item.formData.s}</p>
-        <p><strong>Kecepatan HD:</strong> ${item.formData.v}</p>
-        <hr>
-        <p><strong>Ritase:</strong> ${item.results.ritase} Rit/Jam</p>
-        <p><strong>Produktivitas:</strong> ${item.results.produktivitas} Bcm/Jam</p>
-    `;
+            <p><strong>Waktu:</strong> ${item.timestamp}</p>
+            <p><strong>Jenis EGI:</strong> ${item.formData.vehicleType}</p>
+            <p><strong>Waktu Kerja Efektif:</strong> ${item.formData.wke}</p>
+            <p><strong>Spotting Time:</strong> ${item.formData.st}</p>
+            <p><strong>Loading Time:</strong> ${item.formData.lt}</p>
+            <p><strong>CT HD:</strong> ${item.formData.ct}</p>
+            <p><strong>Jumlah HD:</strong> ${item.formData.n}</p>
+            <p><strong>Jarak Front Ke Disposal::</strong> ${item.formData.s}</p>
+            <p><strong>Kecepatan HD:</strong> ${item.formData.v}</p>
+            <hr>
+            <p><strong>Ritase:</strong> ${item.results.ritase} Rit/Jam</p>
+            <p><strong>Produktivitas:</strong> ${item.results.produktivitas} Bcm/Jam</p>
+        `;
     document.getElementById('historyDetailContent').innerHTML = detailContent;
     document.getElementById('historyDetailModal').style.display = 'block';
-}
+   }
 
-// Fungsi untuk menutup modal detail riwayat
-function closeHistoryDetailModal() {
+   // Fungsi untuk menutup modal detail riwayat
+   function closeHistoryDetailModal() {
     document.getElementById('historyDetailModal').style.display = 'none';
-}
+   }
 
-// Fungsi untuk menghapus item riwayat
-function deleteHistoryItem(index) {
+   // Fungsi untuk menghapus item riwayat
+   function deleteHistoryItem(index) {
     calculationHistory.splice(index, 1);
     localStorage.setItem('calculationHistory', JSON.stringify(calculationHistory));
     updateHistoryList();
-}
+   }
 
-// Fungsi untuk menghapus semua riwayat
-function clearHistory() {
+   // Fungsi untuk menghapus semua riwayat
+   function clearHistory() {
     calculationHistory = [];
     localStorage.removeItem('calculationHistory');
     updateHistoryList();
-}
+   }
 
 // Fungsi untuk mengurutkan riwayat
 function sortHistory(sortOrder) {
+    console.log("sortHistory dipanggil dengan:", sortOrder);
     switch (sortOrder) {
         case 'timestamp_desc':
             calculationHistory.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
@@ -1080,25 +1109,31 @@ function sortHistory(sortOrder) {
 
 // Fungsi untuk memfilter riwayat
 function filterHistory(filterType) {
+    console.log("filterHistory dipanggil dengan:", filterType);
+
     if (filterType === 'all') {
-        // Tidak perlu memfilter, tampilkan semua
-        loadHistory();
+        loadHistory(); // Muat ulang semua riwayat
     } else {
         const storedHistory = localStorage.getItem('calculationHistory');
-        calculationHistory = JSON.parse(storedHistory);
-        calculationHistory = calculationHistory.filter(item => item.formData.vehicleType === filterType);
 
+        if (storedHistory) {
+            try {
+                calculationHistory = JSON.parse(storedHistory).filter(item => item.formData.vehicleType === filterType);
+                console.log("Riwayat difilter:", calculationHistory);
+            } catch (e) {
+                console.error("Gagal mem-parse riwayat:", e);
+                calculationHistory = [];
+            }
+        } else {
+            console.log("Tidak ada riwayat yang tersimpan.");
+            calculationHistory = [];
+        }
+            updateHistoryList();
     }
-    updateHistoryList();
 }
-
 // Fungsi untuk mengupdate tampilan daftar riwayat dengan paginasi
 function updateHistoryList() {
     const historyList = document.getElementById('historyList');
-    if (!historyList) {
-        console.error("historyList element not found");
-        return;
-    }
     historyList.innerHTML = '';
 
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -1153,284 +1188,439 @@ function updatePaginationButtons() {
 }
 
 // ==========================================================================
-// Event Listeners and Initializations
+// Load DOM dan fungsi yang berhubungan diinisialisasi disini
 // ==========================================================================
-
-// Event listener untuk tombol halaman sebelumnya
-document.addEventListener('DOMContentLoaded', () => {
-        
-    const prevPageBtn = document.getElementById('prevPageBtn');
-    if (prevPageBtn) {
-      prevPageBtn.addEventListener('click', () => {
-          if (currentPage > 1) {
-              currentPage--;
-              updateHistoryList();
-          }
-      });
-    } else {
-        console.warn("Tombol 'prevPageBtn' tidak ditemukan.");
-    }
-
-    // Event listener untuk tombol halaman selanjutnya
-    const nextPageBtn = document.getElementById('nextPageBtn');
-    if (nextPageBtn) {
-      nextPageBtn.addEventListener('click', () => {
-          if (currentPage * itemsPerPage < calculationHistory.length) {
-              currentPage++;
-              updateHistoryList();
-          }
-      });
-    } else {
-        console.warn("Tombol 'nextPageBtn' tidak ditemukan.");
-    }
-
-    // Event listener untuk tombol clear history
-    const clearHistoryBtn = document.getElementById('clearHistoryBtn');
-    if(clearHistoryBtn){
-        clearHistoryBtn.addEventListener('click', () => {
-            clearHistory();
-        });
-    }else {
-        console.warn("Tombol 'clearHistoryBtn' tidak ditemukan.");
-    }
-});
-
-// Event listener untuk form submit
-document.getElementById('prodForm').addEventListener('submit', function (event) {
-    event.preventDefault();
-    const formData = getFormData();
-
-    if (validateForm(formData)) {
-        const results = calculateResults(formData);
-        if (results) {
-            displayResults(results);
-            const warnings = generateWarnings(results, formData);
-            document.getElementById('warnings').innerHTML = warnings;
-            document.getElementById('results').classList.remove('hidden');
-            createCharts(results);
-            saveToHistory(formData, results); // Simpan perhitungan ke riwayat
-        }
-    }
-});
-
-// Fungsi untuk menampilkan halaman dan mengatur tautan aktif
-function showPage(pageId, link) {
-    const pages = document.querySelectorAll('.page');
-    pages.forEach(page => page.classList.remove('active'));
-    document.getElementById(pageId).classList.add('active');
-
-    const links = document.querySelectorAll('.nav-link-bottom');
-    links.forEach(link => link.classList.remove('active'));
-    link.classList.add('active');
-
-    // Jika halaman yang ditampilkan adalah riwayat, perbarui daftarnya
-    if (pageId === 'historyPage') {
-        updateHistoryList();
-    }
-}
-
-// Fungsi untuk menutup modal info
-function closeInfoModal() {
-    document.getElementById('infoModal').style.display = 'none';
-}
-
-// Fungsi untuk menampilkan info EGI
-function displayEgiInfo() {
-    const egiInfoModal = document.getElementById('egiInfoModal');
-    let tableHTML = `<table class="egi-table">
-                        <thead>
-                            <tr>
-                                <th>Jenis EGI</th>
-                                <th>Target Ritase</th>
-                                <th>Waktu Kerja Efektif (menit)</th>
-                                <th>CT HD (menit)</th>
-                                <th>Spotting Time (detik)</th>
-                                <th>Produktivitas (Target)</th>
-                                <th>Cycle Time (menit)</th>
-                                <th>Loading Time (menit)</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
-
-    for (const vehicleType in targetValues) {
-        if (targetValues.hasOwnProperty(vehicleType)) {
-            const egi = targetValues[vehicleType];
-            tableHTML += `
-                <tr>
-                    <td>${vehicleType}</td>
-                    <td>${egi.ritase}</td>
-                    <td>${egi.wke}</td>
-                    <td>${egi.ct}</td>
-                    <td>${egi.st}</td>
-                    <td>${egi.produktivitas}</td>
-                    <td>${egi.cycleTime}</td>
-                    <td>${egi.lt}</td>
-                </tr>`;
-        }
-    }
-
-    tableHTML += `</tbody></table>`;
-    egiInfoModal.innerHTML = tableHTML;
-    document.getElementById('infoModal').style.display = 'block'; // Show the modal
-}
-
-// Fungsi untuk mengatur tema (terang/gelap)
-function setTheme(theme) {
-    const body = document.body;
-    const themeToggleBtn = document.getElementById('themeToggleBtn');
-    if (theme === 'light') {
-        body.classList.add('light-mode');
-        themeToggleBtn.classList.add('light-mode');  // Tambahkan class ke tombol
-    } else {
-        body.classList.remove('light-mode');
-        themeToggleBtn.classList.remove('light-mode'); // Hapus class dari tombol
-    }
-    localStorage.setItem('theme', theme); // Simpan preferensi tema
-}
-
-// Kode inisialisasi dan event listener untuk tombol switch mode
-document.addEventListener('DOMContentLoaded', () => {
-    const themeToggleBtn = document.getElementById('themeToggleBtn');
-    const toggleThumb = document.getElementById('toggleThumb');
-
-    // Cek tema yang tersimpan di localStorage saat halaman dimuat
-    const savedTheme = localStorage.getItem('theme') || 'dark';
+  // Inisialisasi saat halaman dimuat
+  document.addEventListener('DOMContentLoaded', () => {
+   const savedTheme = localStorage.getItem('theme');
+   if (savedTheme) {
     setTheme(savedTheme);
+    document.getElementById('themeToggle').value = savedTheme;
+   }
 
-    // Tambahkan event listener ke tombol
-    themeToggleBtn.addEventListener('click', () => {
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        setTheme(newTheme);
+   const splashScreen = document.getElementById('splash-screen');
+   setTimeout(() => {
+    splashScreen.classList.add('hidden');
+   }, 2000);
+
+   loadHistory();
+
+   const sortOrderSelect = document.getElementById('sortOrder');
+   const filterTypeSelect = document.getElementById('filterType');
+   const prevPageBtn = document.getElementById('prevPageBtn');
+   const nextPageBtn = document.getElementById('nextPageBtn');
+   const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+   const egiInfoLink = document.querySelector('.nav-link-bottom[href="#"]');
+
+   if (sortOrderSelect && filterTypeSelect && prevPageBtn && nextPageBtn && clearHistoryBtn && egiInfoLink) {
+    sortOrderSelect.addEventListener('change', () => {
+     sortHistory(sortOrderSelect.value);
     });
 
+    filterTypeSelect.addEventListener('change', () => {
+     filterHistory(filterTypeSelect.value);
+    });
+
+    prevPageBtn.addEventListener('click', () => {
+     if (currentPage > 1) {
+      currentPage--;
+      updateHistoryList();
+     }
+    });
+
+    nextPageBtn.addEventListener('click', () => {
+     if (currentPage * itemsPerPage < calculationHistory.length) {
+      currentPage++;
+      updateHistoryList();
+     }
+    });
+
+    clearHistoryBtn.addEventListener('click', () => {
+     clearHistory();
+    });
+
+    egiInfoLink.addEventListener('click', function(event) {
+     event.preventDefault();
+     if (this.querySelector('.fa-info-circle')) {
+      displayEgiInfo();
+     }
+    });
+   } else {
+    console.warn("Beberapa elemen DOM tidak ditemukan. Memastikan semua ID sudah benar.");
+   }
+  });
+ // Attach the displayEgiInfo function to the onclick event of the "Info EGI" navbar link
+ document.querySelector('.nav-link-bottom[href="#"]').addEventListener('click', function(event) {
+  event.preventDefault(); // Prevent the default action
+  if (this.querySelector('.fa-info-circle')) {
+   displayEgiInfo();
+  }
+ });
+ /*
+  * Saran:
+  * - Pertimbangkan menggunakan linter (misalnya, ESLint) dan formatter (misalnya, Prettier)
+  *   untuk menjaga konsistensi kode dan menemukan potensi masalah lebih awal.
+  */
+ //Fungsi untuk mengatur tema (terang/gelap)
+ function setTheme(theme) {
+  const body = document.body;
+  if (theme === 'light') {
+   body.classList.add('light-mode');
+  } else {
+   body.classList.remove('light-mode');
+  }
+  localStorage.setItem('theme', theme); // Simpan preferensi tema
+ }
+
+ // Event listener untuk pilihan tema
+ document.getElementById('themeToggle').addEventListener('change', function() {
+  setTheme(this.value);
+ });
+ /*
+  * Saran:
+  * - Pertimbangkan menggunakan linter (misalnya, ESLint) dan formatter (misalnya, Prettier)
+  *   untuk menjaga konsistensi kode dan menemukan potensi masalah lebih awal.
+  */
+ /*
+  * Saran:
+  * - Pertimbangkan menggunakan linter (misalnya, ESLint) dan formatter (misalnya, Prettier)
+  *   untuk menjaga konsistensi kode dan menemukan potensi masalah lebih awal.
+  */
+  function generateDummyData() {
+  const dummyData = [
+   {
+    timestamp: new Date().toLocaleString(),
+    formData: {
+     vehicleType: "PC1250",
+     wke: 50,
+     st: 30,
+     lt: 2,
+     ct: 10,
+     n: 5,
+     s: 5,
+     v: 25
+    },
+    results: {
+     ritase: 10,
+     produktivitas: 500,
+     targetRitase: 15,
+     targetProduktivitas: 525
+    }
+   },
+   {
+    timestamp: new Date().toLocaleString(),
+    formData: {
+     vehicleType: "PC2000-8",
+     wke: 55,
+     st: 35,
+     lt: 2.5,
+     ct: 12,
+     n: 6,
+     s: 6,
+     v: 28
+    },
+    results: {
+     ritase: 12,
+     produktivitas: 600,
+     targetRitase: 21,
+     targetProduktivitas: 800
+    }
+   },
+   {
+    timestamp: new Date().toLocaleString(),
+    formData: {
+     vehicleType: "PC2000-11R",
+     wke: 60,
+     st: 40,
+     lt: 3,
+     ct: 14,
+     n: 7,
+     s: 7,
+     v: 30
+    },
+    results: {
+     ritase: 14,
+     produktivitas: 700,
+     targetRitase: 24,
+     targetProduktivitas: 950
+    }
+   },
+   {
+    timestamp: new Date().toLocaleString(),
+    formData: {
+     vehicleType: "EX2600",
+     wke: 65,
+     st: 45,
+     lt: 3.5,
+     ct: 16,
+     n: 8,
+     s: 8,
+     v: 32
+    },
+    results: {
+     ritase: 16,
+     produktivitas: 800,
+     targetRitase: 30,
+     targetProduktivitas: 1200
+    }
+   },
+   {
+    timestamp: new Date().toLocaleString(),
+    formData: {
+     vehicleType: "PC1250",
+     wke: 70,
+     st: 50,
+     lt: 4,
+     ct: 18,
+     n: 9,
+     s: 9,
+     v: 34
+    },
+    results: {
+     ritase: 18,
+     produktivitas: 900,
+     targetRitase: 15,
+     targetProduktivitas: 525
+    }
+   },
+   {
+    timestamp: new Date().toLocaleString(),
+    formData: {
+     vehicleType: "PC2000-8",
+     wke: 75,
+     st: 55,
+     lt: 4.5,
+     ct: 20,
+     n: 10,
+     s: 10,
+     v: 36
+    },
+    results: {
+     ritase: 20,
+     produktivitas: 1000,
+     targetRitase: 21,
+     targetProduktivitas: 800
+    }
+   }
+  ];
+
+  localStorage.setItem('calculationHistory', JSON.stringify(dummyData));
+ }
+document.addEventListener('DOMContentLoaded', () => {
+
+   const savedTheme = localStorage.getItem('theme');
+   if (savedTheme) {
+    setTheme(savedTheme);
+    document.getElementById('themeToggle').value = savedTheme;
+   }
+
+   const splashScreen = document.getElementById('splash-screen');
+   setTimeout(() => {
+    splashScreen.classList.add('hidden');
+   }, 2000);
+
+   loadHistory();
+  
+   generateDummyData()
+    // Inisialisasi saat halaman dimuat
+
+  const sortOrderSelect = document.getElementById('sortOrder');
+  const filterTypeSelect = document.getElementById('filterType');
+
+   // Event listener untuk tombol halaman sebelumnya
+   document.getElementById('prevPageBtn').addEventListener('click', () => {
+    if (currentPage > 1) {
+     currentPage--;
+     updateHistoryList();
+    }
+   });
+
+   // Event listener untuk tombol halaman selanjutnya
+   document.getElementById('nextPageBtn').addEventListener('click', () => {
+    if (currentPage * itemsPerPage < calculationHistory.length) {
+     currentPage++;
+     updateHistoryList();
+    }
+   });
+
+   // Event listener untuk tombol clear history
+   document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+    clearHistory();
+   });
+
         
-    registerServiceWorker();
-    loadTheme();
-    loadHistory();
+        // Event listener untuk pilihan tema
+        document.getElementById('themeToggle').addEventListener('change', function () {
+            setTheme(this.value);
+        });
 
-    const splashScreen = document.getElementById('splash-screen');
-        if (splashScreen) {
-            setTimeout(() => {
-                splashScreen.classList.add('hidden');
-            }, 3000);
-    }
-});
+   const savedTheme = localStorage.getItem('theme');
+   if (savedTheme) {
+    setTheme(savedTheme);
+    document.getElementById('themeToggle').value = savedTheme;
+   }
 
-document.getElementById('exportPdfBtn').addEventListener('click', function () {
-console.log("Tombol Export PDF diklik");
+   const splashScreen = document.getElementById('splash-screen');
+   setTimeout(() => {
+    splashScreen.classList.add('hidden');
+   }, 2000);
 
-const resultsElement = document.getElementById('results');
-console.log("resultsElement:", resultsElement);
+   loadHistory();
+      
+   // Inisialisasi saat halaman dimuat
+        // Inisialisasi saat halaman dimuat
 
-if (resultsElement) {
-    console.log("Elemen hasil ditemukan");
+     //sort
+
+            //filter
+        // Attach the displayEgiInfo function to the onclick event of the "Info EGI" navbar link
+       
+  sortOrderSelect.addEventListener('change', () => {
+      sortHistory(sortOrderSelect.value);
+  });
+filterTypeSelect.addEventListener('change', () => {
+     filterHistory(filterTypeSelect.value);
+ });
+
+    // Attach the displayEgiInfo function to the onclick event of the "Info EGI" navbar link
+    document.querySelector('.nav-link-bottom[href="#"]').addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the default action
+        if (this.querySelector('.fa-info-circle')) {
+            displayEgiInfo();
+        }
+    });
+  });
+
+   
+/*
+  * Saran:
+  * - Pertimbangkan menggunakan linter (misalnya, ESLint) dan formatter (misalnya, Prettier)
+  *   untuk menjaga konsistensi kode dan menemukan potensi masalah lebih awal.
+  */
+/*
+  * Saran:
+  * - Pertimbangkan menggunakan linter (misalnya, ESLint) dan formatter (misalnya, Prettier)
+  *   untuk menjaga konsistensi kode dan menemukan potensi masalah lebih awal.
+  */
+// ==========================================================================
+//Export
+// ==========================================================================
+document.getElementById('exportPdfBtn').addEventListener('click', function() {
+ console.log("Tombol Export PDF diklik");
+
+ const resultsElement = document.getElementById('results');
+ console.log("resultsElement:", resultsElement);
+
+ if (resultsElement) {
+  console.log("Elemen hasil ditemukan");
+  try {
+   // Konfigurasi jsPDF - VERSI TERBARU
+   const {
+    jsPDF
+   } = jspdf; // Akses konstruktor jsPDF dengan benar
+   const pdf = new jsPDF();
+   pdf.setFontSize(12);
+
+   // Judul Dokumen
+   pdf.text("Hasil Perhitungan Produktivitas", 10, 10);
+
+   let yOffset = 20; // Posisi awal untuk konten
+
+   // Hasil Ritase dan Produktivitas
+   const ritaseElement = document.getElementById('ritase');
+   const produktivitasElement = document.getElementById('produktivitas');
+
+   if (ritaseElement && produktivitasElement) {
+    const ritaseText = ritaseElement.textContent;
+    const produktivitasText = produktivitasElement.textContent;
+    pdf.text(ritaseText, 15, yOffset);
+    yOffset += 7;
+    pdf.text(produktivitasText, 15, yOffset);
+    yOffset += 15; // Spasi setelah hasil
+   } else {
+    console.warn("Elemen ritase atau produktivitas tidak ditemukan.");
+    toastr.warning("Hasil ritase atau produktivitas tidak dapat diekspor.");
+   }
+
+   // Peringatan dan Saran
+   const warningsElement = document.getElementById('warnings');
+   if (warningsElement) {
+    console.log("jsPDF instance:", pdf);
+    pdf.setFontSize(12);
+    const warningElements = warningsElement.querySelectorAll('p');
+    warningElements.forEach(element => {
+     pdf.text(element.textContent, 15, yOffset);
+     yOffset += 7;
+    });
+   }
+
+   // Charts
+   const ritaseChartElement = document.getElementById('ritaseChart');
+   if (ritaseChartElement) {
     try {
-        // Konfigurasi jsPDF - VERSI TERBARU
-        const { jsPDF } = jspdf;  // Akses konstruktor jsPDF dengan benar
-        const pdf = new jsPDF();
-        pdf.setFontSize(12);
-
-        // Judul Dokumen
-        pdf.text("Hasil Perhitungan Produktivitas", 10, 10);
-
-        let yOffset = 20; // Posisi awal untuk konten
-
-        // Hasil Ritase dan Produktivitas
-        const ritaseElement = document.getElementById('ritase');
-        const produktivitasElement = document.getElementById('produktivitas');
-
-        if (ritaseElement && produktivitasElement) {
-            const ritaseText = ritaseElement.textContent;
-            const produktivitasText = produktivitasElement.textContent;
-            pdf.text(ritaseText, 15, yOffset);
-            yOffset += 7;
-            pdf.text(produktivitasText, 15, yOffset);
-            yOffset += 15; // Spasi setelah hasil
-        } else {
-            console.warn("Elemen ritase atau produktivitas tidak ditemukan.");
-            toastr.warning("Hasil ritase atau produktivitas tidak dapat diekspor.");
-        }
-
-        // Peringatan dan Saran
-        const warningsElement = document.getElementById('warnings');
-        if (warningsElement) {
-            console.log("jsPDF instance:", pdf);
-            pdf.setFontSize(12);
-            const warningElements = warningsElement.querySelectorAll('p');
-            warningElements.forEach(element => {
-                pdf.text(element.textContent, 15, yOffset);
-                yOffset += 7;
-            });
-        }
-
-        // Charts
-        const ritaseChartElement = document.getElementById('ritaseChart');
-        if (ritaseChartElement) {
-            try {
-                console.log("Mencoba mendapatkan data URL untuk ritaseChart");
-                const imgData = ritaseChartElement.toDataURL('image/png');
-                console.log("Data URL ritaseChart berhasil didapatkan:", imgData.substring(0, 50) + "...");
-                pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
-                yOffset += 85;
-            } catch (chartError) {
-                console.error("Error adding ritase chart to PDF:", chartError);
-                let errorMessage = "Gagal menambahkan grafik ritase ke PDF.";
-                if (chartError instanceof Error && chartError.message) {
-                    errorMessage += " " + chartError.message;
-                } else {
-                    errorMessage += " (Detail tidak tersedia)";
-                }
-                toastr.error(errorMessage, "Error");
-            }
-        }
-
-        const produktivitasChartElement = document.getElementById('produktivitasChart');
-        if (produktivitasChartElement) {
-            try {
-                console.log("Mencoba mendapatkan data URL untuk produktivitasChart");
-                const imgData = produktivitasChartElement.toDataURL('image/png');
-                console.log("Data URL produktivitasChart berhasil didapatkan:", imgData.substring(0, 50) + "...");
-                pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
-                yOffset += 85;
-            } catch (chartError) {
-                console.error("Error adding produktivitas chart to PDF:", chartError);
-                let errorMessage = "Gagal menambahkan grafik produktivitas ke PDF.";
-                if (chartError instanceof Error && chartError.message) {
-                    errorMessage += " " + chartError.message;
-                } else {
-                    errorMessage += " (Detail tidak tersedia)";
-                }
-                toastr.error(errorMessage, "Error");
-            }
-        }
-
-        try {
-            pdf.save("hasil_produktivitas.pdf");
-        } catch (saveError) {
-            console.error("Gagal menyimpan PDF:", saveError);
-            let errorMessage = "Gagal menyimpan PDF. Pastikan browser Anda mendukung penyimpanan file.";
-            if (saveError instanceof Error && saveError.message) {
-                errorMessage += " " + saveError.message;
-            } else {
-                errorMessage += " (Detail tidak tersedia)";
-            }
-            toastr.error(errorMessage, "Error");
-        }
-    } catch (overallError) {
-        console.error("Terjadi kesalahan selama pembuatan PDF:", overallError);
-        let errorMessage = "Terjadi kesalahan selama pembuatan PDF.";
-        if (overallError instanceof Error && overallError.message) {
-            errorMessage += " " + overallError.message;
-        } else {
-            errorMessage += " (Detail tidak tersedia)";
-        }
-        toastr.error(errorMessage, "Error");
+     console.log("Mencoba mendapatkan data URL untuk ritaseChart");
+     const imgData = ritaseChartElement.toDataURL('image/png');
+     console.log("Data URL ritaseChart berhasil didapatkan:", imgData.substring(0, 50) + "...");
+     pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
+     yOffset += 85;
+    } catch (chartError) {
+     console.error("Error adding ritase chart to PDF:", chartError);
+     let errorMessage = "Gagal menambahkan grafik ritase ke PDF.";
+     if (chartError instanceof Error && chartError.message) {
+      errorMessage += " " + chartError.message;
+     } else {
+      errorMessage += " (Detail tidak tersedia)";
+     }
+     toastr.error(errorMessage, "Error");
     }
-} else {
-    console.log("Elemen hasil TIDAK ditemukan");
-    toastr.error("Tidak ada hasil untuk diekspor.", "Error");
-}
+   }
+
+   const produktivitasChartElement = document.getElementById('produktivitasChart');
+   if (produktivitasChartElement) {
+    try {
+     console.log("Mencoba mendapatkan data URL untuk produktivitasChart");
+     const imgData = produktivitasChartElement.toDataURL('image/png');
+     console.log("Data URL produktivitasChart berhasil didapatkan:", imgData.substring(0, 50) + "...");
+     pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
+     yOffset += 85;
+    } catch (chartError) {
+     console.error("Error adding produktivitas chart to PDF:", chartError);
+     let errorMessage = "Gagal menambahkan grafik produktivitas ke PDF.";
+     if (chartError instanceof Error && chartError.message) {
+      errorMessage += " " + chartError.message;
+     } else {
+      errorMessage += " (Detail tidak tersedia)";
+     }
+     toastr.error(errorMessage, "Error");
+    }
+   }
+
+   try {
+    pdf.save("hasil_produktivitas.pdf");
+   } catch (saveError) {
+    console.error("Gagal menyimpan PDF:", saveError);
+    let errorMessage = "Gagal menyimpan PDF. Pastikan browser Anda mendukung penyimpanan file.";
+    if (saveError instanceof Error && saveError.message) {
+     errorMessage += " " + saveError.message;
+    } else {
+     errorMessage += " (Detail tidak tersedia)";
+    }
+    toastr.error(errorMessage, "Error");
+   }
+  } catch (overallError) {
+   console.error("Terjadi kesalahan selama pembuatan PDF:", overallError);
+   let errorMessage = "Terjadi kesalahan selama pembuatan PDF.";
+   if (overallError instanceof Error && overallError.message) {
+    errorMessage += " " + overallError.message;
+   } else {
+    errorMessage += " (Detail tidak tersedia)";
+   }
+   toastr.error(errorMessage, "Error");
+  }
+ } else {
+  console.log("Elemen hasil TIDAK ditemukan");
+  toastr.error("Tidak ada hasil untuk diekspor.", "Error");
+ }
 });
 
 // Attach the displayEgiInfo function to the onclick event of the "Info EGI" navbar link
