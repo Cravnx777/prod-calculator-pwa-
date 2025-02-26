@@ -377,6 +377,19 @@ function updatePaginationButtons() {
     nextPageBtn.disabled = currentPage * itemsPerPage >= calculationHistory.length;
 }
 
+const modal = document.getElementById('historyDetailModal');
+const closeModal = document.querySelector('.history-detail-content .close');
+
+document.querySelectorAll('.history-button').forEach(button => {
+    button.addEventListener('click', () => {
+        modal.classList.add('active');
+    });
+});
+
+closeModal.addEventListener('click', () => {
+    modal.classList.remove('active');
+});
+
 // ==========================================================================
 // Form Submission and Calculation
 // ==========================================================================
