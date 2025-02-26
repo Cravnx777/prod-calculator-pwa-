@@ -1,4 +1,18 @@
+
 {
-  "title": "Prod Calculator",
-  "description": "Production Calculator"
+    "title": "Prod Calculator",
+    "home": "Home",
+    "history": "History",
+    "infoEgi": "EGI Info",
+    "settings": "Settings",
+    "selectLanguage": "Select Language",
+    "vehicleTypeLabel": "EGI Type",
+    "wkeLabel": "Effective Working Time (minutes)",
+    "stLabel": "Spotting Time (seconds)",
+    "ltLabel": "Loading Time (minutes)",
+    "ctLabel": "CT HD (minutes)",
+    "nLabel": "Number of HD (units)",
+    "sLabel": "Front to Disposal Distance (km)",
+    "vLabel": "HD Speed (km/h)",
+    "calculate": "Calculate"
 }
