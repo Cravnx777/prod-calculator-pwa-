@@ -436,6 +436,14 @@ button[type="submit"]:active,
             align-items: center;
             padding: 0.75rem;
             border-bottom: 1px solid var(--border-mining);
+            background: rgba(255, 255, 255, 0.05); /* Latar belakang lebih soft */
+            border-radius: 8px;
+            cursor: pointer;
+            
+            /* Efek transisi masuk */
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
         }
 
         .history-item:last-child {
@@ -475,6 +483,9 @@ button[type="submit"]:active,
         .history-button:hover {
             background-color: var(--bg-orange-dark); /* Warna tombol hitung saat dihover */
         }
+        .history-button:active {
+            transform: scale(0.95);
+        }
 
         #historyDetailModal {
             display: none;
@@ -486,6 +497,13 @@ button[type="submit"]:active,
             height: 100%;
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
+            transform: scale(0.95);
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        #historyDetailModal.active {
+            display: block;
+            opacity: 1;
+            transform: scale(1);
         }
 
         .history-detail-content {
@@ -496,6 +514,7 @@ button[type="submit"]:active,
             width: 80%;
             border-radius: 5px;
             color: var(--text-mining-light);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .history-detail-content .close {
