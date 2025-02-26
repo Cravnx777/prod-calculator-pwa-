@@ -210,16 +210,34 @@ let historyLoaded = false; // Flag baru
 // Fungsi untuk memuat riwayat dari localStorage saat halaman dimuat
 function loadHistory() {
     console.log("loadHistory() dipanggil");
-    if (!historyLoaded) {
+
+    if (historyLoaded) {
+        console.log("loadHistory() diabaikan: sudah dimuat sebelumnya");
+        return;
+    }
+
+    try {
         const storedHistory = localStorage.getItem('calculationHistory');
+        
         if (storedHistory) {
             calculationHistory = JSON.parse(storedHistory);
+
+            // Pastikan data valid (array)
+            if (!Array.isArray(calculationHistory)) {
+                console.warn("Data riwayat tidak valid, menginisialisasi ulang.");
+                calculationHistory = [];
+            }
+        } else {
+            console.log("Tidak ada riwayat tersimpan, memulai dengan array kosong.");
+            calculationHistory = [];
         }
-        updateHistoryList();
-        historyLoaded = true; // Set flag ke true
-    } else {
-        console.log("loadHistory() diabaikan: sudah dimuat sebelumnya");
+    } catch (error) {
+        console.error("Gagal memuat riwayat dari localStorage:", error);
+        calculationHistory = []; // Fallback ke array kosong
     }
+
+    updateHistoryList();
+    historyLoaded = true; // Set flag ke true
 }
 
 // Fungsi untuk menampilkan detail riwayat dalam modal
