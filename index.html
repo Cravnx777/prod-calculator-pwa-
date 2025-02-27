@@ -115,43 +115,29 @@
         }
 
         button[type="submit"],
-#exportPdfBtn {
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem; /* Tambahkan border-radius lebih smooth */
-    font-weight: 600;
-    transition: all 0.3s ease-in-out;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    width: 100%;
-    box-sizing: border-box;
-    background-color: var(--bg-orange);
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
+        #exportPdfBtn {
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: var(--bg-orange); /* Tambahkan atau ganti ini */
+        }
 
-button[type="submit"]:hover,
-#exportPdfBtn:hover {
-    background-color: var(--bg-orange-dark);
-    transform: translateY(-3px); /* Tambahkan efek hover mengangkat tombol */
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
-}
+        #exportPdfBtn {
+            background-color: var(--bg-blue);
+        }
 
-#exportPdfBtn {
-    background-color: var(--bg-blue);
-}
-
-#exportPdfBtn:hover {
-    background-color: var(--bg-blue-dark);
-    transform: translateY(-3px);
-}
-button[type="submit"]:active,
-#exportPdfBtn:active {
-    transform: scale(0.98);
-    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
-}
-
+        #exportPdfBtn:hover {
+            background-color: var(--bg-blue-dark);
+            transform: translateY(-2px);
+        }
 
         #results {
             background-color: var(--bg-mining-light);
@@ -215,72 +201,41 @@ button[type="submit"]:active,
 
         /* Bottom Navbar - FIXED */
         .navbar-bottom {
-    position: fixed;
-    bottom: -4px;
-    left: 0;
-    width: 100%;
-    background: linear-gradient(to top, rgba(40, 52, 66, 0.9), rgba(20, 30, 40, 1));
-    padding: 0.75rem;
-    border-top: 1px solid var(--border-mining);
-    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 100;
-    box-sizing: border-box;
-    backdrop-filter: blur(8px); /* Efek transparan */
-}
-
-.nav-item-bottom {
-    text-align: center;
-}
-
-.nav-link-bottom {
-    color: var(--text-mining-light);
-    text-decoration: none;
-    display: block;
-    transition: all 0.3s ease-in-out;
-    font-size: 0.85rem;
-    padding-bottom: 4px;
-    position: relative;
-}
-
-.nav-link-bottom:hover {
-    color: var(--bg-orange);
-    transform: scale(1.05);
-}
-.nav-link-bottom.active::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 50%;
-    height: 2px;
-    background-color: var(--bg-orange);
-    transform: translateX(-50%);
-    border-radius: 2px;
-}
-
-.nav-icon-bottom {
-    display: block;
-    font-size: 1.5rem;
-    margin-bottom: 0.25rem;
-    padding: 8px; /* Menambah area klik */
-    border-radius: 50%;
-    transition: background-color 0.3s ease-in-out;
-}
-
-.nav-item-bottom:hover .nav-icon-bottom {
-    background-color: rgba(255, 255, 255, 0.2);
-    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
-    transform: scale(1.1);
-}
-@media screen and (max-height: 400px) and (max-width: 768px) {
-    .navbar-bottom {
-        opacity: 0;
-        pointer-events: none;
-    }
-}
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          /* Background dengan gradien linear */
+          background: linear-gradient(to right, var(--bg-mining-light), #283442);
+          padding: 0.75rem; /* Padding sedikit ditingkatkan */
+          border-top: 1px solid var(--border-mining);
+          /* Efek shadow yang lebih jelas */
+          box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          z-index: 100;
+          box-sizing: border-box;
+          transition: background-color 0.3s ease;
+          border-radius: 12px 12px 0 0; /* Rounded corners di bagian atas */
+        }
+        
+        .nav-item-bottom {
+          text-align: center;
+        }
+        
+        .nav-link-bottom:hover {
+          color: var(--bg-orange); /* Warna teks saat di-hover */
+          /* Efek bayangan halus */
+          text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+          transform: translateY(-2px); /* Efek naik sedikit */
+        }
+        
+        .nav-icon-bottom {
+          display: block;
+          font-size: 1.25rem;
+          margin-bottom: 0.25rem;
+        }
 
         /* Utility Classes */
         .hidden {
@@ -326,7 +281,7 @@ button[type="submit"]:active,
         }
 
         /* Splash Screen Styles */
-        #splash-screen {
+#splash-screen {
   position: fixed;
   top: 0;
   left: 0;
@@ -349,7 +304,7 @@ button[type="submit"]:active,
 }
 
 
-        #splash-screen h1 {
+       #splash-screen h1 {
     color: var(--text-mining);
     font-size: 3rem;
     margin-bottom: 0.75rem;
@@ -382,7 +337,6 @@ button[type="submit"]:active,
     0% { opacity: 0; }
     100% { opacity: 1; }
 }
-
 
         /* Modal Styles */
         .modal {
@@ -436,14 +390,6 @@ button[type="submit"]:active,
             align-items: center;
             padding: 0.75rem;
             border-bottom: 1px solid var(--border-mining);
-            background: rgba(255, 255, 255, 0.05); /* Latar belakang lebih soft */
-            border-radius: 8px;
-            cursor: pointer;
-            
-            /* Efek transisi masuk */
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
         }
 
         .history-item:last-child {
@@ -483,9 +429,6 @@ button[type="submit"]:active,
         .history-button:hover {
             background-color: var(--bg-orange-dark); /* Warna tombol hitung saat dihover */
         }
-        .history-button:active {
-            transform: scale(0.95);
-        }
 
         #historyDetailModal {
             display: none;
@@ -497,13 +440,6 @@ button[type="submit"]:active,
             height: 100%;
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
-            transform: scale(0.95);
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-        }
-        #historyDetailModal.active {
-            display: block;
-            opacity: 1;
-            transform: scale(1);
         }
 
         .history-detail-content {
@@ -514,7 +450,6 @@ button[type="submit"]:active,
             width: 80%;
             border-radius: 5px;
             color: var(--text-mining-light);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .history-detail-content .close {
@@ -608,12 +543,11 @@ button[type="submit"]:active,
 
 <body class="bg-mining font-roboto text-mining-light">
 
-     <!-- Splash Screen -->
+    <!-- Splash Screen -->
     <div id="splash-screen">
-    <img src="/icons/icon-192x192.png" alt="Logo" id="splash-logo">
+    <img src="logo.png" alt="Logo" id="splash-logo">
     <h1>Prod Calculator</h1>
     <p>Memuat...</p>
-        <div class="loader"></div>
 </div>
 
     <!-- Page Container -->
@@ -691,9 +625,8 @@ button[type="submit"]:active,
                 </div>
                 <!-- End Form Inputs -->
 
-                <button type="submit" id="submitBtn">
-                  <span id="btnText">Hitung</span>
-                  <i id="btnLoader" class="fas fa-spinner fa-spin hidden"></i>
+                <button type="submit" class="w-full bg-orange text-white p-2 rounded hover:bg-orange-dark">
+                    <i class="fas fa-calculator mr-2"></i>Hitung
                 </button>
             </form>
 
@@ -1491,657 +1424,402 @@ function formatNumber(num) {
             }
         }
 
-   // Array untuk menyimpan riwayat perhitungan
-   let calculationHistory = [];
-   const itemsPerPage = 5; // Jumlah item per halaman
-   let currentPage = 1;     // Halaman saat ini
+        // Array untuk menyimpan riwayat perhitungan
+        let calculationHistory = [];
+        const itemsPerPage = 5; // Jumlah item per halaman
+        let currentPage = 1;     // Halaman saat ini
 
-   // Fungsi untuk menyimpan perhitungan ke dalam riwayat
-   function saveToHistory(formData, results) {
-    const historyItem = {
-     timestamp: new Date().toLocaleString(),
-     formData: formData,
-     results: results
-    };
-
-    // Periksa apakah item yang sama sudah ada
-    const alreadyExists = calculationHistory.some(item => {
-     return (
-      item.formData.vehicleType === historyItem.formData.vehicleType &&
-      item.formData.wke === historyItem.formData.wke &&
-      item.formData.n === historyItem.formData.n &&
-      item.formData.st === historyItem.formData.st &&
-      item.formData.lt === historyItem.formData.lt &&
-      item.formData.ct === historyItem.formData.ct &&
-      item.formData.s === historyItem.formData.s &&
-      item.formData.v === historyItem.formData.v &&
-      item.results.ritase === historyItem.results.ritase &&
-      item.results.produktivitas === historyItem.results.produktivitas
-     );
-    });
-
-    if (!alreadyExists) {
-     calculationHistory.push(historyItem);
-     localStorage.setItem('calculationHistory', JSON.stringify(calculationHistory));
-     updateHistoryList();
-     console.log("Riwayat disimpan:", calculationHistory);
-    } else {
-     console.log("Riwayat sudah ada, tidak disimpan lagi.");
-    }
-   }
-
-   // Flag baru untuk memastikan loadHistory hanya dipanggil sekali
-   let historyLoaded = false;
-
-   // Fungsi untuk memuat riwayat dari localStorage saat halaman dimuat
-   function loadHistory() {
-    console.log("loadHistory() dipanggil");
-
-    if (historyLoaded) {
-     console.log("loadHistory() diabaikan: sudah dimuat sebelumnya");
-     return;
-    }
-
-    try {
-     const storedHistory = localStorage.getItem('calculationHistory');
-
-     if (storedHistory) {
-      calculationHistory = JSON.parse(storedHistory);
-      console.log("Riwayat dimuat dari localStorage:", calculationHistory);
-
-      // Pastikan data valid (array)
-      if (!Array.isArray(calculationHistory)) {
-       console.warn("Data riwayat tidak valid, menginisialisasi ulang.");
-       calculationHistory = [];
-      }
-     } else {
-      console.log("Tidak ada riwayat tersimpan, memulai dengan array kosong.");
-      calculationHistory = [];
-     }
-    } catch (error) {
-     console.error("Gagal memuat riwayat dari localStorage:", error);
-     calculationHistory = []; // Inisialisasi ke array kosong jika terjadi kesalahan
-    }
-
-    updateHistoryList(); // Perbarui tampilan setelah pemuatan
-    historyLoaded = true; // Set flag setelah pemuatan
-   }
-
-   // Fungsi untuk menampilkan detail riwayat dalam modal
-   function showHistoryDetail(index) {
-    const item = calculationHistory[index];
-    const detailContent = `
-            <p><strong>Waktu:</strong> ${item.timestamp}</p>
-            <p><strong>Jenis EGI:</strong> ${item.formData.vehicleType}</p>
-            <p><strong>Waktu Kerja Efektif:</strong> ${item.formData.wke}</p>
-            <p><strong>Spotting Time:</strong> ${item.formData.st}</p>
-            <p><strong>Loading Time:</strong> ${item.formData.lt}</p>
-            <p><strong>CT HD:</strong> ${item.formData.ct}</p>
-            <p><strong>Jumlah HD:</strong> ${item.formData.n}</p>
-            <p><strong>Jarak Front Ke Disposal::</strong> ${item.formData.s}</p>
-            <p><strong>Kecepatan HD:</strong> ${item.formData.v}</p>
-            <hr>
-            <p><strong>Ritase:</strong> ${item.results.ritase} Rit/Jam</p>
-            <p><strong>Produktivitas:</strong> ${item.results.produktivitas} Bcm/Jam</p>
-        `;
-    document.getElementById('historyDetailContent').innerHTML = detailContent;
-    document.getElementById('historyDetailModal').style.display = 'block';
-   }
-
-   // Fungsi untuk menutup modal detail riwayat
-   function closeHistoryDetailModal() {
-    document.getElementById('historyDetailModal').style.display = 'none';
-   }
-
-   // Fungsi untuk menghapus item riwayat
-   function deleteHistoryItem(index) {
-    calculationHistory.splice(index, 1);
-    localStorage.setItem('calculationHistory', JSON.stringify(calculationHistory));
-    updateHistoryList();
-   }
-
-   // Fungsi untuk menghapus semua riwayat
-   function clearHistory() {
-    calculationHistory = [];
-    localStorage.removeItem('calculationHistory');
-    updateHistoryList();
-   }
-
-// Fungsi untuk mengurutkan riwayat
-function sortHistory(sortOrder) {
-    console.log("sortHistory dipanggil dengan:", sortOrder);
-    switch (sortOrder) {
-        case 'timestamp_desc':
-            calculationHistory.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            break;
-        case 'timestamp_asc':
-            calculationHistory.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-            break;
-        case 'vehicleType_asc':
-            calculationHistory.sort((a, b) => a.formData.vehicleType.localeCompare(b.formData.vehicleType));
-            break;
-        case 'vehicleType_desc':
-            calculationHistory.sort((a, b) => b.formData.vehicleType.localeCompare(a.formData.vehicleType));
-            break;
-        // Tambahkan case lain untuk opsi penyortiran lain
-    }
-    updateHistoryList();
-}
-
-// Fungsi untuk memfilter riwayat
-function filterHistory(filterType) {
-    console.log("filterHistory dipanggil dengan:", filterType);
-
-    if (filterType === 'all') {
-        loadHistory(); // Muat ulang semua riwayat
-    } else {
-        const storedHistory = localStorage.getItem('calculationHistory');
-
-        if (storedHistory) {
-            try {
-                calculationHistory = JSON.parse(storedHistory).filter(item => item.formData.vehicleType === filterType);
-                console.log("Riwayat difilter:", calculationHistory);
-            } catch (e) {
-                console.error("Gagal mem-parse riwayat:", e);
-                calculationHistory = [];
-            }
-        } else {
-            console.log("Tidak ada riwayat yang tersimpan.");
-            calculationHistory = [];
-        }
-            updateHistoryList();
-    }
-}
-// Fungsi untuk mengupdate tampilan daftar riwayat dengan paginasi
-function updateHistoryList() {
-    const historyList = document.getElementById('historyList');
-    historyList.innerHTML = '';
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentHistory = calculationHistory.slice(startIndex, endIndex);
-
-    currentHistory.forEach((item, index) => {
-        const globalIndex = startIndex + index;  // index dalam array calculationHistory
-
-        const historyItemElement = document.createElement('div');
-        historyItemElement.classList.add('history-item');
-
-        const historyItemDetails = document.createElement('div');
-        historyItemDetails.classList.add('history-item-details');
-        historyItemDetails.innerHTML = `
-            <p><strong>Waktu:</strong> ${item.timestamp}</p>
-            <p><strong>Jenis EGI:</strong> ${item.formData.vehicleType}, <strong>WKE:</strong> ${item.formData.wke}, <strong>Jumlah HD:</strong> ${item.formData.n}</p>
-            <p><strong>Ritase:</strong> ${item.results.ritase} Rit/Jam, <strong>Produktivitas:</strong> ${item.results.produktivitas} Bcm/Jam</p>
-        `;
-        historyItemElement.appendChild(historyItemDetails);
-
-        const historyItemActions = document.createElement('div');
-        historyItemActions.classList.add('history-item-actions');
-
-        const detailButton = document.createElement('button');
-        detailButton.textContent = 'Detail';
-        detailButton.classList.add('history-delete-btn'); // Menggunakan style yang sama dengan tombol delete
-        detailButton.onclick = () => showHistoryDetail(globalIndex);
-        historyItemActions.appendChild(detailButton);
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Hapus';
-        deleteButton.classList.add('history-delete-btn');
-        deleteButton.onclick = () => deleteHistoryItem(globalIndex);
-        historyItemActions.appendChild(deleteButton);
-
-        historyItemElement.appendChild(historyItemActions);
-
-        historyList.appendChild(historyItemElement);
-    });
-
-    updatePaginationButtons();
-}
-
-// Fungsi untuk mengupdate tombol paginasi
-function updatePaginationButtons() {
-    const prevPageBtn = document.getElementById('prevPageBtn');
-    const nextPageBtn = document.getElementById('nextPageBtn');
-
-    prevPageBtn.disabled = currentPage === 1;
-    nextPageBtn.disabled = currentPage * itemsPerPage >= calculationHistory.length;
-}
-
-// ==========================================================================
-// Load DOM dan fungsi yang berhubungan diinisialisasi disini
-// ==========================================================================
-  // Inisialisasi saat halaman dimuat
-  document.addEventListener('DOMContentLoaded', () => {
-   const savedTheme = localStorage.getItem('theme');
-   if (savedTheme) {
-    setTheme(savedTheme);
-    document.getElementById('themeToggle').value = savedTheme;
-   }
-
-   const splashScreen = document.getElementById('splash-screen');
-   setTimeout(() => {
-    splashScreen.classList.add('hidden');
-   }, 2000);
-
-   loadHistory();
-
-   const sortOrderSelect = document.getElementById('sortOrder');
-   const filterTypeSelect = document.getElementById('filterType');
-   const prevPageBtn = document.getElementById('prevPageBtn');
-   const nextPageBtn = document.getElementById('nextPageBtn');
-   const clearHistoryBtn = document.getElementById('clearHistoryBtn');
-   const egiInfoLink = document.querySelector('.nav-link-bottom[href="#"]');
-
-   if (sortOrderSelect && filterTypeSelect && prevPageBtn && nextPageBtn && clearHistoryBtn && egiInfoLink) {
-    sortOrderSelect.addEventListener('change', () => {
-     sortHistory(sortOrderSelect.value);
-    });
-
-    filterTypeSelect.addEventListener('change', () => {
-     filterHistory(filterTypeSelect.value);
-    });
-
-    prevPageBtn.addEventListener('click', () => {
-     if (currentPage > 1) {
-      currentPage--;
-      updateHistoryList();
-     }
-    });
-
-    nextPageBtn.addEventListener('click', () => {
-     if (currentPage * itemsPerPage < calculationHistory.length) {
-      currentPage++;
-      updateHistoryList();
-     }
-    });
-
-    clearHistoryBtn.addEventListener('click', () => {
-     clearHistory();
-    });
-
-    egiInfoLink.addEventListener('click', function(event) {
-     event.preventDefault();
-     if (this.querySelector('.fa-info-circle')) {
-      displayEgiInfo();
-     }
-    });
-   } else {
-    console.warn("Beberapa elemen DOM tidak ditemukan. Memastikan semua ID sudah benar.");
-   }
-  });
- // Attach the displayEgiInfo function to the onclick event of the "Info EGI" navbar link
- document.querySelector('.nav-link-bottom[href="#"]').addEventListener('click', function(event) {
-  event.preventDefault(); // Prevent the default action
-  if (this.querySelector('.fa-info-circle')) {
-   displayEgiInfo();
-  }
- });
- /*
-  * Saran:
-  * - Pertimbangkan menggunakan linter (misalnya, ESLint) dan formatter (misalnya, Prettier)
-  *   untuk menjaga konsistensi kode dan menemukan potensi masalah lebih awal.
-  */
- //Fungsi untuk mengatur tema (terang/gelap)
- function setTheme(theme) {
-  const body = document.body;
-  if (theme === 'light') {
-   body.classList.add('light-mode');
-  } else {
-   body.classList.remove('light-mode');
-  }
-  localStorage.setItem('theme', theme); // Simpan preferensi tema
- }
-
- // Event listener untuk pilihan tema
- document.getElementById('themeToggle').addEventListener('change', function() {
-  setTheme(this.value);
- });
- /*
-  * Saran:
-  * - Pertimbangkan menggunakan linter (misalnya, ESLint) dan formatter (misalnya, Prettier)
-  *   untuk menjaga konsistensi kode dan menemukan potensi masalah lebih awal.
-  */
- /*
-  * Saran:
-  * - Pertimbangkan menggunakan linter (misalnya, ESLint) dan formatter (misalnya, Prettier)
-  *   untuk menjaga konsistensi kode dan menemukan potensi masalah lebih awal.
-  */
-  function generateDummyData() {
-  const dummyData = [
-   {
-    timestamp: new Date().toLocaleString(),
-    formData: {
-     vehicleType: "PC1250",
-     wke: 50,
-     st: 30,
-     lt: 2,
-     ct: 10,
-     n: 5,
-     s: 5,
-     v: 25
-    },
-    results: {
-     ritase: 10,
-     produktivitas: 500,
-     targetRitase: 15,
-     targetProduktivitas: 525
-    }
-   },
-   {
-    timestamp: new Date().toLocaleString(),
-    formData: {
-     vehicleType: "PC2000-8",
-     wke: 55,
-     st: 35,
-     lt: 2.5,
-     ct: 12,
-     n: 6,
-     s: 6,
-     v: 28
-    },
-    results: {
-     ritase: 12,
-     produktivitas: 600,
-     targetRitase: 21,
-     targetProduktivitas: 800
-    }
-   },
-   {
-    timestamp: new Date().toLocaleString(),
-    formData: {
-     vehicleType: "PC2000-11R",
-     wke: 60,
-     st: 40,
-     lt: 3,
-     ct: 14,
-     n: 7,
-     s: 7,
-     v: 30
-    },
-    results: {
-     ritase: 14,
-     produktivitas: 700,
-     targetRitase: 24,
-     targetProduktivitas: 950
-    }
-   },
-   {
-    timestamp: new Date().toLocaleString(),
-    formData: {
-     vehicleType: "EX2600",
-     wke: 65,
-     st: 45,
-     lt: 3.5,
-     ct: 16,
-     n: 8,
-     s: 8,
-     v: 32
-    },
-    results: {
-     ritase: 16,
-     produktivitas: 800,
-     targetRitase: 30,
-     targetProduktivitas: 1200
-    }
-   },
-   {
-    timestamp: new Date().toLocaleString(),
-    formData: {
-     vehicleType: "PC1250",
-     wke: 70,
-     st: 50,
-     lt: 4,
-     ct: 18,
-     n: 9,
-     s: 9,
-     v: 34
-    },
-    results: {
-     ritase: 18,
-     produktivitas: 900,
-     targetRitase: 15,
-     targetProduktivitas: 525
-    }
-   },
-   {
-    timestamp: new Date().toLocaleString(),
-    formData: {
-     vehicleType: "PC2000-8",
-     wke: 75,
-     st: 55,
-     lt: 4.5,
-     ct: 20,
-     n: 10,
-     s: 10,
-     v: 36
-    },
-    results: {
-     ritase: 20,
-     produktivitas: 1000,
-     targetRitase: 21,
-     targetProduktivitas: 800
-    }
-   }
-  ];
-
-  localStorage.setItem('calculationHistory', JSON.stringify(dummyData));
- }
-document.addEventListener('DOMContentLoaded', () => {
-
-   const savedTheme = localStorage.getItem('theme');
-   if (savedTheme) {
-    setTheme(savedTheme);
-    document.getElementById('themeToggle').value = savedTheme;
-   }
-
-   const splashScreen = document.getElementById('splash-screen');
-   setTimeout(() => {
-    splashScreen.classList.add('hidden');
-   }, 2000);
-
-   loadHistory();
-  
-   generateDummyData()
-    // Inisialisasi saat halaman dimuat
-
-  const sortOrderSelect = document.getElementById('sortOrder');
-  const filterTypeSelect = document.getElementById('filterType');
-
-   // Event listener untuk tombol halaman sebelumnya
-   document.getElementById('prevPageBtn').addEventListener('click', () => {
-    if (currentPage > 1) {
-     currentPage--;
-     updateHistoryList();
-    }
-   });
-
-   // Event listener untuk tombol halaman selanjutnya
-   document.getElementById('nextPageBtn').addEventListener('click', () => {
-    if (currentPage * itemsPerPage < calculationHistory.length) {
-     currentPage++;
-     updateHistoryList();
-    }
-   });
-
-   // Event listener untuk tombol clear history
-   document.getElementById('clearHistoryBtn').addEventListener('click', () => {
-    clearHistory();
-   });
-
+        // Fungsi untuk menyimpan perhitungan ke dalam riwayat
+        function saveToHistory(formData, results) {
+            const historyItem = {
+                timestamp: new Date().toLocaleString(),
+                formData: formData,
+                results: results
+            };
         
-        // Event listener untuk pilihan tema
-        document.getElementById('themeToggle').addEventListener('change', function () {
-            setTheme(this.value);
+            // Periksa apakah item yang sama sudah ada
+            const alreadyExists = calculationHistory.some(item => {
+                return (
+                    item.timestamp === historyItem.timestamp &&
+                    JSON.stringify(item.formData) === JSON.stringify(historyItem.formData) &&
+                    JSON.stringify(item.results) === JSON.stringify(historyItem.results)
+                );
+            });
+        
+            if (!alreadyExists) {
+                calculationHistory.push(historyItem);
+                localStorage.setItem('calculationHistory', JSON.stringify(calculationHistory));
+                updateHistoryList();
+            } else {
+                console.log("Riwayat sudah ada, tidak disimpan lagi.");
+            }
+        }
+        
+        let historyLoaded = false; // Flag baru
+        
+        // Fungsi untuk memuat riwayat dari localStorage saat halaman dimuat
+        function loadHistory() {
+              console.log("loadHistory() dipanggil");
+              if (!historyLoaded) {
+                  const storedHistory = localStorage.getItem('calculationHistory');
+                  if (storedHistory) {
+                      calculationHistory = JSON.parse(storedHistory);
+                  }
+                  updateHistoryList();
+                  historyLoaded = true; // Set flag ke true
+              } else {
+                  console.log("loadHistory() diabaikan: sudah dimuat sebelumnya");
+              }
+          }
+
+        // Fungsi untuk menampilkan detail riwayat dalam modal
+        function showHistoryDetail(index) {
+            const item = calculationHistory[index];
+            const detailContent = `
+                <p><strong>Waktu:</strong> ${item.timestamp}</p>
+                <p><strong>Jenis EGI:</strong> ${item.formData.vehicleType}</p>
+                <p><strong>Waktu Kerja Efektif:</strong> ${item.formData.wke}</p>
+                <p><strong>Spotting Time:</strong> ${item.formData.st}</p>
+                <p><strong>Loading Time:</strong> ${item.formData.lt}</p>
+                <p><strong>CT HD:</strong> ${item.formData.ct}</p>
+                <p><strong>Jumlah HD:</strong> ${item.formData.n}</p>
+                <p><strong>Jarak Front Ke Disposal:</strong> ${item.formData.s}</p>
+                <p><strong>Kecepatan HD:</strong> ${item.formData.v}</p>
+                <hr>
+                <p><strong>Ritase:</strong> ${item.results.ritase} Rit/Jam</p>
+                <p><strong>Produktivitas:</strong> ${item.results.produktivitas} Bcm/Jam</p>
+            `;
+            document.getElementById('historyDetailContent').innerHTML = detailContent;
+            document.getElementById('historyDetailModal').style.display = 'block';
+        }
+
+        // Fungsi untuk menutup modal detail riwayat
+        function closeHistoryDetailModal() {
+            document.getElementById('historyDetailModal').style.display = 'none';
+        }
+
+        // Fungsi untuk menghapus item riwayat
+        function deleteHistoryItem(index) {
+            calculationHistory.splice(index, 1);
+            localStorage.setItem('calculationHistory', JSON.stringify(calculationHistory));
+            updateHistoryList();
+        }
+
+        // Fungsi untuk menghapus semua riwayat
+        function clearHistory() {
+            calculationHistory = [];
+            localStorage.removeItem('calculationHistory');
+            updateHistoryList();
+        }
+
+        // Fungsi untuk mengupdate tampilan daftar riwayat dengan paginasi
+        function updateHistoryList() {
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentHistory = calculationHistory.slice(startIndex, endIndex);
+
+            currentHistory.forEach((item, index) => {
+                const globalIndex = startIndex + index;  // index dalam array calculationHistory
+
+                const historyItemElement = document.createElement('div');
+                historyItemElement.classList.add('history-item');
+
+                const historyItemDetails = document.createElement('div');
+                historyItemDetails.classList.add('history-item-details');
+                historyItemDetails.innerHTML = `
+                    <p><strong>Waktu:</strong> ${item.timestamp}</p>
+                    <p><strong>Jenis EGI:</strong> ${item.formData.vehicleType}, <strong>WKE:</strong> ${item.formData.wke}, <strong>Jumlah HD:</strong> ${item.formData.n}</p>
+                    <p><strong>Ritase:</strong> ${item.results.ritase} Rit/Jam, <strong>Produktivitas:</strong> ${item.results.produktivitas} Bcm/Jam</p>
+                `;
+                historyItemElement.appendChild(historyItemDetails);
+
+                const historyItemActions = document.createElement('div');
+                historyItemActions.classList.add('history-item-actions');
+
+                const detailButton = document.createElement('button');
+                detailButton.textContent = 'Detail';
+                detailButton.classList.add('history-delete-btn'); // Menggunakan style yang sama dengan tombol delete
+                detailButton.onclick = () => showHistoryDetail(globalIndex);
+                historyItemActions.appendChild(detailButton);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Hapus';
+                deleteButton.classList.add('history-delete-btn');
+                deleteButton.onclick = () => deleteHistoryItem(globalIndex);
+                historyItemActions.appendChild(deleteButton);
+
+                historyItemElement.appendChild(historyItemActions);
+
+                historyList.appendChild(historyItemElement);
+            });
+
+            updatePaginationButtons();
+        }
+
+        // Fungsi untuk mengupdate tombol paginasi
+        function updatePaginationButtons() {
+            const prevPageBtn = document.getElementById('prevPageBtn');
+            const nextPageBtn = document.getElementById('nextPageBtn');
+
+            prevPageBtn.disabled = currentPage === 1;
+            nextPageBtn.disabled = currentPage * itemsPerPage >= calculationHistory.length;
+        }
+
+        // Event listener untuk tombol halaman sebelumnya
+        document.getElementById('prevPageBtn').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                updateHistoryList();
+            }
         });
 
-   const savedTheme = localStorage.getItem('theme');
-   if (savedTheme) {
-    setTheme(savedTheme);
-    document.getElementById('themeToggle').value = savedTheme;
-   }
+        // Event listener untuk tombol halaman selanjutnya
+        document.getElementById('nextPageBtn').addEventListener('click', () => {
+            if (currentPage * itemsPerPage < calculationHistory.length) {
+                currentPage++;
+                updateHistoryList();
+            }
+        });
 
-   const splashScreen = document.getElementById('splash-screen');
-   setTimeout(() => {
-    splashScreen.classList.add('hidden');
-   }, 2000);
+        // Event listener untuk tombol clear history
+        document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+            clearHistory();
+        });
 
-   loadHistory();
-      
-   // Inisialisasi saat halaman dimuat
-        // Inisialisasi saat halaman dimuat
+        // Event listener untuk form submit
+        document.getElementById('prodForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = getFormData();
 
-     //sort
+            if (validateForm(formData)) {
+                const results = calculateResults(formData);
+                if (results) {
+                    displayResults(results);
+                    const warnings = generateWarnings(results, formData);
+                    document.getElementById('warnings').innerHTML = warnings;
+                    document.getElementById('results').classList.remove('hidden');
+                    createCharts(results);
+                    saveToHistory(formData, results); // Simpan perhitungan ke riwayat
+                }
+            }
+        });
 
-            //filter
-        // Attach the displayEgiInfo function to the onclick event of the "Info EGI" navbar link
-       
-  sortOrderSelect.addEventListener('change', () => {
-      sortHistory(sortOrderSelect.value);
-  });
-filterTypeSelect.addEventListener('change', () => {
-     filterHistory(filterTypeSelect.value);
- });
+        // Fungsi untuk menampilkan halaman dan mengatur tautan aktif
+        function showPage(pageId, link) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
 
-    // Attach the displayEgiInfo function to the onclick event of the "Info EGI" navbar link
-    document.querySelector('.nav-link-bottom[href="#"]').addEventListener('click', function (event) {
-        event.preventDefault(); // Prevent the default action
-        if (this.querySelector('.fa-info-circle')) {
-            displayEgiInfo();
+            const links = document.querySelectorAll('.nav-link-bottom');
+            links.forEach(link => link.classList.remove('active'));
+            link.classList.add('active');
+
+            // Jika halaman yang ditampilkan adalah riwayat, perbarui daftarnya
+            if (pageId === 'historyPage') {
+                updateHistoryList();
+            }
         }
-    });
-  });
 
-   
-/*
-  * Saran:
-  * - Pertimbangkan menggunakan linter (misalnya, ESLint) dan formatter (misalnya, Prettier)
-  *   untuk menjaga konsistensi kode dan menemukan potensi masalah lebih awal.
-  */
-/*
-  * Saran:
-  * - Pertimbangkan menggunakan linter (misalnya, ESLint) dan formatter (misalnya, Prettier)
-  *   untuk menjaga konsistensi kode dan menemukan potensi masalah lebih awal.
-  */
-// ==========================================================================
-//Export
-// ==========================================================================
-document.getElementById('exportPdfBtn').addEventListener('click', function() {
- console.log("Tombol Export PDF diklik");
+        // Fungsi untuk menutup modal info
+        function closeInfoModal() {
+            document.getElementById('infoModal').style.display = 'none';
+        }
 
- const resultsElement = document.getElementById('results');
- console.log("resultsElement:", resultsElement);
+        // Fungsi untuk menampilkan info EGI
+        function displayEgiInfo() {
+            const egiInfoModal = document.getElementById('egiInfoModal');
+            let tableHTML = `<table class="egi-table">
+                                <thead>
+                                    <tr>
+                                        <th>Jenis EGI</th>
+                                        <th>Target Ritase</th>
+                                        <th>Waktu Kerja Efektif (menit)</th>
+                                        <th>CT HD (menit)</th>
+                                        <th>Spotting Time (detik)</th>
+                                        <th>Produktivitas (Target)</th>
+                                        <th>Cycle Time (menit)</th>
+                                        <th>Loading Time (menit)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
 
- if (resultsElement) {
-  console.log("Elemen hasil ditemukan");
-  try {
-   // Konfigurasi jsPDF - VERSI TERBARU
-   const {
-    jsPDF
-   } = jspdf; // Akses konstruktor jsPDF dengan benar
-   const pdf = new jsPDF();
-   pdf.setFontSize(12);
+            for (const vehicleType in targetValues) {
+                if (targetValues.hasOwnProperty(vehicleType)) {
+                    const egi = targetValues[vehicleType];
+                    tableHTML += `
+                        <tr>
+                            <td>${vehicleType}</td>
+                            <td>${egi.ritase}</td>
+                            <td>${egi.wke}</td>
+                            <td>${egi.ct}</td>
+                            <td>${egi.st}</td>
+                            <td>${egi.produktivitas}</td>
+                            <td>${egi.cycleTime}</td>
+                            <td>${egi.lt}</td>
+                        </tr>`;
+                }
+            }
 
-   // Judul Dokumen
-   pdf.text("Hasil Perhitungan Produktivitas", 10, 10);
+            tableHTML += `</tbody></table>`;
+            egiInfoModal.innerHTML = tableHTML;
+            document.getElementById('infoModal').style.display = 'block'; // Show the modal
+        }
 
-   let yOffset = 20; // Posisi awal untuk konten
+      // Fungsi untuk mengatur tema (terang/gelap)
+        function setTheme(theme) {
+            const body = document.body;
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            if (theme === 'light') {
+                body.classList.add('light-mode');
+                themeToggleBtn.classList.add('light-mode');  // Tambahkan class ke tombol
+            } else {
+                body.classList.remove('light-mode');
+                themeToggleBtn.classList.remove('light-mode'); // Hapus class dari tombol
+            }
+            localStorage.setItem('theme', theme); // Simpan preferensi tema
+        }
 
-   // Hasil Ritase dan Produktivitas
-   const ritaseElement = document.getElementById('ritase');
-   const produktivitasElement = document.getElementById('produktivitas');
+        // Kode inisialisasi dan event listener untuk tombol switch mode
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const toggleThumb = document.getElementById('toggleThumb');
 
-   if (ritaseElement && produktivitasElement) {
-    const ritaseText = ritaseElement.textContent;
-    const produktivitasText = produktivitasElement.textContent;
-    pdf.text(ritaseText, 15, yOffset);
-    yOffset += 7;
-    pdf.text(produktivitasText, 15, yOffset);
-    yOffset += 15; // Spasi setelah hasil
-   } else {
-    console.warn("Elemen ritase atau produktivitas tidak ditemukan.");
-    toastr.warning("Hasil ritase atau produktivitas tidak dapat diekspor.");
-   }
+            // Cek tema yang tersimpan di localStorage saat halaman dimuat
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            setTheme(savedTheme);
 
-   // Peringatan dan Saran
-   const warningsElement = document.getElementById('warnings');
-   if (warningsElement) {
-    console.log("jsPDF instance:", pdf);
-    pdf.setFontSize(12);
-    const warningElements = warningsElement.querySelectorAll('p');
-    warningElements.forEach(element => {
-     pdf.text(element.textContent, 15, yOffset);
-     yOffset += 7;
-    });
-   }
+            // Tambahkan event listener ke tombol
+            themeToggleBtn.addEventListener('click', () => {
+                const currentTheme = localStorage.getItem('theme') || 'dark';
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
 
-   // Charts
-   const ritaseChartElement = document.getElementById('ritaseChart');
-   if (ritaseChartElement) {
-    try {
-     console.log("Mencoba mendapatkan data URL untuk ritaseChart");
-     const imgData = ritaseChartElement.toDataURL('image/png');
-     console.log("Data URL ritaseChart berhasil didapatkan:", imgData.substring(0, 50) + "...");
-     pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
-     yOffset += 85;
-    } catch (chartError) {
-     console.error("Error adding ritase chart to PDF:", chartError);
-     let errorMessage = "Gagal menambahkan grafik ritase ke PDF.";
-     if (chartError instanceof Error && chartError.message) {
-      errorMessage += " " + chartError.message;
-     } else {
-      errorMessage += " (Detail tidak tersedia)";
-     }
-     toastr.error(errorMessage, "Error");
-    }
-   }
+            const splashScreen = document.getElementById('splash-screen');
+            setTimeout(() => {
+                splashScreen.classList.add('hidden');
+            }, 2000);
 
-   const produktivitasChartElement = document.getElementById('produktivitasChart');
-   if (produktivitasChartElement) {
-    try {
-     console.log("Mencoba mendapatkan data URL untuk produktivitasChart");
-     const imgData = produktivitasChartElement.toDataURL('image/png');
-     console.log("Data URL produktivitasChart berhasil didapatkan:", imgData.substring(0, 50) + "...");
-     pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
-     yOffset += 85;
-    } catch (chartError) {
-     console.error("Error adding produktivitas chart to PDF:", chartError);
-     let errorMessage = "Gagal menambahkan grafik produktivitas ke PDF.";
-     if (chartError instanceof Error && chartError.message) {
-      errorMessage += " " + chartError.message;
-     } else {
-      errorMessage += " (Detail tidak tersedia)";
-     }
-     toastr.error(errorMessage, "Error");
-    }
-   }
+            loadHistory();
+        });
 
-   try {
-    pdf.save("hasil_produktivitas.pdf");
-   } catch (saveError) {
-    console.error("Gagal menyimpan PDF:", saveError);
-    let errorMessage = "Gagal menyimpan PDF. Pastikan browser Anda mendukung penyimpanan file.";
-    if (saveError instanceof Error && saveError.message) {
-     errorMessage += " " + saveError.message;
+        document.getElementById('exportPdfBtn').addEventListener('click', function () {
+    console.log("Tombol Export PDF diklik");
+
+    const resultsElement = document.getElementById('results');
+    console.log("resultsElement:", resultsElement);
+
+    if (resultsElement) {
+        console.log("Elemen hasil ditemukan");
+        try {
+            // Konfigurasi jsPDF - VERSI TERBARU
+            const { jsPDF } = jspdf;  // Akses konstruktor jsPDF dengan benar
+            const pdf = new jsPDF();
+            pdf.setFontSize(12);
+
+            // Judul Dokumen
+            pdf.text("Hasil Perhitungan Produktivitas", 10, 10);
+
+            let yOffset = 20; // Posisi awal untuk konten
+
+            // Hasil Ritase dan Produktivitas
+            const ritaseElement = document.getElementById('ritase');
+            const produktivitasElement = document.getElementById('produktivitas');
+
+            if (ritaseElement && produktivitasElement) {
+                const ritaseText = ritaseElement.textContent;
+                const produktivitasText = produktivitasElement.textContent;
+                pdf.text(ritaseText, 15, yOffset);
+                yOffset += 7;
+                pdf.text(produktivitasText, 15, yOffset);
+                yOffset += 15; // Spasi setelah hasil
+            } else {
+                console.warn("Elemen ritase atau produktivitas tidak ditemukan.");
+                toastr.warning("Hasil ritase atau produktivitas tidak dapat diekspor.");
+            }
+
+            // Peringatan dan Saran
+            const warningsElement = document.getElementById('warnings');
+            if (warningsElement) {
+                console.log("jsPDF instance:", pdf);
+                pdf.setFontSize(12);
+                const warningElements = warningsElement.querySelectorAll('p');
+                warningElements.forEach(element => {
+                    pdf.text(element.textContent, 15, yOffset);
+                    yOffset += 7;
+                });
+            }
+
+            // Charts
+            const ritaseChartElement = document.getElementById('ritaseChart');
+            if (ritaseChartElement) {
+                try {
+                    console.log("Mencoba mendapatkan data URL untuk ritaseChart");
+                    const imgData = ritaseChartElement.toDataURL('image/png');
+                    console.log("Data URL ritaseChart berhasil didapatkan:", imgData.substring(0, 50) + "...");
+                    pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
+                    yOffset += 85;
+                } catch (chartError) {
+                    console.error("Error adding ritase chart to PDF:", chartError);
+                    let errorMessage = "Gagal menambahkan grafik ritase ke PDF.";
+                    if (chartError instanceof Error && chartError.message) {
+                        errorMessage += " " + chartError.message;
+                    } else {
+                        errorMessage += " (Detail tidak tersedia)";
+                    }
+                    toastr.error(errorMessage, "Error");
+                }
+            }
+
+            const produktivitasChartElement = document.getElementById('produktivitasChart');
+            if (produktivitasChartElement) {
+                try {
+                    console.log("Mencoba mendapatkan data URL untuk produktivitasChart");
+                    const imgData = produktivitasChartElement.toDataURL('image/png');
+                    console.log("Data URL produktivitasChart berhasil didapatkan:", imgData.substring(0, 50) + "...");
+                    pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
+                    yOffset += 85;
+                } catch (chartError) {
+                    console.error("Error adding produktivitas chart to PDF:", chartError);
+                    let errorMessage = "Gagal menambahkan grafik produktivitas ke PDF.";
+                    if (chartError instanceof Error && chartError.message) {
+                        errorMessage += " " + chartError.message;
+                    } else {
+                        errorMessage += " (Detail tidak tersedia)";
+                    }
+                    toastr.error(errorMessage, "Error");
+                }
+            }
+
+            try {
+                pdf.save("hasil_produktivitas.pdf");
+            } catch (saveError) {
+                console.error("Gagal menyimpan PDF:", saveError);
+                let errorMessage = "Gagal menyimpan PDF. Pastikan browser Anda mendukung penyimpanan file.";
+                if (saveError instanceof Error && saveError.message) {
+                    errorMessage += " " + saveError.message;
+                } else {
+                    errorMessage += " (Detail tidak tersedia)";
+                }
+                toastr.error(errorMessage, "Error");
+            }
+        } catch (overallError) {
+            console.error("Terjadi kesalahan selama pembuatan PDF:", overallError);
+            let errorMessage = "Terjadi kesalahan selama pembuatan PDF.";
+            if (overallError instanceof Error && overallError.message) {
+                errorMessage += " " + overallError.message;
+            } else {
+                errorMessage += " (Detail tidak tersedia)";
+            }
+            toastr.error(errorMessage, "Error");
+        }
     } else {
-     errorMessage += " (Detail tidak tersedia)";
+        console.log("Elemen hasil TIDAK ditemukan");
+        toastr.error("Tidak ada hasil untuk diekspor.", "Error");
     }
-    toastr.error(errorMessage, "Error");
-   }
-  } catch (overallError) {
-   console.error("Terjadi kesalahan selama pembuatan PDF:", overallError);
-   let errorMessage = "Terjadi kesalahan selama pembuatan PDF.";
-   if (overallError instanceof Error && overallError.message) {
-    errorMessage += " " + overallError.message;
-   } else {
-    errorMessage += " (Detail tidak tersedia)";
-   }
-   toastr.error(errorMessage, "Error");
-  }
- } else {
-  console.log("Elemen hasil TIDAK ditemukan");
-  toastr.error("Tidak ada hasil untuk diekspor.", "Error");
- }
 });
 
         // Attach the displayEgiInfo function to the onclick event of the "Info EGI" navbar link
