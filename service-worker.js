@@ -1,4 +1,4 @@
-const CACHE_NAME = 'prod-calculator-cache-v4';
+const CACHE_NAME = 'prod-calculator-cache-v5'; // PERHATIKAN VERSI YANG BERUBAH
 const urlsToCache = [
     '/',
     '/index.html',
@@ -58,58 +58,58 @@ self.addEventListener('activate', (event) => {
     });
 
 self.addEventListener('fetch', (event) => {
-        event.respondWith(
-            caches.match(event.request)
-                .then((response) => {
-                    // Cache hit - return response
-                    if (response) {
-                        // console.log('Service Worker: Found in cache ', event.request.url);
-                        return response;
-                    }
+    event.respondWith(
+        caches.match(event.request)
+            .then((response) => {
+                // Cache hit - return response
+                if (response) {
+                    // console.log('Service Worker: Found in cache ', event.request.url);
+                    return response;
+                }
 
-                    // Not in cache - fetch and cache
-                    console.log('Service Worker: Fetching from network ', event.request.url);
-                    return fetch(event.request)
-                        .then((response) => {
-                            // Check if we received a valid response
-                            if (!response || response.status !== 200 || response.type !== 'basic') {
-                                console.log('Service Worker: Invalid response from network.');
-                                return response;
-                            }
-
-                            // IMPORTANT: Clone the response. A response is a stream
-                            // and because we want the browser to consume the response
-                            // as well as the cache consuming the response, we need
-                            // to clone it so we have two independent copies.
-                            var responseToCache = response.clone();
-
-                            caches.open(CACHE_NAME)
-                                .then(function (cache) {
-                                    cache.put(event.request, responseToCache);
-                                });
-
+                // Not in cache - fetch and cache
+                console.log('Service Worker: Fetching from network ', event.request.url);
+                return fetch(event.request)
+                    .then((response) => {
+                        // Check if we received a valid response
+                        if (!response || response.status !== 200 || response.type !== 'basic') {
+                            console.log('Service Worker: Invalid response from network.');
                             return response;
-                        })
-                        .catch(err => {
-                            console.error("Service Worker: Fetch failed:", err);
-                            // Optionally return a fallback page for navigation requests
-                            if (event.request.mode === 'navigate') {
-                                console.log("Service Worker: Returning offline page");
-                                return caches.match('/offline.html') // Coba ambil offline.html dari cache
-                                    .then(offlineResponse => {
-                                        if (offlineResponse) {
-                                            return offlineResponse;
-                                        }
-                                        // Jika offline.html juga tidak ada di cache, tampilkan respons error
-                                        console.error('Service Worker: offline.html not found in cache');
-                                        return new Response('<h1>Offline Page Not Available</h1>', {
-                                            status: 503,
-                                            statusText: 'Service Unavailable',
-                                            headers: { 'Content-Type': 'text/html' }
-                                        });
+                        }
+
+                        // IMPORTANT: Clone the response. A response is a stream
+                        // and because we want the browser to consume the response
+                        // as well as the cache consuming the response, we need
+                        // to clone it so we have two independent copies.
+                        var responseToCache = response.clone();
+
+                        caches.open(CACHE_NAME)
+                            .then(function (cache) {
+                                cache.put(event.request, responseToCache);
+                            });
+
+                        return response;
+                    })
+                    .catch(err => {
+                        console.error("Service Worker: Fetch failed:", err);
+                        // Optionally return a fallback page for navigation requests
+                        if (event.request.mode === 'navigate') {
+                            console.log("Service Worker: Returning offline page");
+                            return caches.match('/offline.html') // Coba ambil offline.html dari cache
+                                .then(offlineResponse => {
+                                    if (offlineResponse) {
+                                        return offlineResponse;
+                                    }
+                                    // Jika offline.html juga tidak ada di cache, tampilkan respons error
+                                    console.error('Service Worker: offline.html not found in cache');
+                                    return new Response('<h1>Offline Page Not Available</h1>', {
+                                        status: 503,
+                                        statusText: 'Service Unavailable',
+                                        headers: { 'Content-Type': 'text/html' }
                                     });
-                            }
-                        });
-                })
-        );
-    });
+                            });
+                        }
+                    });
+            })
+    );
+});
