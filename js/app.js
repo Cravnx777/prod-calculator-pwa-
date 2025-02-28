@@ -27,13 +27,36 @@ document.addEventListener('DOMContentLoaded', () => {
             const btnLoader = document.getElementById("btnLoader");
 
             if (btnText && btnLoader) {
+                // Tambahkan class untuk memulai animasi loader (CSS)
                 btnText.classList.add("hidden");
                 btnLoader.classList.remove("hidden");
 
-                setTimeout(() => {
+                // Dapatkan data formulir
+                const formData = new FormData(prodForm);
+
+                // Kirim data menggunakan AJAX
+                fetch('/calculate', { // Ganti '/calculate' dengan URL endpoint Anda
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json()) // Ubah ke JSON
+                .then(data => {
+                    // Sembunyikan loader setelah respons diterima
                     btnLoader.classList.add("hidden");
                     btnText.classList.remove("hidden");
-                }, 2000);
+
+                    // Tampilkan hasil
+                    displayResults(data); // Ganti displayResults dengan fungsi Anda
+
+                    // Tambahkan kode lain untuk menampilkan hasil
+                })
+                .catch(error => {
+                    // Tangani kesalahan
+                    console.error("Error:", error);
+                    btnLoader.classList.add("hidden");
+                    btnText.classList.remove("hidden");
+                    // Tampilkan pesan kesalahan kepada pengguna
+                });
             } else {
                 console.warn("btnText or btnLoader element not found");
             }
@@ -655,7 +678,12 @@ function calculateResults(formData) {
 
 // Fungsi untuk menampilkan hasil perhitungan
 function displayResults(results) {
-    if (!results) return;
+    if (!results) {
+        console.warn("Hasil tidak valid, tidak menampilkan apa pun.");
+        return;
+    }
+
+    console.log("Hasil yang akan ditampilkan:", results); // TAMBAHKAN INI
 
     const ritaseElement = document.getElementById('ritase');
     const produktivitasElement = document.getElementById('produktivitas');
@@ -940,10 +968,17 @@ function generateWarnings(results, formData) {
 
 // Fungsi untuk membuat atau memperbarui grafik
 function createCharts(results) {
-    if (!results) return;
+    if (!results) {
+        console.warn("Objek 'results' null atau undefined. Grafik tidak akan dibuat.");
+        return;
+    }
 
     const { ritase, produktivitas, targetRitase, targetProduktivitas } = results;
 
+    if (isNaN(ritase) || isNaN(produktivitas) || isNaN(targetRitase) || isNaN(targetProduktivitas)) {
+        console.warn("Salah satu nilai ritase, produktivitas, targetRitase, atau targetProduktivitas adalah NaN.");
+        return;
+    }
     const chartOptions = {
         type: 'bar',
         options: {
@@ -1028,30 +1063,41 @@ function createCharts(results) {
 function createOrUpdateChart(chartId, chartData, options) {
     const ctx = document.getElementById(chartId).getContext('2d');
 
-    if (ctx) {
-        // Hancurkan instance chart sebelumnya jika ada
+    if (!ctx) {
+        console.error('Tidak dapat mendapatkan konteks 2D untuk ' + chartId);
+        return;
+    }
+
+    try {
         if (chartId === 'ritaseChart' && ritaseChart) {
             ritaseChart.destroy();
         } else if (chartId === 'produktivitasChart' && produktivitasChart) {
             produktivitasChart.destroy();
         }
+    } catch (error) {
+        console.error("Gagal menghancurkan grafik sebelumnya:", error);
+    }
 
-        // Buat instance chart baru
+    try {
+        let newChart;
         if (chartId === 'ritaseChart') {
-            ritaseChart = new Chart(ctx, {
+            newChart = new Chart(ctx, {
                 type: options.type,
                 data: chartData,
                 options: options.options
             });
+            ritaseChart = newChart;
         } else if (chartId === 'produktivitasChart') {
-            produktivitasChart = new Chart(ctx, {
+            newChart = new Chart(ctx, {
                 type: options.type,
                 data: chartData,
                 options: options.options
             });
+            produktivitasChart = newChart;
         }
-    } else {
-        console.error('Tidak dapat mendapatkan konteks 2D untuk ' + chartId);
+        console.log("Grafik " + chartId + " berhasil dibuat/diperbarui.");
+    } catch (error) {
+        console.error("Gagal membuat grafik:", error);
     }
 }
 
@@ -1740,6 +1786,10 @@ function loadTheme() {
         console.error("Error loading theme:", error);
     }
 }
+document.addEventListener('DOMContentLoaded', () => {
+    loadTheme();
+    loadHistory();
+});
 
 // ==========================================================================
 // Page Navigation
