@@ -6,6 +6,9 @@
   "display": "standalone",
   "background_color": "#283442",
   "theme_color": "#f0ad4e",
+  "permissions": [
+    "storage"
+  ],
   "icons": [
     {
       "src": "icons/icon-72x72.png",
