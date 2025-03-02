@@ -1917,17 +1917,14 @@
             }
 
             try {
-                pdf.save("hasil_produktivitas.pdf");
-            } catch (saveError) {
-                console.error("Gagal menyimpan PDF:", saveError);
-                let errorMessage = "Gagal menyimpan PDF. Pastikan browser Anda mendukung penyimpanan file.";
-                if (saveError instanceof Error && saveError.message) {
-                    errorMessage += " " + saveError.message;
-                } else {
-                    errorMessage += " (Detail tidak tersedia)";
-                }
-                toastr.error(errorMessage, "Error");
+                const dataURI = pdf.output('datauristring');
+                console.log("Data URI yang dihasilkan:", dataURI.substring(0, 50) + "...");
+                Android.getPdfData(dataURI);  // Panggil JavaScript Interface
+            } catch (outputError) {
+                console.error("Gagal menghasilkan data URI:", outputError);
+                toastr.error("Gagal menghasilkan data URI untuk PDF.", "Error");
             }
+
         } catch (overallError) {
             console.error("Terjadi kesalahan selama pembuatan PDF:", overallError);
             let errorMessage = "Terjadi kesalahan selama pembuatan PDF.";
