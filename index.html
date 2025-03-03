@@ -1828,119 +1828,97 @@
 
             loadHistory();
         });
-        document.getElementById('exportPdfBtn').addEventListener('click', function () {
-    console.log("Tombol Export PDF diklik");
+        function triggerExportPDF() {
+    console.log("triggerExportPDF() dipanggil");
+    exportToPDF();
+}
 
-    const resultsElement = document.getElementById('results');
-    console.log("resultsElement:", resultsElement);
+function exportToPDF() {
+    console.log("exportToPDF() dipanggil");
+    try {
+        const { jsPDF } = jspdf;
+        console.log("jsPDF loaded successfully");
+        const pdf = new jsPDF();
+        pdf.setFontSize(12);
 
-    if (resultsElement) {
-        console.log("Elemen hasil ditemukan");
-        try {
-            // Konfigurasi jsPDF - VERSI TERBARU
-            const { jsPDF } = jspdf;  // Akses konstruktor jsPDF dengan benar
-            const pdf = new jsPDF();
-            pdf.setFontSize(12);
+        // Judul Dokumen
+        pdf.text("Hasil Perhitungan Produktivitas", 10, 10);
 
-            // Judul Dokumen
-            pdf.text("Hasil Perhitungan Produktivitas", 10, 10);
+        let yOffset = 20; // Posisi awal untuk konten
 
-            let yOffset = 20; // Posisi awal untuk konten
+        // Hasil Ritase dan Produktivitas
+        const ritaseElement = document.getElementById('ritase');
+        const produktivitasElement = document.getElementById('produktivitas');
 
-            // Hasil Ritase dan Produktivitas
-            const ritaseElement = document.getElementById('ritase');
-            const produktivitasElement = document.getElementById('produktivitas');
-
-            if (ritaseElement && produktivitasElement) {
-                const ritaseText = ritaseElement.textContent;
-                const produktivitasText = produktivitasElement.textContent;
-                pdf.text(ritaseText, 15, yOffset);
-                yOffset += 7;
-                pdf.text(produktivitasText, 15, yOffset);
-                yOffset += 15; // Spasi setelah hasil
-            } else {
-                console.warn("Elemen ritase atau produktivitas tidak ditemukan.");
-                toastr.warning("Hasil ritase atau produktivitas tidak dapat diekspor.");
-            }
-
-            // Peringatan dan Saran
-            const warningsElement = document.getElementById('warnings');
-            if (warningsElement) {
-                console.log("jsPDF instance:", pdf);
-                pdf.setFontSize(12);
-                const warningElements = warningsElement.querySelectorAll('p');
-                warningElements.forEach(element => {
-                    pdf.text(element.textContent, 15, yOffset);
-                    yOffset += 7;
-                });
-            }
-
-            // Charts
-            const ritaseChartElement = document.getElementById('ritaseChart');
-            if (ritaseChartElement) {
-                try {
-                    console.log("Mencoba mendapatkan data URL untuk ritaseChart");
-                    const imgData = ritaseChartElement.toDataURL('image/png');
-                    console.log("Data URL ritaseChart berhasil didapatkan:", imgData.substring(0, 50) + "...");
-                    pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
-                    yOffset += 85;
-                } catch (chartError) {
-                    console.error("Error adding ritase chart to PDF:", chartError);
-                    let errorMessage = "Gagal menambahkan grafik ritase ke PDF.";
-                    if (chartError instanceof Error && chartError.message) {
-                        errorMessage += " " + chartError.message;
-                    } else {
-                        errorMessage += " (Detail tidak tersedia)";
-                    }
-                    toastr.error(errorMessage, "Error");
-                }
-            }
-
-            const produktivitasChartElement = document.getElementById('produktivitasChart');
-            if (produktivitasChartElement) {
-                try {
-                    console.log("Mencoba mendapatkan data URL untuk produktivitasChart");
-                    const imgData = produktivitasChartElement.toDataURL('image/png');
-                    console.log("Data URL produktivitasChart berhasil didapatkan:", imgData.substring(0, 50) + "...");
-                    pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
-                    yOffset += 85;
-                } catch (chartError) {
-                    console.error("Error adding produktivitas chart to PDF:", chartError);
-                    let errorMessage = "Gagal menambahkan grafik produktivitas ke PDF.";
-                    if (chartError instanceof Error && chartError.message) {
-                        errorMessage += " " + chartError.message;
-                    } else {
-                        errorMessage += " (Detail tidak tersedia)";
-                    }
-                    toastr.error(errorMessage, "Error");
-                }
-            }
-
-            try {
-                const dataURI = pdf.output('datauristring');
-                console.log("Data URI yang dihasilkan:", dataURI.substring(0, 50) + "...");
-                Android.getPdfData(dataURI);  // Panggil JavaScript Interface
-            } catch (outputError) {
-                console.error("Gagal menghasilkan data URI:", outputError);
-                toastr.error("Gagal menghasilkan data URI untuk PDF.", "Error");
-            }
-
-        } catch (overallError) {
-            console.error("Terjadi kesalahan selama pembuatan PDF:", overallError);
-            let errorMessage = "Terjadi kesalahan selama pembuatan PDF.";
-            if (overallError instanceof Error && overallError.message) {
-                errorMessage += " " + overallError.message;
-            } else {
-                errorMessage += " (Detail tidak tersedia)";
-            }
-            toastr.error(errorMessage, "Error");
+        if (ritaseElement && produktivitasElement) {
+            const ritaseText = ritaseElement.textContent;
+            const produktivitasText = produktivitasElement.textContent;
+            pdf.text(ritaseText, 15, yOffset);
+            yOffset += 7;
+            pdf.text(produktivitasText, 15, yOffset);
+            yOffset += 15; // Spasi setelah hasil
+        } else {
+            console.warn("Elemen ritase atau produktivitas tidak ditemukan.");
+            toastr.warning("Hasil ritase atau produktivitas tidak dapat diekspor.");
         }
-    } else {
-        console.log("Elemen hasil TIDAK ditemukan");
-        toastr.error("Tidak ada hasil untuk diekspor.", "Error");
-    }
-});
 
+        // Peringatan dan Saran
+        const warningsElement = document.getElementById('warnings');
+        if (warningsElement) {
+            console.log("jsPDF instance:", pdf);
+            pdf.setFontSize(12);
+            const warningElements = warningsElement.querySelectorAll('p');
+            warningElements.forEach(element => {
+                pdf.text(element.textContent, 15, yOffset);
+                yOffset += 7;
+            });
+        }
+
+        // Charts
+        const ritaseChartElement = document.getElementById('ritaseChart');
+        if (ritaseChartElement) {
+            try {
+                console.log("Mencoba mendapatkan data URL untuk ritaseChart");
+                const imgData = ritaseChartElement.toDataURL('image/png');
+                console.log("Data URL ritaseChart berhasil didapatkan:", imgData.substring(0, 50) + "...");
+                pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
+                yOffset += 85;
+            } catch (chartError) {
+                console.error("Error adding ritase chart to PDF:", chartError);
+                toastr.error("Gagal menambahkan grafik ritase ke PDF: " + chartError.message, "Error");
+            }
+        }
+
+        const produktivitasChartElement = document.getElementById('produktivitasChart');
+        if (produktivitasChartElement) {
+            try {
+                console.log("Mencoba mendapatkan data URL untuk produktivitasChart");
+                const imgData = produktivitasChartElement.toDataURL('image/png');
+                console.log("Data URL produktivitasChart berhasil didapatkan:", imgData.substring(0, 50) + "...");
+                pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
+                yOffset += 85;
+            } catch (chartError) {
+                console.error("Error adding produktivitas chart to PDF:", chartError);
+                toastr.error("Gagal menambahkan grafik produktivitas ke PDF: " + chartError.message, "Error");
+            }
+        }
+
+        try {
+            const dataURI = pdf.output('datauristring');
+            console.log("Data URI yang dihasilkan:", dataURI.substring(0, 50) + "...");
+            Android.getPdfData(dataURI);  // Panggil JavaScript Interface
+        } catch (outputError) {
+            console.error("Gagal menghasilkan data URI:", outputError);
+            toastr.error("Gagal menghasilkan data URI untuk PDF: " + outputError.message, "Error");
+        }
+
+    } catch (overallError) {
+        console.error("Terjadi kesalahan selama pembuatan PDF:", overallError);
+        toastr.error("Terjadi kesalahan selama pembuatan PDF: " + overallError.message, "Error");
+    }
+}
+
+});
         // Attach the displayEgiInfo function to the onclick event of the "Info EGI" navbar link
         document.querySelector('.nav-link-bottom[href="#"]').addEventListener('click', function (event) {
             event.preventDefault(); // Prevent the default action
