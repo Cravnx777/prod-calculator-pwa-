@@ -1885,7 +1885,13 @@ function exportToPDF() {
                 yOffset += 85;
             } catch (chartError) {
                 console.error("Error adding ritase chart to PDF:", chartError);
-                toastr.error("Gagal menambahkan grafik ritase ke PDF: " + chartError.message, "Error");
+                let errorMessage = "Gagal menambahkan grafik ritase ke PDF.";
+                if (chartError instanceof Error && chartError.message) {
+                    errorMessage += " " + chartError.message;
+                } else {
+                    errorMessage += " (Detail tidak tersedia)";
+                }
+                toastr.error(errorMessage, "Error");
             }
         }
 
@@ -1899,25 +1905,50 @@ function exportToPDF() {
                 yOffset += 85;
             } catch (chartError) {
                 console.error("Error adding produktivitas chart to PDF:", chartError);
-                toastr.error("Gagal menambahkan grafik produktivitas ke PDF: " + chartError.message, "Error");
+                let errorMessage = "Gagal menambahkan grafik produktivitas ke PDF.";
+                if (chartError instanceof Error && chartError.message) {
+                    errorMessage += " " + chartError.message;
+                } else {
+                    errorMessage += " (Detail tidak tersedia)";
+                }
+                toastr.error(errorMessage, "Error");
             }
         }
 
         try {
             const dataURI = pdf.output('datauristring');
             console.log("Data URI yang dihasilkan:", dataURI.substring(0, 50) + "...");
-            Android.getPdfData(dataURI);  // Panggil JavaScript Interface
+
+            // Periksa apakah Android didefinisikan (berarti kita berada di WebView)
+            if (typeof Android !== 'undefined') {
+                console.log("Android object terdeteksi, memanggil Android.getPdfData()");
+                Android.getPdfData(dataURI);  // Panggil JavaScript Interface
+            } else {
+                console.log("Android object tidak terdeteksi, mengunduh PDF di browser");
+                // Kode untuk mengunduh PDF di browser
+                pdf.save("hasil_produktivitas.pdf");
+            }
         } catch (outputError) {
             console.error("Gagal menghasilkan data URI:", outputError);
-            toastr.error("Gagal menghasilkan data URI untuk PDF: " + outputError.message, "Error");
+            toastr.error("Gagal menghasilkan data URI untuk PDF.", "Error");
         }
 
     } catch (overallError) {
         console.error("Terjadi kesalahan selama pembuatan PDF:", overallError);
-        toastr.error("Terjadi kesalahan selama pembuatan PDF: " + overallError.message, "Error");
+        let errorMessage = "Terjadi kesalahan selama pembuatan PDF.";
+        if (overallError instanceof Error && overallError.message) {
+            errorMessage += " " + overallError.message;
+        } else {
+            errorMessage += " (Detail tidak tersedia)";
+        }
+        toastr.error(errorMessage, "Error");
     }
 }
 
+// Kembalikan event listener ke tombol
+document.getElementById('exportPdfBtn').addEventListener('click', function () {
+    console.log("Tombol exportPdfBtn diklik");
+    exportToPDF();
 });
         // Attach the displayEgiInfo function to the onclick event of the "Info EGI" navbar link
         document.querySelector('.nav-link-bottom[href="#"]').addEventListener('click', function (event) {
