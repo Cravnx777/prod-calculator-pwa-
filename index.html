@@ -1828,18 +1828,13 @@
 
             loadHistory();
         });
-        function triggerExportPDF() {
-    console.log("triggerExportPDF() dipanggil");
-    exportToPDF();
-}
-
-function exportToPDF() {
-    console.log("exportToPDF() dipanggil");
-    try {
-        const { jsPDF } = jspdf;
-        console.log("jsPDF loaded successfully");
-        const pdf = new jsPDF();
-        pdf.setFontSize(12);
+        function exportToPDF() {
+            console.log("exportToPDF() dipanggil");
+            try {
+                const { jsPDF } = jspdf;
+                console.log("jsPDF loaded successfully");
+                const pdf = new jsPDF();
+                pdf.setFontSize(12);
 
         // Judul Dokumen
         pdf.text("Hasil Perhitungan Produktivitas", 10, 10);
@@ -1859,13 +1854,13 @@ function exportToPDF() {
             yOffset += 15; // Spasi setelah hasil
         } else {
             console.warn("Elemen ritase atau produktivitas tidak ditemukan.");
-            toastr.warning("Hasil ritase atau produktivitas tidak dapat diekspor.");
+            toastr.warning("Hasil ritase atau produktivitas tidak dapat diekspor.", "Peringatan");
         }
 
         // Peringatan dan Saran
         const warningsElement = document.getElementById('warnings');
         if (warningsElement) {
-            console.log("jsPDF instance:", pdf);
+            console.log("Menambahkan peringatan ke PDF");
             pdf.setFontSize(12);
             const warningElements = warningsElement.querySelectorAll('p');
             warningElements.forEach(element => {
@@ -1874,57 +1869,49 @@ function exportToPDF() {
             });
         }
 
-        // Charts
-        const ritaseChartElement = document.getElementById('ritaseChart');
-        if (ritaseChartElement) {
-            try {
-                console.log("Mencoba mendapatkan data URL untuk ritaseChart");
-                const imgData = ritaseChartElement.toDataURL('image/png');
-                console.log("Data URL ritaseChart berhasil didapatkan:", imgData.substring(0, 50) + "...");
-                pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
-                yOffset += 85;
-            } catch (chartError) {
-                console.error("Error adding ritase chart to PDF:", chartError);
-                let errorMessage = "Gagal menambahkan grafik ritase ke PDF.";
-                if (chartError instanceof Error && chartError.message) {
-                    errorMessage += " " + chartError.message;
-                } else {
-                    errorMessage += " (Detail tidak tersedia)";
+        // Fungsi untuk menambahkan grafik ke PDF
+        function addChartToPdf(chartElement, pdf, yOffset, chartName) {
+            if (chartElement) {
+                try {
+                    console.log(`Mencoba mendapatkan data URL untuk ${chartName}`);
+                    const imgData = chartElement.toDataURL('image/png');
+                    console.log(`Data URL ${chartName} berhasil didapatkan:`, imgData.substring(0, 50) + "...");
+                    pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
+                    return yOffset + 85;
+                } catch (chartError) {
+                    console.error(`Error menambahkan ${chartName} ke PDF:`, chartError);
+                    let errorMessage = `Gagal menambahkan grafik ${chartName} ke PDF.`;
+                    if (chartError instanceof Error && chartError.message) {
+                        errorMessage += " " + chartError.message;
+                    } else {
+                        errorMessage += " (Detail tidak tersedia)";
+                    }
+                    toastr.error(errorMessage, "Error");
+                    return yOffset; // Kembalikan yOffset yang tidak berubah jika terjadi kesalahan
                 }
-                toastr.error(errorMessage, "Error");
+            } else {
+                console.warn(`Elemen grafik ${chartName} tidak ditemukan.`);
+                toastr.warning(`Grafik ${chartName} tidak dapat diekspor.`, "Peringatan");
+                return yOffset; // Kembalikan yOffset yang tidak berubah jika elemen tidak ditemukan
             }
         }
 
-        const produktivitasChartElement = document.getElementById('produktivitasChart');
-        if (produktivitasChartElement) {
-            try {
-                console.log("Mencoba mendapatkan data URL untuk produktivitasChart");
-                const imgData = produktivitasChartElement.toDataURL('image/png');
-                console.log("Data URL produktivitasChart berhasil didapatkan:", imgData.substring(0, 50) + "...");
-                pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
-                yOffset += 85;
-            } catch (chartError) {
-                console.error("Error adding produktivitas chart to PDF:", chartError);
-                let errorMessage = "Gagal menambahkan grafik produktivitas ke PDF.";
-                if (chartError instanceof Error && chartError.message) {
-                    errorMessage += " " + chartError.message;
-                } else {
-                    errorMessage += " (Detail tidak tersedia)";
-                }
-                toastr.error(errorMessage, "Error");
-            }
-        }
+        // Tambahkan grafik ritase
+        yOffset = addChartToPdf(document.getElementById('ritaseChart'), pdf, yOffset, "ritaseChart");
+
+        // Tambahkan grafik produktivitas
+        yOffset = addChartToPdf(document.getElementById('produktivitasChart'), pdf, yOffset, "produktivitasChart");
 
         try {
             const dataURI = pdf.output('datauristring');
             console.log("Data URI yang dihasilkan:", dataURI.substring(0, 50) + "...");
 
-            // Periksa apakah Android didefinisikan (berarti kita berada di WebView)
-            if (typeof Android !== 'undefined') {
-                console.log("Android object terdeteksi, memanggil Android.getPdfData()");
+            // Periksa apakah Android didefinisikan (berarti kita berada di WebView) dan fungsi getPdfData ada
+            if (typeof Android !== 'undefined' && typeof Android.getPdfData === 'function') {
+                console.log("Objek Android dan fungsi getPdfData terdeteksi, memanggil Android.getPdfData()");
                 Android.getPdfData(dataURI);  // Panggil JavaScript Interface
             } else {
-                console.log("Android object tidak terdeteksi, mengunduh PDF di browser");
+                console.log("Objek Android atau fungsi getPdfData tidak terdeteksi, mengunduh PDF di browser");
                 // Kode untuk mengunduh PDF di browser
                 pdf.save("hasil_produktivitas.pdf");
             }
