@@ -1829,12 +1829,12 @@
             loadHistory();
         });
         function exportToPDF() {
-            console.log("exportToPDF() dipanggil");
-            try {
-                const { jsPDF } = jspdf;
-                console.log("jsPDF loaded successfully");
-                const pdf = new jsPDF();
-                pdf.setFontSize(12);
+    console.log("exportToPDF() dipanggil");
+    try {
+        const { jsPDF } = window.jspdf; // Pastikan jsPDF diakses dari window
+        console.log("jsPDF loaded successfully");
+        const pdf = new jsPDF();
+        pdf.setFontSize(12);
 
         // Judul Dokumen
         pdf.text("Hasil Perhitungan Produktivitas", 10, 10);
@@ -1845,17 +1845,18 @@
         const ritaseElement = document.getElementById('ritase');
         const produktivitasElement = document.getElementById('produktivitas');
 
-        if (ritaseElement && produktivitasElement) {
-            const ritaseText = ritaseElement.textContent;
-            const produktivitasText = produktivitasElement.textContent;
-            pdf.text(ritaseText, 15, yOffset);
-            yOffset += 7;
-            pdf.text(produktivitasText, 15, yOffset);
-            yOffset += 15; // Spasi setelah hasil
-        } else {
+        if (!ritaseElement || !produktivitasElement) {
             console.warn("Elemen ritase atau produktivitas tidak ditemukan.");
             toastr.warning("Hasil ritase atau produktivitas tidak dapat diekspor.", "Peringatan");
+            return; // Early exit if elements are not found
         }
+
+        const ritaseText = ritaseElement.textContent;
+        const produktivitasText = produktivitasElement.textContent;
+        pdf.text(ritaseText, 15, yOffset);
+        yOffset += 7;
+        pdf.text(produktivitasText, 15, yOffset);
+        yOffset += 15; // Spasi setelah hasil
 
         // Peringatan dan Saran
         const warningsElement = document.getElementById('warnings');
@@ -1877,16 +1878,10 @@
                     const imgData = chartElement.toDataURL('image/png');
                     console.log(`Data URL ${chartName} berhasil didapatkan:`, imgData.substring(0, 50) + "...");
                     pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
-                    return yOffset + 85;
+                    return yOffset + 85; // Kembalikan yOffset yang baru
                 } catch (chartError) {
                     console.error(`Error menambahkan ${chartName} ke PDF:`, chartError);
-                    let errorMessage = `Gagal menambahkan grafik ${chartName} ke PDF.`;
-                    if (chartError instanceof Error && chartError.message) {
-                        errorMessage += " " + chartError.message;
-                    } else {
-                        errorMessage += " (Detail tidak tersedia)";
-                    }
-                    toastr.error(errorMessage, "Error");
+                    toastr.error(`Gagal menambahkan grafik ${chartName} ke PDF.`, "Error");
                     return yOffset; // Kembalikan yOffset yang tidak berubah jika terjadi kesalahan
                 }
             } else {
@@ -1932,7 +1927,7 @@
     }
 }
 
-// Kembalikan event listener ke tombol
+// Event listener untuk tombol ekspor PDF
 document.getElementById('exportPdfBtn').addEventListener('click', function () {
     console.log("Tombol exportPdfBtn diklik");
     exportToPDF();
