@@ -5,32 +5,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prod Calculator - Optimalkan Produktivitas Pertambangan Anda</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS and Font Awesome (CDN) -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Toastr CSS and JavaScript -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/21.8.14/i18next.min.js"
-        integrity="sha512-jnLk89W5wPny0nKou9w4b/0+jZ3XgWk+O4f5w80xUvw65U9T/7lEV/2Jv+e0H8Y0fM5U+gQj9lG6H33gK7J6w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- i18next (Internationalization) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/21.8.14/i18next.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-browser-languagedetector/7.1.0/i18nextBrowserLanguageDetector.min.js" integrity="sha512-INOD11hT+C8SDRYQYy+ea+O1jL+aFegWNu05sNq7a9o3OO1jmnwS2MtQiUTW4wkSQ+dQJqnzm9+jFNX8q1xUeg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-http-backend/2.2.1/i18nextHTTPBackend.min.js" integrity="sha512-QK2zxy1MDxS7t9EQT7DS4wD1XQvY039jbVZs1O6S4iJm7U8TqVbY11tKxYJmYpB/Xwz4vY+iJ2NfI5mJqgO6w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-browser-languagedetector/7.1.0/i18nextBrowserLanguageDetector.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-http-backend/2.2.1/i18nextHTTPBackend.min.js"></script>
+
+    <!-- FileSaver.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
-    <!-- Tambahkan Google Analytics (Ganti UA-XXXXXXX-Y dengan ID Anda) -->
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-Y"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-
         gtag('config', 'UA-XXXXXXX-Y');
 
-        // Fungsi untuk mengirim peristiwa ke Google Analytics
         function trackEvent(category, action, label) {
             gtag('event', action, {
                 'event_category': category,
@@ -38,307 +44,323 @@
             });
         }
     </script>
-    
+
+    <!-- Custom Styles -->
     <style>
-        /* Default Dark Mode */
+        /* Color Palette (Dark Mode - Default) */
         :root {
-            --bg-mining: #283442;
-            --text-mining: #f0ad4e;
-            --border-mining: #f0ad4e;
-            --bg-mining-light: #34495e;
-            --text-mining-light: #d0d8e0;
-            --text-warning: #f39c12;
-            --text-success: #2ecc71;
-            --bg-orange: #f0ad4e;
-            --bg-orange-dark: #e09a3a;
-            --bg-blue: #3498db;
-            --bg-blue-dark: #2980b9;
-            --body-bg: var(--bg-mining);
-            --body-text: var(--text-mining-light);
+            --primary-color: #f0ad4e; /* Mining Orange */
+            --secondary-color: #34495e; /* Darker Blue-Gray */
+            --text-color-light: #d0d8e0; /* Light Gray */
+            --bg-color-dark: #283442; /* Dark Blue-Gray */
+            --bg-color-light: #34495e; /* Lighter Blue-Gray */
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --info-color: #3498db;
+            --body-bg: var(--bg-color-dark);
+            --body-text: var(--text-color-light);
+            --border-color: var(--primary-color);
         }
 
         /* Light Mode Override */
         body.light-mode {
-            --bg-mining: #f0f0f0;
-            --text-mining: #333;
-            --border-mining: #ccc;
-            --bg-mining-light: #fff;
-            --text-mining-light: #555;
-            --body-bg: var(--bg-mining);
-            --body-text: var(--text-mining-light);
+            --primary-color: #3498db; /* Blue */
+            --secondary-color: #ecf0f1; /* Very Light Gray */
+            --text-color-light: #555;
+            --bg-color-dark: #f0f0f0;
+            --bg-color-light: #fff;
+            --body-bg: var(--bg-color-dark);
+            --body-text: var(--text-color-light);
+            --border-color: #ccc;
         }
 
+        /* Base Styles */
         body {
+            font-family: 'Roboto', sans-serif;
             background-color: var(--body-bg);
-            font-family: 'Inter', sans-serif;
             color: var(--body-text);
+            line-height: 1.6;
             transition: background-color 0.3s, color 0.3s;
             font-size: 16px;
         }
 
+        /* Container */
         .container {
-            max-width: 100%;
-            padding: 1rem;
-            margin: 0;
-            /* Tambahkan padding-bottom untuk ruang di atas navbar */
-            padding-bottom: 5rem;
-            box-sizing: border-box; /* Tambahkan box-sizing */
+            max-width: 1200px; /* Modern max-width */
+            margin: 0 auto;
+            padding: 2rem;
+            padding-bottom: 6rem;
         }
 
-        h1,
-        h2,
-        h3 {
-            color: var(--text-mining);
+        /* Typography */
+        h1, h2, h3 {
+            color: var(--primary-color);
             font-weight: 700;
             text-align: center;
-        }
-
-        h1 {
-            font-size: 1.75rem;
-            margin-bottom: 0.75rem;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-        }
-
-        h3 {
-            font-size: 1.25rem;
-        }
-
-        .form-label {
-            font-weight: 600;
-            margin-bottom: 0.375rem;
-            color: var(--text-mining-light);
-            display: block;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-mining);
-            border-radius: 0.375rem;
-            background-color: var(--bg-mining-light);
-            color: var(--text-mining-light);
-            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
             margin-bottom: 1rem;
-            box-sizing: border-box; /* Tambahkan box-sizing */
+            line-height: 1.2;
         }
 
-        .form-input:focus {
-            border-color: var(--text-mining);
-            outline: 0;
-            box-shadow: 0 0 0 0.2rem rgba(240, 173, 78, 0.25);
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+
+        /* Form Elements */
+        .form-label {
+            font-weight: 500;
+            color: var(--text-color-light);
+            display: block;
+            margin-bottom: 0.5rem;
         }
-        button[type="submit"],
-        #submitBtn {
-            background: linear-gradient(to right, var(--bg-orange), var(--bg-orange-dark));
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            background-color: var(--bg-color-light);
+            color: var(--body-text);
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            margin-bottom: 1.5rem;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--info-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary-color), #e09a3a);
             color: white;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            display: flex;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
             cursor: pointer;
             transition: all 0.3s ease-in-out;
             border: none;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 100%;
-        }
-        
-        #submitBtn:hover {
-            background: linear-gradient(to right, var(--bg-orange-dark), var(--bg-orange));
-            transform: scale(1.05);
-        }
-        
-        #submitBtn:active {
-            transform: scale(0.95);
+            box-sizing: border-box;
         }
 
-        #exportPdfBtn {
+        .btn-primary:hover {
+            background: linear-gradient(to right, #e09a3a, var(--primary-color));
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background-color: var(--info-color);
             color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.375rem;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
             font-weight: 600;
-            transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             width: 100%;
             box-sizing: border-box;
-            background-color: var(--bg-orange); /* Tambahkan atau ganti ini */
         }
 
-        #exportPdfBtn {
-            background-color: var(--bg-blue);
-        }
-
-        #exportPdfBtn:hover {
-            background-color: var(--bg-blue-dark);
+        .btn-secondary:hover {
+            background-color: #2980b9;
             transform: translateY(-2px);
         }
 
+        /* Results Section */
         #results {
-            background-color: var(--bg-mining-light);
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            padding: 1rem;
-            margin-top: 0.75rem;
+            background-color: var(--bg-color-light);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-top: 2rem;
         }
 
         #results h2 {
-            color: var(--text-mining);
-            font-size: 1.25rem;
-            margin-bottom: 0.75rem;
+            color: var(--primary-color);
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
         }
 
         #results p {
-            color: var(--text-mining-light);
-            line-height: 1.6;
-            margin-bottom: 0.5rem;
+            color: var(--text-color-light);
+            line-height: 1.75;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 1rem;
+            gap: 0.75rem;
+            font-size: 1.1rem;
         }
 
-        #warnings {
-            margin-top: 0.75rem;
-        }
-
-        .text-warning {
-            color: var(--text-warning) !important;
+        /* Alerts (Warnings/Success) */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
+            gap: 0.75rem;
+            font-weight: 500;
         }
 
-        .text-warning i {
-            color: var(--text-warning) !important;
+        .alert i {
+            font-size: 1.25rem;
         }
 
-        .text-success {
-            color: var(--text-success) !important;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
+        .alert-warning {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
         }
 
-        .text-success i {
-            color: var(--text-success) !important;
+        .alert-success {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
         }
 
+        /* Charts */
         #ritaseChart,
         #produktivitasChart {
-            background-color: white;
-            border-radius: 0.5rem;
+            background-color: var(--bg-color-light);
+            border-radius: 0.75rem;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             width: 100%;
+            padding: 1rem;
+            box-sizing: border-box;
         }
 
-        /* Bottom Navbar - FIXED */
+        /* Bottom Navbar */
         .navbar-bottom {
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          /* Background dengan gradien linear */
-          background: linear-gradient(to right, var(--bg-mining-light), #283442);
-          padding: 0.75rem; /* Padding sedikit ditingkatkan */
-          border-top: 1px solid var(--border-mining);
-          /* Efek shadow yang lebih jelas */
-          box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
-          display: flex;
-          justify-content: space-around;
-          align-items: center;
-          z-index: 100;
-          box-sizing: border-box;
-          transition: background-color 0.3s ease;
-          border-radius: 12px 12px 0 0; /* Rounded corners di bagian atas */
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to right, var(--bg-color-light), var(--bg-color-dark));
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+            box-sizing: border-box;
+            border-radius: 1rem 1rem 0 0;
         }
 
         .nav-item-bottom {
             text-align: center;
         }
 
-        nav-link-bottom:hover {
-          color: var(--bg-orange); /* Warna teks saat di-hover */
-          /* Efek bayangan halus */
-          text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-          transform: translateY(-2px); /* Efek naik sedikit */
+        .nav-link-bottom {
+            color: var(--text-color-light);
+            display: block;
+            text-decoration: none;
+            transition: color 0.2s ease-in-out, text-shadow 0.2s ease-in-out;
         }
-        
+
+        .nav-link-bottom:hover {
+            color: var(--primary-color);
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-link-bottom.active {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
         .nav-icon-bottom {
-          display: block;
-          font-size: 1.25rem;
-          margin-bottom: 0.25rem;
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
         }
 
         /* Utility Classes */
-        .hidden {
-            display: none !important;
-        }
-
-        .page {
-            display: none;
-        }
-
+        .hidden { display: none !important; }
+        .page { display: none; }
         .page.active {
             display: block;
             animation: fadeIn 0.3s ease-in-out;
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* Table Styles */
         .egi-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 0.75rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            overflow: hidden; /* Ensures rounded corners are respected */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .egi-table th,
         .egi-table td {
-            border: 1px solid var(--border-mining);
-            padding: 0.5rem;
+            border: none; /* Remove individual cell borders */
+            padding: 0.75rem 1rem;
             text-align: left;
         }
 
         .egi-table th {
-            background-color: var(--bg-mining-light);
-            color: var(--text-mining);
+            background-color: var(--secondary-color);
+            color: white;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        /* Splash Screen Styles */
+        .egi-table td {
+            background-color: var(--bg-color-light);
+            color: var(--text-color-light);
+        }
+
+        /* Add subtle row highlighting */
+        .egi-table tbody tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Zebra striping (optional, but adds visual clarity) */
+        .egi-table tbody tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.025);
+        }
+
+        /* Splash Screen */
         #splash-screen {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-color: var(--bg-mining);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-direction: column;
-          text-align: center;
-          z-index: 9999;
-          opacity: 1;
-          transition: opacity 1s ease-in-out;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color-dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
         }
 
         #splash-screen.hidden {
@@ -347,79 +369,68 @@
         }
 
         #splash-screen h1 {
-            color: var(--text-mining);
+            color: var(--primary-color);
             font-size: 3rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
+            animation: fadeInUp 0.7s ease-out forwards;
             opacity: 0;
-            transform: translateY(20px);
-            animation: fadeUp 1.2s ease-out forwards;
-        }
-        @keyframes fadeUp {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         #splash-screen p {
-            color: var(--text-mining-light);
+            color: var(--text-color-light);
             font-size: 1.2rem;
+            animation: fadeIn 0.7s ease-in forwards;
+            animation-delay: 0.4s;
             opacity: 0;
-            animation: fadeIn 1.5s ease-in-out forwards;
-            animation-delay: 0.5s; /* Muncul setelah `h1` */
         }
-        
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
-            z-index: 1;
-            left: 0;
+            z-index: 1000;
             top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
         .modal-content {
-            background-color: var(--bg-mining-light);
-            margin: 15% auto;
-            padding: 1rem;
-            border: 1px solid var(--border-mining);
+            background-color: var(--bg-color-light);
+            margin: 10% auto;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
             width: 80%;
-            color: var(--text-mining-light);
-            border-radius: 0.5rem;
+            max-width: 600px;
+            color: var(--text-color-light);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .close {
-            color: var(--text-mining);
+        .modal .close {
+            color: var(--primary-color);
             float: right;
-            font-size: 28px;
+            font-size: 2rem;
             font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: white;
-            text-decoration: none;
             cursor: pointer;
+            transition: color 0.2s ease-in-out;
         }
 
-        /* Tambahan penting */
-        #prodForm {
-            box-sizing: border-box;
-            margin-bottom: 2rem; /* Ruang antara form dan elemen berikutnya */
-
+        .modal .close:hover {
+            color: white;
         }
 
         /* History Styles */
@@ -427,12 +438,17 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.75rem;
-            border-bottom: 1px solid var(--border-mining);
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s ease-in-out;
         }
 
         .history-item:last-child {
             border-bottom: none;
+        }
+
+        .history-item:hover {
+            background-color: rgba(0, 0, 0, 0.05);
         }
 
         .history-item-details {
@@ -441,72 +457,44 @@
 
         .history-item-actions {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
 
         .history-item-details p {
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color-light);
         }
 
         .history-item-details p:last-child {
             margin-bottom: 0;
         }
 
-        /* Flex container untuk paginasi dan hapus riwayat */
         /* Style untuk tombol di history */
         .history-button {
-            background-color: var(--bg-orange); /* Warna tombol hitung */
+            background-color: var(--primary-color); /* Warna tombol hitung */
             color: white;
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1.25rem;
             border: none;
-            border-radius: 0.375rem;
+            border-radius: 0.5rem;
             cursor: pointer;
             transition: background-color 0.2s ease-in-out;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .history-button:hover {
-            background-color: var(--bg-orange-dark); /* Warna tombol hitung saat dihover */
-        }
-
-        #historyDetailModal {
-            display: none;
-            position: fixed;
-            z-index: 2;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        .history-detail-content {
-            background-color: var(--bg-mining-light);
-            margin: 10% auto;
-            padding: 20px;
-            border: 1px solid var(--border-mining);
-            width: 80%;
-            border-radius: 5px;
-            color: var(--text-mining-light);
-        }
-
-        .history-detail-content .close {
-            color: var(--text-mining);
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
+            background-color: #e09a3a; /* Warna tombol hitung saat dihover */
         }
 
         /* NEW: Style untuk container tombol history */
         .history-button-container {
             position: fixed;
-            bottom: 3.5rem; /* Sesuaikan dengan tinggi navbar-bottom Anda */
+            bottom: 4.5rem; /* Sesuaikan dengan tinggi navbar-bottom Anda */
             left: 0;
             width: 100%;
             background-color: rgba(40, 52, 66, 0.9); /* Warna latar belakang semi-transparan */
-            padding: 0.5rem;
+            padding: 0.75rem;
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -523,58 +511,91 @@
         body #historyPage.active+.history-button-container {
             display: flex;
         }
-        
+
         /* Tombol Switch Mode (Matahari/Bulan) */
+        .theme-toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle-label {
+            color: var(--text-color-light);
+            font-weight: 500;
+        }
+
         #themeToggleBtn {
+            position: relative;
+            display: inline-block;
             width: 3rem;
             height: 1.5rem;
-            position: relative;
+            cursor: pointer;
         }
-        
-        #themeToggleBtn .fas {
+
+        #themeToggleBtn input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        #themeToggleSlider {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            transition: opacity 0.3s ease;
-        }
-        
-        #themeToggleBtn .fa-sun {
-            opacity: 0; /* Sembunyikan matahari secara default */
-        }
-
-        #themeToggleBtn .fa-moon {
-            opacity: 1; /* Tampilkan bulan secara default */
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 1.5rem;
         }
 
-        #themeToggleBtn.light-mode .fa-sun {
-            opacity: 1; /* Tampilkan matahari saat mode terang aktif */
+        #themeToggleSlider:before {
+            position: absolute;
+            content: "";
+            height: 1.125rem;
+            width: 1.125rem;
+            left: 0.1875rem;
+            bottom: 0.1875rem;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
         }
 
-        #themeToggleBtn.light-mode .fa-moon {
-            opacity: 0; /* Sembunyikan bulan saat mode terang aktif */
+        input:checked + #themeToggleSlider {
+            background-color: var(--info-color);
         }
 
-        #toggleThumb {
-          width: 1.125rem; /* 18px */
-          height: 1.125rem; /* 18px */
-          top: 0.1875rem; /* 3px */
-          left: 0.1875rem; /* 3px */
-          position: absolute;
+        input:focus + #themeToggleSlider {
+            box-shadow: 0 0 1px var(--info-color);
         }
 
-        #themeToggleBtn.light-mode #toggleThumb {
-            transform: translateX(1.5rem); /* Pindahkan jempol ke kanan saat mode terang */
+        input:checked + #themeToggleSlider:before {
+            transform: translateX(1.5rem);
         }
 
-        /* Light Mode Override khusus untuk tombol toggle */
-        body.light-mode #themeToggleBtn {
-            background-color: #ddd; /* Warna latar belakang yang lebih terang */
+        /* Tambahan untuk tampilan yang lebih baik */
+        .history-item-actions button {
+          background-color: var(--primary-color);
+          color: white;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 0.375rem;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
         }
 
-        #themeToggleBtn:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2); /* Efek fokus yang lebih halus */
+        .history-item-actions button:hover {
+          background-color: #e09a3a; /* Warna yang lebih gelap atau berbeda saat di-hover */
+        }
+
+        /* Settings Styles */
+        #settingsPage select.form-input {
+            max-width: 1200px;
+        }
+
+        #settingsPage .form-label {
+            margin-bottom: 0.5rem;
         }
 
     </style>
@@ -589,7 +610,7 @@
     </div>
 
     <!-- Page Container -->
-    <div class="container mx-auto">
+    <div class="container">
 
         <!-- Home Page -->
         <div id="homePage" class="page active">
@@ -663,7 +684,7 @@
                 </div>
                 <!-- End Form Inputs -->
 
-                <button type="submit" class="w-full bg-orange text-white p-2 rounded hover:bg-orange-dark" id="submitBtn">
+                <button type="submit" class="btn-primary" id="submitBtn">
                     <i class="fas fa-calculator mr-2"></i>Hitung
                 </button>
             </form>
@@ -682,7 +703,7 @@
                         <canvas id="produktivitasChart" class="mt-6 bg-white p-4 rounded shadow-md"></canvas>
                     </div>
                 </div>
-                <button id="exportPdfBtn" class="mt-4 w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-700">
+                <button id="exportPdfBtn" class="btn-secondary">
                     <i class="fas fa-file-pdf mr-2"></i>Export to PDF
                 </button>
             </div>
@@ -691,12 +712,12 @@
         <!-- History Page -->
         <div id="historyPage" class="page">
             <h2 class="text-xl font-bold mb-4 text-mining">Riwayat Perhitungan</h2>
-            
+
             <!-- Kontrol Penyortiran dan Pemfilteran -->
             <div class="mb-4 flex justify-between items-center">
                 <div>
                     <label for="sortOrder" class="form-label inline-block mr-2">Urutkan Berdasarkan:</label>
-                    <select id="sortOrder" class="form-input inline-block w-auto">
+                    <select id="sortOrder" class="form-select inline-block w-auto">
                         <option value="timestamp_desc">Terbaru</option>
                         <option value="timestamp_asc">Terlama</option>
                         <option value="vehicleType_asc">Jenis EGI (A-Z)</option>
@@ -705,8 +726,8 @@
                     </select>
                 </div>
                 <div>
-                  <label for="filterType" class="form-label inline-block mr-2">Filter Jenis EGI:</label>
-                    <select id="filterType" class="form-input inline-block w-auto">
+                    <label for="filterType" class="form-label inline-block mr-2">Filter Jenis EGI:</label>
+                    <select id="filterType" class="form-select inline-block w-auto">
                         <option value="all">Semua</option>
                         <option value="PC1250">PC1250</option>
                         <option value="PC2000-8">PC2000-8</option>
@@ -716,17 +737,17 @@
                     </select>
                 </div>
             </div>
-            
+
             <div id="historyList">
                 <!-- Riwayat akan ditampilkan di sini -->
             </div>
-            
+
             <!-- Container untuk tombol paginasi dan hapus riwayat -->
         </div>
 
         <!-- History Detail Modal -->
         <div id="historyDetailModal" class="modal">
-            <div class="history-detail-content">
+            <div class="modal-content">
                 <span class="close" onclick="closeHistoryDetailModal()">×</span>
                 <h2 class="text-xl font-bold mb-4 text-mining">Detail Perhitungan</h2>
                 <div id="historyDetailContent">
@@ -748,9 +769,9 @@
                             <th>Cycle Time</th>
                             <th>Loading Time</th>
                             <th>Jumlah Passing</th>
-                            <th>Target Speed </th>
-                            <th>Target Payload </th>
-                            <th>Target Spotting Time </th> <!-- Kolom Baru -->
+                            <th>Target Speed</th>
+                            <th>Target Payload</th>
+                            <th>Target Spotting Time</th>
                         </tr>
                     </thead>
                     <tbody>
