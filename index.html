@@ -54,8 +54,8 @@
             --text-color-light: #d0d8e0; /* Light Gray */
             --bg-color-dark: #283442; /* Dark Blue-Gray */
             --bg-color-light: #34495e; /* Lighter Blue-Gray */
-            --success-color: #2ecc71;
-            --warning-color: #f39c12;
+            --alert alert-success: #2ecc71;
+            --alert alert-warning: #f39c12;
             --info-color: #3498db;
             --body-bg: var(--bg-color-dark);
             --body-text: var(--text-color-light);
@@ -225,15 +225,15 @@
         }
 
         .alert-warning {
-            background-color: rgba(243, 156, 18, 0.1);
-            color: var(--warning-color);
-            border: 1px solid var(--warning-color);
+            background-color: #e09a3a;
+            color: var(--alert alert-warning);
+            border: 1px solid var(--alert alert-warning);
         }
 
         .alert-success {
             background-color: rgba(46, 204, 113, 0.1);
-            color: var(--success-color);
-            border: 1px solid var(--success-color);
+            color: var(--alert alert-success);
+            border: 1px solid var(--alert alert-success);
         }
 
         /* Charts */
@@ -324,7 +324,7 @@
 
         .egi-table th {
             background-color: var(--secondary-color);
-            color: white;
+            color: var(--text-color-light);
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -1202,15 +1202,15 @@
 
                 // Periksa apakah target produktivitas dan ritase sudah tercapai
                 if (ritase >= targetRitase && produktivitas >= targetProduktivitas) {
-                    warnings = `<p class="text-success"><i class="fas fa-check-circle mr-2"></i>Target Produktivitas/Ritase sudah tercapai, PERTAHANKAN!!!</p>`;
+                    warnings = `<p class="alert alert-success"><i class="fas fa-check-circle mr-2"></i>Target Produktivitas/Ritase sudah tercapai, PERTAHANKAN!!!</p>`;
                 } else {
                     // Peringatan umum jika target belum tercapai
-                    warnings = `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Produktivitas di bawah target (${formatNumberWithoutDecimals(targetProduktivitas)} Bcm/Jam) dan/atau Ritase di bawah target (${formatNumberWithoutDecimals(targetRitase)} Rit/Jam).</p>`;
+                    warnings = `<p class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Produktivitas di bawah target (${formatNumberWithoutDecimals(targetProduktivitas)} Bcm/Jam) dan/atau Ritase di bawah target (${formatNumberWithoutDecimals(targetRitase)} Rit/Jam).</p>`;
                     warnings += '<p class="text-mining-light"><i class="fas fa-lightbulb mr-2"></i>Untuk mencapai target di atas, maka perlu beberapa perbaikan:</p>';
 
                     // 1. Saran WKE (Waktu Kerja Efektif)
                     if (wke !== konfigurasi.waktuKerjaEfektifIdeal) {
-                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Waktu Kerja Efektif idealnya ${formatNumberWithoutDecimals(konfigurasi.waktuKerjaEfektifIdeal)} menit.</p>`;
+                        warnings += `<p class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Waktu Kerja Efektif idealnya ${formatNumberWithoutDecimals(konfigurasi.waktuKerjaEfektifIdeal)} menit.</p>`;
                         const wkeDiff = Math.abs(wke - konfigurasi.waktuKerjaEfektifIdeal);
                         const perkiraanWKEBaru = konfigurasi.waktuKerjaEfektifIdeal;
 
@@ -1224,7 +1224,7 @@
 
                     // 2. Saran Spotting Time (ST)
                     if (target && target.st !== undefined && st !== target.st) {
-                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Spotting Time sebaiknya ${formatNumberWithoutDecimals(target.st)} detik.</p>`;
+                        warnings += `<p class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Spotting Time sebaiknya ${formatNumberWithoutDecimals(target.st)} detik.</p>`;
 
                         const stDiff = Math.abs(st - target.st);
 
@@ -1239,9 +1239,9 @@
                      // 3. Saran Loading Time (LT)
                     if (target && target.lt !== undefined) {
                         if (lt < target.lt) {
-                            warnings += `<p class="text-success"><i class="fas fa-check-circle mr-2"></i>Loading Time sudah ideal (dibawah atau sama dengan ${formatNumberWithoutDecimals(target.lt)} menit). PERTAHANKAN!</p>`;
+                            warnings += `<p class="alert alert-success"><i class="fas fa-check-circle mr-2"></i>Loading Time sudah ideal (dibawah atau sama dengan ${formatNumberWithoutDecimals(target.lt)} menit). PERTAHANKAN!</p>`;
                         } else if (lt > target.lt) {
-                            warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Loading Time saat ini melebihi target ideal. Loading Time sebaiknya ${formatNumberWithoutDecimals(target.lt)} menit.</p>`;
+                            warnings += `<p class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Loading Time saat ini melebihi target ideal. Loading Time sebaiknya ${formatNumberWithoutDecimals(target.lt)} menit.</p>`;
                             const ltDiff = Math.abs(lt - target.lt);
 
                             // Hitung ritase baru *dengan target Loading Time*
@@ -1252,13 +1252,13 @@
                             warnings += `<p class="text-mining-light"><i class="fas fa-tools mr-2"></i>${ritaseSuggestionText}</p>`;
                         } else {
                           // Tambahkan blok `else` jika lt sama dengan target.lt
-                          warnings += `<p class="text-success"><i class="fas fa-check-circle mr-2"></i>Loading Time sudah ideal (sama dengan ${formatNumberWithoutDecimals(target.lt)} menit). PERTAHANKAN!</p>`;
+                          warnings += `<p class="alert alert-success"><i class="fas fa-check-circle mr-2"></i>Loading Time sudah ideal (sama dengan ${formatNumberWithoutDecimals(target.lt)} menit). PERTAHANKAN!</p>`;
                       }
                     }
 
                     // 4. Saran Cycle Time HD (CT)
                     if (ct > targetIdealCt) {
-                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: CT HD sebaiknya ${formatNumberWithoutDecimals(targetIdealCt)} menit.</p>`;
+                        warnings += `<p class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: CT HD sebaiknya ${formatNumberWithoutDecimals(targetIdealCt)} menit.</p>`;
                         const ctDiff = Math.abs(ct - targetIdealCt);
 
                         // Hitung ritase baru *dengan CT yang baru dan jumlahHD*
@@ -1272,7 +1272,7 @@
                     // 5. Saran Jumlah HD (Hauling Truck)
                     const hdDiff = Math.ceil(targetRitase / (wke / (ct + targetIdealSt + targetIdealLt)) - jumlahHD);
                     if (hdDiff > 0) {
-                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Jumlah HD sebaiknya ditingkatkan sebanyak ${formatNumberWithoutDecimals(hdDiff)} unit.</p>`;
+                        warnings += `<p class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Jumlah HD sebaiknya ditingkatkan sebanyak ${formatNumberWithoutDecimals(hdDiff)} unit.</p>`;
 
                         // Hitung perkiraan ritase dengan jumlah HD yang baru
                         const perkiraanRitaseKarenaHD = Math.round((wke / ((ct) + (st/60) + lt)) * (jumlahHD + hdDiff));
@@ -1287,7 +1287,7 @@
                     // 6. Saran Kecepatan HD
                     if (v < konfigurasi.kecepatanIdealHD) {
                         console.log("Saran Kecepatan HD: v =", v);
-                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Kecepatan HD sebaiknya ${formatNumberWithoutDecimals(konfigurasi.kecepatanIdealHD)} Km/jam.</p>`;
+                        warnings += `<p class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Kecepatan HD sebaiknya ${formatNumberWithoutDecimals(konfigurasi.kecepatanIdealHD)} Km/jam.</p>`;
                         const vDiff = Math.abs(v - konfigurasi.kecepatanIdealHD);
                         const vTarget = konfigurasi.kecepatanIdealHD;
 
@@ -1305,10 +1305,10 @@
                         console.log("Validasi nilai...");
                         if (isNaN(jarakHauling) || jarakHauling <= 0) {
                             console.error("Jarak (s) tidak valid!");
-                            warnings += `<p class="text-warning">Jarak Front Ke Disposal tidak valid, tidak dapat memberikan saran kecepatan.</p>`;
+                            warnings += `<p class="alert alert-warning">Jarak Front Ke Disposal tidak valid, tidak dapat memberikan saran kecepatan.</p>`;
                         } else if (isNaN(kecepatanHDInput) || kecepatanHDInput <= 0) {
                             console.error("Kecepatan (v) tidak valid!");
-                            warnings += `<p class="text-warning">Kecepatan HD tidak valid, tidak dapat memberikan saran kecepatan.</p>`;
+                            warnings += `<p class="alert alert-warning">Kecepatan HD tidak valid, tidak dapat memberikan saran kecepatan.</p>`;
                         } else {
                             // Semua nilai valid, lakukan perhitungan
                             console.log("Semua nilai valid, melakukan perhitungan...");
@@ -1335,7 +1335,7 @@
                     console.log("Kelebihan ritase:", excessRitase);
                     console.log("Pengurangan HD:", hdReduction);
                     if (hdReduction > 0) {
-                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i> Sebaiknya kurangi jumlah HD sebanyak ${formatNumberWithoutDecimals(hdReduction)} unit.</p>`;
+                        warnings += `<p class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i> Sebaiknya kurangi jumlah HD sebanyak ${formatNumberWithoutDecimals(hdReduction)} unit.</p>`;
                     }
                 }
             } catch (error) {
