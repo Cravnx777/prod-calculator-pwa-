@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prod Calculator - Optimalkan Produktivitas Pertambangan Anda</title>
     <!-- Tailwind CSS and Font Awesome (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -54,8 +55,8 @@
             --text-color-light: #d0d8e0; /* Light Gray */
             --bg-color-dark: #283442; /* Dark Blue-Gray */
             --bg-color-light: #34495e; /* Lighter Blue-Gray */
-            --alert alert-success: #2ecc71;
-            --alert alert-warning: #f39c12;
+            --text-warning: #f39c12;
+            --text-success: #2ecc71;
             --info-color: #3498db;
             --body-bg: var(--bg-color-dark);
             --body-text: var(--text-color-light);
@@ -187,53 +188,50 @@
         /* Results Section */
         #results {
             background-color: var(--bg-color-light);
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            margin-top: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            margin-top: 0.75rem;
         }
 
         #results h2 {
             color: var(--primary-color);
-            font-size: 1.75rem;
-            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
         }
 
         #results p {
             color: var(--text-color-light);
-            line-height: 1.75;
-            margin-bottom: 1rem;
+            line-height: 1.6rem;
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 1.1rem;
+            gap: 0.5rem;
+            font-size: 1rem;
         }
 
-        /* Alerts (Warnings/Success) */
-        .alert {
-            padding: 1rem 1.5rem;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
+        .text-warning {
+            color: var(--text-warning) !important;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-weight: 500;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        .alert i {
-            font-size: 1.25rem;
+        .text-warning i {
+            color: var(--text-warning) !important;
         }
 
-        .alert-warning {
-            background-color: #e09a3a;
-            color: var(--alert alert-warning);
-            border: 1px solid var(--alert alert-warning);
+        .text-success {
+            color: var(--text-success) !important;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        .alert-success {
-            background-color: rgba(46, 204, 113, 0.1);
-            color: var(--alert alert-success);
-            border: 1px solid var(--alert alert-success);
+        .text-success i {
+            color: var(--text-success) !important;
         }
 
         /* Charts */
@@ -615,7 +613,7 @@
         <!-- Home Page -->
         <div id="homePage" class="page active">
             <h1 class="text-2xl font-bold text-mining">Prod Calculator</h1>
-            <form id="prodForm" class="bg-mining-light p-6 rounded shadow-md">
+            <form id="prodForm" class="bg-color-dark">
                 <div class="mb-4">
                     <label for="vehicleType" class="form-label">Jenis EGI</label>
                     <select id="vehicleType" class="form-input">
@@ -1202,15 +1200,15 @@
 
                 // Periksa apakah target produktivitas dan ritase sudah tercapai
                 if (ritase >= targetRitase && produktivitas >= targetProduktivitas) {
-                    warnings = `<p class="alert alert-success"><i class="fas fa-check-circle mr-2"></i>Target Produktivitas/Ritase sudah tercapai, PERTAHANKAN!!!</p>`;
+                    warnings = `<p class="text-success"><i class="fas fa-check-circle mr-2"></i>Target Produktivitas/Ritase sudah tercapai, PERTAHANKAN!!!</p>`;
                 } else {
                     // Peringatan umum jika target belum tercapai
-                    warnings = `<p class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Produktivitas di bawah target (${formatNumberWithoutDecimals(targetProduktivitas)} Bcm/Jam) dan/atau Ritase di bawah target (${formatNumberWithoutDecimals(targetRitase)} Rit/Jam).</p>`;
+                    warnings = `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Produktivitas di bawah target (${formatNumberWithoutDecimals(targetProduktivitas)} Bcm/Jam) dan/atau Ritase di bawah target (${formatNumberWithoutDecimals(targetRitase)} Rit/Jam).</p>`;
                     warnings += '<p class="text-mining-light"><i class="fas fa-lightbulb mr-2"></i>Untuk mencapai target di atas, maka perlu beberapa perbaikan:</p>';
 
                     // 1. Saran WKE (Waktu Kerja Efektif)
                     if (wke !== konfigurasi.waktuKerjaEfektifIdeal) {
-                        warnings += `<p class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Waktu Kerja Efektif idealnya ${formatNumberWithoutDecimals(konfigurasi.waktuKerjaEfektifIdeal)} menit.</p>`;
+                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Waktu Kerja Efektif idealnya ${formatNumberWithoutDecimals(konfigurasi.waktuKerjaEfektifIdeal)} menit.</p>`;
                         const wkeDiff = Math.abs(wke - konfigurasi.waktuKerjaEfektifIdeal);
                         const perkiraanWKEBaru = konfigurasi.waktuKerjaEfektifIdeal;
 
@@ -1224,7 +1222,7 @@
 
                     // 2. Saran Spotting Time (ST)
                     if (target && target.st !== undefined && st !== target.st) {
-                        warnings += `<p class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Spotting Time sebaiknya ${formatNumberWithoutDecimals(target.st)} detik.</p>`;
+                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Spotting Time sebaiknya ${formatNumberWithoutDecimals(target.st)} detik.</p>`;
 
                         const stDiff = Math.abs(st - target.st);
 
@@ -1239,9 +1237,9 @@
                      // 3. Saran Loading Time (LT)
                     if (target && target.lt !== undefined) {
                         if (lt < target.lt) {
-                            warnings += `<p class="alert alert-success"><i class="fas fa-check-circle mr-2"></i>Loading Time sudah ideal (dibawah atau sama dengan ${formatNumberWithoutDecimals(target.lt)} menit). PERTAHANKAN!</p>`;
+                            warnings += `<p class="text-success"><i class="fas fa-check-circle mr-2"></i>Loading Time sudah ideal (dibawah atau sama dengan ${formatNumberWithoutDecimals(target.lt)} menit). PERTAHANKAN!</p>`;
                         } else if (lt > target.lt) {
-                            warnings += `<p class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Loading Time saat ini melebihi target ideal. Loading Time sebaiknya ${formatNumberWithoutDecimals(target.lt)} menit.</p>`;
+                            warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Loading Time saat ini melebihi target ideal. Loading Time sebaiknya ${formatNumberWithoutDecimals(target.lt)} menit.</p>`;
                             const ltDiff = Math.abs(lt - target.lt);
 
                             // Hitung ritase baru *dengan target Loading Time*
@@ -1252,13 +1250,13 @@
                             warnings += `<p class="text-mining-light"><i class="fas fa-tools mr-2"></i>${ritaseSuggestionText}</p>`;
                         } else {
                           // Tambahkan blok `else` jika lt sama dengan target.lt
-                          warnings += `<p class="alert alert-success"><i class="fas fa-check-circle mr-2"></i>Loading Time sudah ideal (sama dengan ${formatNumberWithoutDecimals(target.lt)} menit). PERTAHANKAN!</p>`;
+                          warnings += `<p class="text-success"><i class="fas fa-check-circle mr-2"></i>Loading Time sudah ideal (sama dengan ${formatNumberWithoutDecimals(target.lt)} menit). PERTAHANKAN!</p>`;
                       }
                     }
 
                     // 4. Saran Cycle Time HD (CT)
                     if (ct > targetIdealCt) {
-                        warnings += `<p class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: CT HD sebaiknya ${formatNumberWithoutDecimals(targetIdealCt)} menit.</p>`;
+                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: CT HD sebaiknya ${formatNumberWithoutDecimals(targetIdealCt)} menit.</p>`;
                         const ctDiff = Math.abs(ct - targetIdealCt);
 
                         // Hitung ritase baru *dengan CT yang baru dan jumlahHD*
@@ -1272,7 +1270,7 @@
                     // 5. Saran Jumlah HD (Hauling Truck)
                     const hdDiff = Math.ceil(targetRitase / (wke / (ct + targetIdealSt + targetIdealLt)) - jumlahHD);
                     if (hdDiff > 0) {
-                        warnings += `<p class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Jumlah HD sebaiknya ditingkatkan sebanyak ${formatNumberWithoutDecimals(hdDiff)} unit.</p>`;
+                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Jumlah HD sebaiknya ditingkatkan sebanyak ${formatNumberWithoutDecimals(hdDiff)} unit.</p>`;
 
                         // Hitung perkiraan ritase dengan jumlah HD yang baru
                         const perkiraanRitaseKarenaHD = Math.round((wke / ((ct) + (st/60) + lt)) * (jumlahHD + hdDiff));
@@ -1287,7 +1285,7 @@
                     // 6. Saran Kecepatan HD
                     if (v < konfigurasi.kecepatanIdealHD) {
                         console.log("Saran Kecepatan HD: v =", v);
-                        warnings += `<p class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Kecepatan HD sebaiknya ${formatNumberWithoutDecimals(konfigurasi.kecepatanIdealHD)} Km/jam.</p>`;
+                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Kecepatan HD sebaiknya ${formatNumberWithoutDecimals(konfigurasi.kecepatanIdealHD)} Km/jam.</p>`;
                         const vDiff = Math.abs(v - konfigurasi.kecepatanIdealHD);
                         const vTarget = konfigurasi.kecepatanIdealHD;
 
@@ -1305,10 +1303,10 @@
                         console.log("Validasi nilai...");
                         if (isNaN(jarakHauling) || jarakHauling <= 0) {
                             console.error("Jarak (s) tidak valid!");
-                            warnings += `<p class="alert alert-warning">Jarak Front Ke Disposal tidak valid, tidak dapat memberikan saran kecepatan.</p>`;
+                            warnings += `<p class="text-warning">Jarak Front Ke Disposal tidak valid, tidak dapat memberikan saran kecepatan.</p>`;
                         } else if (isNaN(kecepatanHDInput) || kecepatanHDInput <= 0) {
                             console.error("Kecepatan (v) tidak valid!");
-                            warnings += `<p class="alert alert-warning">Kecepatan HD tidak valid, tidak dapat memberikan saran kecepatan.</p>`;
+                            warnings += `<p class="text-warning">Kecepatan HD tidak valid, tidak dapat memberikan saran kecepatan.</p>`;
                         } else {
                             // Semua nilai valid, lakukan perhitungan
                             console.log("Semua nilai valid, melakukan perhitungan...");
@@ -1335,7 +1333,7 @@
                     console.log("Kelebihan ritase:", excessRitase);
                     console.log("Pengurangan HD:", hdReduction);
                     if (hdReduction > 0) {
-                        warnings += `<p class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i> Sebaiknya kurangi jumlah HD sebanyak ${formatNumberWithoutDecimals(hdReduction)} unit.</p>`;
+                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i> Sebaiknya kurangi jumlah HD sebanyak ${formatNumberWithoutDecimals(hdReduction)} unit.</p>`;
                     }
                 }
             } catch (error) {
