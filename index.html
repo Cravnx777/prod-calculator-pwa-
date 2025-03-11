@@ -597,6 +597,25 @@
         #settingsPage .form-label {
             margin-bottom: 0.5rem;
         }
+        /* Analytics Styles */
+        #analyticsPage .chart-container {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;                  /* Aktifkan Flexbox */
+            flex-direction: column;         /* Atur arah Flexbox menjadi kolom (vertikal) */
+            align-items: center;            /* Tengahkan item secara horizontal */
+            justify-content: center;       /* Tengahkan item secara vertikal */
+            min-height: 300px;              /* Tinggi minimum container */
+            transition: background-color 0.2s ease-in-out; /* Transisi untuk efek hover atau lainnya */
+        }
+        
+        #analyticsPage .chart-container canvas {
+            max-width: 90%;                /* Lebar maksimum grafik adalah 100% dari container */
+            max-height: 90%;               /* Tinggi maksimum grafik adalah 100% dari container */
+        }
 
     </style>
 </head>
@@ -864,14 +883,60 @@
                 <div id="egiInfoModal"></div>
             </div>
         </div>
-    </div>
 
-    <!-- NEW: Container untuk tombol-tombol riwayat-->
-    <div class="history-button-container">
-        <button id="prevPageBtn" class="history-button" disabled>Sebelumnya</button>
-        <button id="clearHistoryBtn" class="history-button">Hapus Semua Riwayat</button>
-        <button id="nextPageBtn" class="history-button">Selanjutnya</button>
-    </div>
+        <!-- NEW: Container untuk tombol-tombol riwayat-->
+        <div class="history-button-container">
+            <button id="prevPageBtn" class="history-button" disabled>Sebelumnya</button>
+            <button id="clearHistoryBtn" class="history-button">Hapus Semua Riwayat</button>
+            <button id="nextPageBtn" class="history-button">Selanjutnya</button>
+        </div>
+        
+        <!-- Analytics Page -->
+        <div id="analyticsPage" class="page">
+            <h2 class="text-xl font-bold mb-4 text-mining">Analisis Data</h2>
+        
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="chart-container">
+                    <h3 class="text-lg font-semibold text-mining mb-2">Penggunaan Jenis EGI</h3>
+                    <canvas id="egiUsageChart" width="400" height="300"></canvas>
+                </div>
+    
+                <div class="chart-container">
+                    <h3 class="text-lg font-semibold text-mining mb-2">Rata-rata Produktivitas</h3>
+                    <p id="avgProductivity" class="text-xl"></p>
+                </div>
+    
+                <div class="chart-container">
+                    <h3 class="text-lg font-semibold text-mining mb-2">Distribusi Waktu Kerja Efektif (WKE)</h3>
+                    <canvas id="wkeDistributionChart"></canvas>
+                </div>
+    
+                <div class="chart-container">
+                    <h3 class="text-lg font-semibold text-mining mb-2">Distribusi Spotting Time</h3>
+                    <canvas id="spottingTimeChart"></canvas>
+                </div>
+    
+                <div class="chart-container">
+                    <h3 class="text-lg font-semibold text-mining mb-2">Distribusi Loading Time</h3>
+                    <canvas id="loadingTimeChart"></canvas>
+                </div>
+    
+                <div class="chart-container">
+                    <h3 class="text-lg font-semibold text-mining mb-2">Distribusi CT HD</h3>
+                    <canvas id="ctHDChart"></canvas>
+                </div>
+            </div>
+        </div>
+        </div>
+    
+    <style>
+    #analyticsPage .chart-container {
+        width: 100%;
+        max-width: 500px;
+        height: 300px;
+        overflow: hidden;
+    }
+    </style>
 
 
     <!-- Bottom Navbar -->
@@ -940,6 +1005,11 @@
 
         let ritaseChart;
         let produktivitasChart;
+        let egiUsageChart;
+        let wkeDistributionChart;
+        let spottingTimeChart;
+        let loadingTimeChart;
+        let ctHDChart;
 
         // Fungsi untuk mendapatkan data formulir
         function getFormData() {
@@ -2009,45 +2079,194 @@
             const pages = document.querySelectorAll('.page');
             pages.forEach(page => page.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
-        
+
             const links = document.querySelectorAll('.nav-link-bottom');
             links.forEach(link => link.classList.remove('active'));
             link.classList.add('active');
-        
+
             // Track event: Page Navigation
             trackEvent('Navigation', 'Navigate', pageId);
-        
+
             // Jika halaman yang ditampilkan adalah riwayat, perbarui daftarnya
             if (pageId === 'historyPage') {
                 updateHistoryList();
             }
-        
+
             // If the displayed page is analytics, update dashboard
             if (pageId === 'analyticsPage') {
                 console.log("Menampilkan halaman analytics, memanggil updateAnalyticsDashboard()");
                 updateAnalyticsDashboard();
             }
         }
-        
-        // Pastikan updateAnalyticsDashboard() dipanggil setelah loadHistory()
-        function loadHistory() {
-            console.log("loadHistory() dipanggil");
-            if (!historyLoaded) {
-                const storedHistory = localStorage.getItem('calculationHistory');
-                if (storedHistory) {
-                    calculationHistory = JSON.parse(storedHistory);
-                }
-                updateHistoryList();
-        
-                // Panggil updateAnalyticsDashboard() setelah daftar riwayat diperbarui
-                console.log("Memanggil updateAnalyticsDashboard() setelah memuat riwayat");
-                updateAnalyticsDashboard();
-        
-                historyLoaded = true; // Set flag ke true
-            } else {
-                console.log("loadHistory() diabaikan: sudah dimuat sebelumnya");
+
+        function updateAnalyticsDashboard() {
+            console.log("updateAnalyticsDashboard() dipanggil");
+            // Fungsi untuk menghitung rata-rata
+            function calculateAverage(data, key) {
+                if (!data || data.length === 0) return 0;
+                const sum = data.reduce((acc, item) => acc + item.results[key], 0);
+                return sum / data.length;
             }
+
+            // 1. Penggunaan Jenis EGI
+            const egiCounts = {};
+            calculationHistory.forEach(item => {
+                const vehicleType = item.formData.vehicleType;
+                egiCounts[vehicleType] = (egiCounts[vehicleType] || 0) + 1;
+            });
+
+            const egiLabels = Object.keys(egiCounts);
+            const egiData = Object.values(egiCounts);
+
+            if (egiUsageChart) {
+                egiUsageChart.destroy();
+            }
+
+            const egiUsageCtx = document.getElementById('egiUsageChart').getContext('2d');
+            egiUsageChart = new Chart(egiUsageCtx, {
+                type: 'pie',
+                data: {
+                    labels: egiLabels,
+                    datasets: [{
+                        data: egiData,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+            // 2. Rata-rata Produktivitas
+            const avgProductivity = calculateAverage(calculationHistory, 'produktivitas');
+            document.getElementById('avgProductivity').textContent = `${avgProductivity.toFixed(2)} Bcm/Jam`;
+
+            // 3. Distribusi WKE
+            const wkeData = calculationHistory.map(item => item.formData.wke);
+            createDistributionChart('wkeDistributionChart', wkeData, 'Waktu Kerja Efektif (menit)');
+
+            // 4. Distribusi Spotting Time
+            const spottingTimeData = calculationHistory.map(item => item.formData.st);
+            createDistributionChart('spottingTimeChart', spottingTimeData, 'Spotting Time (detik)');
+
+            // 5. Distribusi Loading Time
+            const loadingTimeData = calculationHistory.map(item => item.formData.lt);
+            createDistributionChart('loadingTimeChart', loadingTimeData, 'Loading Time (menit)');
+
+            // 6. Distribusi CT HD
+            const ctHDData = calculationHistory.map(item => item.formData.ct);
+            createDistributionChart('ctHDChart', ctHDData, 'CT HD (menit)');
         }
+
+        function createDistributionChart(chartId, data, label) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            if (!ctx) {
+                console.error(`Tidak dapat menemukan elemen canvas dengan ID "${chartId}"`);
+                return;
+            }
+        
+            // Hancurkan grafik yang ada sebelum membuat yang baru
+            if (Chart.getChart(ctx)) {
+                Chart.getChart(ctx).destroy();
+            }
+        
+            const chartData = {
+                labels: data.map((_, i) => i + 1),
+                datasets: [{
+                    label: label,
+                    data: data,
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1
+                }]
+            };
+        
+            const chartOptions = {
+                type: 'line',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: label
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Data Point'
+                            }
+                        }
+                    }
+                }
+            };
+                
+                // Hancurkan chart sebelumnya jika ada
+                let chart;
+                switch (chartId) {
+                    case 'wkeDistributionChart':
+                        if (wkeDistributionChart) wkeDistributionChart.destroy();
+                        wkeDistributionChart = new Chart(ctx, chartOptions);
+                        chart = wkeDistributionChart;
+                        break;
+                    case 'spottingTimeChart':
+                        if (spottingTimeChart) spottingTimeChart.destroy();
+                        spottingTimeChart = new Chart(ctx, chartOptions);
+                        chart = spottingTimeChart;
+                        break;
+                    case 'loadingTimeChart':
+                        if (loadingTimeChart) loadingTimeChart.destroy();
+                        loadingTimeChart = new Chart(ctx, chartOptions);
+                        chart = loadingTimeChart;
+                        break;
+                    case 'ctHDChart':
+                        if (ctHDChart) ctHDChart.destroy();
+                        ctHDChart = new Chart(ctx, chartOptions);
+                        chart = ctHDChart;
+                        break;
+                }
+            }
+                
+                // Pastikan updateAnalyticsDashboard() dipanggil setelah loadHistory()
+                function loadHistory() {
+                    console.log("loadHistory() dipanggil");
+                    if (!historyLoaded) {
+                        const storedHistory = localStorage.getItem('calculationHistory');
+                        if (storedHistory) {
+                            calculationHistory = JSON.parse(storedHistory);
+                        }
+                        updateHistoryList();
+                
+                        // Panggil updateAnalyticsDashboard() setelah daftar riwayat diperbarui
+                        console.log("Memanggil updateAnalyticsDashboard() setelah memuat riwayat");
+                        updateAnalyticsDashboard();
+                
+                        historyLoaded = true; // Set flag ke true
+                    } else {
+                        console.log("loadHistory() diabaikan: sudah dimuat sebelumnya");
+                    }
+                }
         
         /*
          * Saran:
