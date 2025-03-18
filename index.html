@@ -1124,10 +1124,10 @@
             // Calculate target ideal CT
             const targetIdealLt = target.lt;
             const targetIdealSt = target.st / 60;
-            const targetIdealCt = (((s / 23) * 60) + 1)*2;
+            const targetIdealCt = (((s / 23) * 60) *2)+1;
 
             // Calculate actual CT
-            const actualCt = (((s / v) * 60) + 1)*2;
+            const actualCt = (((s / v) * 60) *2)+1;
 
             // Calculate ritase and productivity
             const ritase = Math.round((wke / ((ct) + (st/60) + lt)) * n);
