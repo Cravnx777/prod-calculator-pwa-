@@ -1329,7 +1329,7 @@
                         const ctDiff = Math.abs(ct - targetIdealCt);
 
                         // Hitung ritase baru *dengan CT yang baru dan jumlahHD*
-                        const perkiraanRitaseKarenaCT = Math.round((wke / ((targetIdealCt) + (st/60) + lt)) * jumlahHD);
+                        const perkiraanRitaseKarenaCT = Math.round((wke / ((targetIdealCt) + (st/60) + lt + 1)) * jumlahHD);
 
                         let ritaseSuggestionText = `Saran: Kurangi CT HD sebanyak ${formatNumberWithoutDecimals(ctDiff)} menit, Cycle time Baru = ${formatNumberWithoutDecimals(targetIdealCt)} menit.`;
                         ritaseSuggestionText += createRitaseSuggestionText(perkiraanRitaseKarenaCT, targetRitase, ritase);
@@ -1337,7 +1337,7 @@
                     }
 
                     // 5. Saran Jumlah HD (Hauling Truck)
-                    const hdDiff = Math.ceil(targetRitase / (wke / (ct + targetIdealSt + lt)) - jumlahHD);
+                    const hdDiff = Math.ceil(targetRitase / (wke / (ct + targetIdealSt + lt + 1)) - jumlahHD);
                     if (hdDiff > 0) {
                         warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Jumlah HD sebaiknya ditingkatkan sebanyak ${formatNumberWithoutDecimals(hdDiff)} unit.</p>`;
 
