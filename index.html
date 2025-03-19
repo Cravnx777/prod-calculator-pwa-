@@ -1337,13 +1337,15 @@
                     }
 
                     // 5. Saran Jumlah HD (Hauling Truck)
-                    const hdDiff = Math.ceil(targetRitase / (wke / (ct + targetIdealSt + lt )) - jumlahHD);
+                    const targetJumlahHD = Math.round(targetRitase / (wke / (ct + (st / 60) + lt)));
+                    const hdDiff = targetJumlahHD - jumlahHD;
+                    
                     if (hdDiff > 0) {
                         warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Jumlah HD sebaiknya ditingkatkan sebanyak ${formatNumberWithoutDecimals(hdDiff)} unit.</p>`;
-
+                    
                         // Hitung perkiraan ritase dengan jumlah HD yang baru
                         const perkiraanRitaseKarenaHD = Math.round((wke / ((ct) + (st/60) + lt)) * (jumlahHD + hdDiff));
-
+                    
                         let hdSuggestionTextSaran = `Saran: Tingkatkan Jumlah HD sebanyak ${formatNumberWithoutDecimals(hdDiff)} unit.`;
                         // Tambahkan createRitaseSuggestionText hanya jika ritase belum melebihi target
                         if (ritase < targetRitase) {
