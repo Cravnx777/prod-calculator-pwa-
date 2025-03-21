@@ -1,0 +1,2278 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prod Calculator - Optimalkan Produktivitas Pertambangan Anda</title>
+    <!-- Tailwind CSS and Font Awesome (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Toastr CSS and JavaScript -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- i18next (Internationalization) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/21.8.14/i18next.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-browser-languagedetector/7.1.0/i18nextBrowserLanguageDetector.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-http-backend/2.2.1/i18nextHTTPBackend.min.js"></script>
+
+    <!-- FileSaver.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-Y"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-XXXXXXX-Y');
+
+        function trackEvent(category, action, label) {
+            gtag('event', action, {
+                'event_category': category,
+                'event_label': label
+            });
+        }
+
+    </script>
+
+    <!-- Custom Styles -->
+    <style>
+        /* Color Palette (Dark Mode - Default) */
+        :root {
+            --primary-color: #f0ad4e; /* Mining Orange */
+            --secondary-color: #34495e; /* Darker Blue-Gray */
+            --text-color-light: #d0d8e0; /* Light Gray */
+            --bg-color-dark: #283442; /* Dark Blue-Gray */
+            --bg-color-light: #34495e; /* Lighter Blue-Gray */
+            --text-warning: #f39c12;
+            --text-success: #2ecc71;
+            --info-color: #3498db;
+            --body-bg: var(--bg-color-dark);
+            --body-text: var(--text-color-light);
+            --border-color: var(--primary-color);
+        }
+
+        /* Light Mode Override */
+        body.light-mode {
+            --primary-color: #3498db; /* Blue */
+            --secondary-color: #ecf0f1; /* Very Light Gray */
+            --text-color-light: #555;
+            --bg-color-dark: #f0f0f0;
+            --bg-color-light: #fff;
+            --body-bg: var(--bg-color-dark);
+            --body-text: var(--text-color-light);
+            --border-color: #ccc;
+        }
+
+        /* Base Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--body-bg);
+            color: var(--body-text);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 16px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px; /* Modern max-width */
+            margin: 0 auto;
+            padding: 2rem;
+            padding-bottom: 6rem;
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            color: var(--primary-color);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+
+        /* Form Elements */
+        .form-label {
+            font-weight: 500;
+            color: var(--text-color-light);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            background-color: var(--bg-color-light);
+            color: var(--body-text);
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            margin-bottom: 1.5rem;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--info-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary-color), #e09a3a);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, #e09a3a, var(--primary-color));
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background-color: var(--info-color);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 1.5rem;
+        }
+
+        .btn-secondary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        /* Results Section */
+        #results {
+            background-color: var(--bg-color-light);
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            margin-top: 0.75rem;
+        }
+
+        #results h2 {
+            color: var(--primary-color);
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        #results p {
+            color: var(--text-color-light);
+            line-height: 1.6rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .text-warning {
+            color: var(--text-warning) !important;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .text-warning i {
+            color: var(--text-warning) !important;
+        }
+
+        .text-success {
+            color: var(--text-success) !important;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .text-success i {
+            color: var(--text-success) !important;
+        }
+
+        /* Charts */
+        #ritaseChart,
+        #produktivitasChart {
+            background-color: #fff;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        /* Bottom Navbar */
+        .navbar-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to right, var(--bg-color-light), var(--bg-color-dark));
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+            box-sizing: border-box;
+            border-radius: 1rem 1rem 0 0;
+        }
+
+        .nav-item-bottom {
+            text-align: center;
+        }
+
+        .nav-link-bottom {
+            color: var(--text-color-light);
+            display: block;
+            text-decoration: none;
+            transition: color 0.2s ease-in-out, text-shadow 0.2s ease-in-out;
+        }
+
+        .nav-link-bottom:hover {
+            color: var(--primary-color);
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-link-bottom.active {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .nav-icon-bottom {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Utility Classes */
+        .hidden { display: none !important; }
+        .page { display: none; }
+        .page.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Table Styles */
+        .egi-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            overflow: hidden; /* Ensures rounded corners are respected */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .egi-table th,
+        .egi-table td {
+            border: none; /* Remove individual cell borders */
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+
+        .egi-table th {
+            background-color: var(--secondary-color);
+            color: var(--text-color-light);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .egi-table td {
+            background-color: var(--bg-color-light);
+            color: var(--text-color-light);
+        }
+
+        /* Add subtle row highlighting */
+        .egi-table tbody tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Zebra striping (optional, but adds visual clarity) */
+        .egi-table tbody tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.025);
+        }
+
+        /* Splash Screen */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color-dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+        }
+
+        #splash-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        #splash-screen h1 {
+            color: var(--primary-color);
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            animation: fadeInUp 0.7s ease-out forwards;
+            opacity: 0;
+        }
+
+        #splash-screen p {
+            color: var(--text-color-light);
+            font-size: 1.2rem;
+            animation: fadeIn 0.7s ease-in forwards;
+            animation-delay: 0.4s;
+            opacity: 0;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: var(--bg-color-light);
+            margin: 10% auto;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            width: 80%;
+            max-width: 600px;
+            color: var(--text-color-light);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal .close {
+            color: var(--primary-color);
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .modal .close:hover {
+            color: white;
+        }
+
+        /* History Styles */
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-item:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .history-item-details {
+            flex-grow: 1;
+        }
+
+        .history-item-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .history-item-details p {
+            margin-bottom: 0.5rem;
+            color: var(--text-color-light);
+        }
+
+        .history-item-details p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Style untuk tombol di history */
+        .history-button {
+            background-color: var(--primary-color); /* Warna tombol hitung */
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .history-button:hover {
+            background-color: #e09a3a; /* Warna tombol hitung saat dihover */
+        }
+
+        /* NEW: Style untuk container tombol history */
+        .history-button-container {
+            position: fixed;
+            bottom: 4.5rem; /* Sesuaikan dengan tinggi navbar-bottom Anda */
+            left: 0;
+            width: 100%;
+            background-color: rgba(40, 52, 66, 0.9); /* Warna latar belakang semi-transparan */
+            padding: 0.75rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 99; /* Pastikan di atas konten lain */
+            box-sizing: border-box;
+        }
+
+        /* Sembunyikan secara default */
+        .history-button-container {
+            display: none;
+        }
+
+        /* Tampilkan hanya di history page */
+        body #historyPage.active+.history-button-container {
+            display: flex;
+        }
+
+        /* Tombol Switch Mode (Matahari/Bulan) */
+        .theme-toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle-label {
+            color: var(--text-color-light);
+            font-weight: 500;
+        }
+
+        #themeToggleBtn {
+            position: relative;
+            display: inline-block;
+            width: 3rem;
+            height: 1.5rem;
+            cursor: pointer;
+        }
+
+        #themeToggleBtn input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        #themeToggleSlider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 1.5rem;
+        }
+
+        #themeToggleSlider:before {
+            position: absolute;
+            content: "";
+            height: 1.125rem;
+            width: 1.125rem;
+            left: 0.1875rem;
+            bottom: 0.1875rem;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + #themeToggleSlider {
+            background-color: var(--info-color);
+        }
+
+        input:focus + #themeToggleSlider {
+            box-shadow: 0 0 1px var(--info-color);
+        }
+
+        input:checked + #themeToggleSlider:before {
+            transform: translateX(1.5rem);
+        }
+
+        /* Tambahan untuk tampilan yang lebih baik */
+        .history-item-actions button {
+          background-color: var(--primary-color);
+          color: white;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 0.375rem;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+        }
+
+        .history-item-actions button:hover {
+          background-color: #e09a3a; /* Warna yang lebih gelap atau berbeda saat di-hover */
+        }
+
+        /* Settings Styles */
+        #settingsPage select.form-input {
+            max-width: 1200px;
+        }
+
+        #settingsPage .form-label {
+            margin-bottom: 0.5rem;
+        }
+        /* Analytics Styles */
+        #analyticsPage .chart-container {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;                  /* Aktifkan Flexbox */
+            flex-direction: column;         /* Atur arah Flexbox menjadi kolom (vertikal) */
+            align-items: center;            /* Tengahkan item secara horizontal */
+            justify-content: center;       /* Tengahkan item secara vertikal */
+            min-height: 300px;              /* Tinggi minimum container */
+            transition: background-color 0.2s ease-in-out; /* Transisi untuk efek hover atau lainnya */
+        }
+        
+        #analyticsPage .chart-container canvas {
+            max-width: 90%;                /* Lebar maksimum grafik adalah 100% dari container */
+            max-height: 90%;               /* Tinggi maksimum grafik adalah 100% dari container */
+        }
+
+    </style>
+</head>
+
+<body class="bg-mining font-roboto text-mining-light">
+
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <h1>Prod Calculator</h1>
+        <p>Memuat...</p>
+    </div>
+
+    <!-- Page Container -->
+    <div class="container">
+
+        <!-- Home Page -->
+        <div id="homePage" class="page active">
+            <h1 class="text-2xl font-bold text-mining">Prod Calculator</h1>
+            <form id="prodForm" class="bg-color-dark">
+                <div class="mb-4">
+                    <label for="vehicleType" class="form-label">Jenis EGI</label>
+                    <select id="vehicleType" class="form-input">
+                        <option value="PC1250">PC1250</option>
+                        <option value="PC2000-8">PC2000-8</option>
+                        <option value="PC2000-11R">PC2000-11R</option>
+                        <option value="EX2600">EX2600</option>
+                    </select>
+                </div>
+
+                <!-- Form Inputs -->
+                <div class="mb-4">
+                    <label for="wke" class="form-label">Waktu Kerja Efektif (menit)</label>
+                    <input type="number" step="0.01" id="wke" class="form-input" min="0" required>
+                    <p id="wke-error" class="text-red-500 text-sm mt-1 hidden">
+                        <i class="fas fa-exclamation-circle mr-1"></i>Waktu Kerja Efektif harus lebih besar dari 0.
+                    </p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="st" class="form-label">Spotting Time (detik)</label>
+                    <input type="number" step="0.01" id="st" class="form-input" min="0" required>
+                    <p id="st-error" class="text-red-500 text-sm mt-1 hidden">
+                        <i class="fas fa-exclamation-circle mr-1"></i>Spotting Time harus positif.
+                    </p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="lt" class="form-label">Loading Time (menit)</label>
+                    <input type="number" step="0.01" id="lt" class="form-input" min="0" required>
+                    <p id="lt-error" class="text-red-500 text-sm mt-1 hidden">
+                        <i class="fas fa-exclamation-circle mr-1"></i>Loading Time harus positif.
+                    </p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="ct" class="form-label">CT HD tanpa Serving Time (menit)</label>
+                    <input type="number" step="0.01" id="ct" class="form-input" min="0" required>
+                    <p id="ct-error" class="text-red-500 text-sm mt-1 hidden">
+                        <i class="fas fa-exclamation-circle mr-1"></i>CT HD harus positif.
+                    </p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="n" class="form-label">Jumlah HD (unit)</label>
+                    <input type="number" step="1" id="n" class="form-input" min="1" required>
+                    <p id="n-error" class="text-red-500 text-sm mt-1 hidden">
+                        <i class="fas fa-exclamation-circle mr-1"></i>Jumlah HD harus lebih besar dari 0.
+                    </p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="s" class="form-label">Jarak Front Ke Disposal (km)</label>
+                    <input type="number" step="0.01" id="s" class="form-input" min="0" required>
+                    <p id="s-error" class="text-red-500 text-sm mt-1 hidden">
+                        <i class="fas fa-exclamation-circle mr-1"></i>Jarak Front Ke Disposal harus positif.
+                    </p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="v" class="form-label">Kecepatan HD (km/jam)</label>
+                    <input type="number" step="0.1" id="v" class="form-input" max="99.9" min="0" required>
+                    <p id="v-error" class="text-red-500 text-sm mt-1 hidden">
+                        <i class="fas fa-exclamation-circle mr-1"></i>Kecepatan HD harus positif dan maksimal 99.9 km/jam.
+                    </p>
+                </div>
+                <!-- End Form Inputs -->
+
+                <button type="submit" class="btn-primary" id="submitBtn">
+                    <i class="fas fa-calculator mr-2"></i>Hitung
+                </button>
+            </form>
+
+            <div id="results" class="hidden mt-6 bg-mining-light p-6 rounded shadow-md">
+                <h2 class="text-xl font-bold mb-4 text-mining">Hasil</h2>
+                <p id="ritase" class="text-mining-light"><i class="fas fa-truck-loading mr-2"></i>Ritase: -</p>
+                <p id="produktivitas" class="text-mining-light"><i class="fas fa-mountain mr-2"></i>Produktivitas: -
+                </p>
+                <div id="warnings" class="mt-4"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <canvas id="ritaseChart" class="mt-6 bg-white p-4 rounded shadow-md"></canvas>
+                    </div>
+                    <div>
+                        <canvas id="produktivitasChart" class="mt-6 bg-white p-4 rounded shadow-md"></canvas>
+                    </div>
+                </div>
+                <button id="exportPdfBtn" class="btn-secondary">
+                    <i class="fas fa-file-pdf mr-2"></i>Export to PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- History Page -->
+        <div id="historyPage" class="page">
+            <h2 class="text-xl font-bold mb-4 text-mining">Riwayat Perhitungan</h2>
+
+            <!-- Kontrol Penyortiran dan Pemfilteran -->
+            <div class="mb-4 flex justify-between items-center">
+                <div>
+                    <label for="sortOrder" class="form-label inline-block mr-2">Urutkan Berdasarkan:</label>
+                    <select id="sortOrder" class="form-select inline-block w-auto">
+                        <option value="timestamp_desc">Terbaru</option>
+                        <option value="timestamp_asc">Terlama</option>
+                        <option value="vehicleType_asc">Jenis EGI (A-Z)</option>
+                        <option value="vehicleType_desc">Jenis EGI (Z-A)</option>
+                        <!-- Tambahkan opsi penyortiran lain -->
+                    </select>
+                </div>
+                <div>
+                    <label for="filterType" class="form-label inline-block mr-2">Filter Jenis EGI:</label>
+                    <select id="filterType" class="form-select inline-block w-auto">
+                        <option value="all">Semua</option>
+                        <option value="PC1250">PC1250</option>
+                        <option value="PC2000-8">PC2000-8</option>
+                        <option value="PC2000-11R">PC2000-11R</option>
+                        <option value="EX2600">EX2600</option>
+                        <!-- Tambahkan opsi filter lain -->
+                    </select>
+                </div>
+            </div>
+
+            <div id="historyList">
+                <!-- Riwayat akan ditampilkan di sini -->
+            </div>
+
+            <!-- Container untuk tombol paginasi dan hapus riwayat -->
+        </div>
+
+        <!-- History Detail Modal -->
+        <div id="historyDetailModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeHistoryDetailModal()">×</span>
+                <h2 class="text-xl font-bold mb-4 text-mining">Detail Perhitungan</h2>
+                <div id="historyDetailContent">
+                    <!-- Detail riwayat akan ditampilkan di sini -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Info EGI Page -->
+        <div id="infoEgiPage" class="page">
+            <h2 class="text-xl font-bold mb-4 text-mining">Informasi Target EGI</h2>
+            <div id="egiInfo">
+                <table class="egi-table">
+                    <thead>
+                        <tr>
+                            <th>Jenis EGI</th>
+                            <th>Target Ritase</th>
+                            <th>Target Produktivitas</th>
+                            <th>Cycle Time</th>
+                            <th>Loading Time</th>
+                            <th>Jumlah Passing</th>
+                            <th>Target Speed</th>
+                            <th>Target Payload</th>
+                            <th>Target Spotting Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>PC1250</td>
+                            <td>15 Rit / Jam</td>
+                            <td>525 Bcm / Jam</td>
+                            <td>24 - 29.25 Detik</td>
+                            <td>3.6 - 3.9  Menit</td>
+                            <td>8 Passing</td>
+                            <td>-</td>
+                            <td>105 Ton</td>
+                            <td>10 Detik</td>
+                        </tr>
+                        <tr>
+                            <td>PC2000-8</td>
+                            <td>21 Rit / Jam</td>
+                            <td>800 Bcm / Jam</td>
+                            <td>26 - 30 Detik</td>
+                            <td>2.16 - 2.5 Menit</td>
+                            <td>5 Passing</td>
+                            <td>-</td>
+                            <td>105 Ton</td>
+                            <td>10 Detik</td>
+                        </tr>
+                        <tr>
+                            <td>PC2000-11R</td>
+                            <td>24 Rit / Jam</td>
+                            <td>950 Bcm / Jam</td>
+                            <td>28 - 31.5 Detik</td>
+                            <td>1.86 - 2.1 Menit</td>
+                            <td>4 Passing</td>
+                            <td>-</td>
+                            <td>105 Ton</td>
+                            <td>10 Detik</td>
+                        </tr>
+                        <tr>
+                            <td>EX2600</td>
+                            <td>30 Rit / Jam</td>
+                            <td>1200 Bcm / Jam</td>
+                            <td>30 - 35 Detik</td>
+                            <td>1.5 - 1.75 Menit</td>
+                            <td>3 Passing</td>
+                            <td>-</td>
+                            <td>105 Ton</td>
+                            <td>10 Detik</td>
+                        </tr>
+                        <tr>
+                            <td>HD 785 - 7</td>
+                            <td>-</td>
+                            <td>231 Bcm / Jam</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>23 Km / Jam</td>
+                            <td>105 Ton</td>
+                            <td>10 Detik</td> <!-- Isi jika ada data -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div id="settingsPage" class="page">
+            <h2 class="text-xl font-bold mb-4 text-mining">Pengaturan</h2>
+            <div class="mb-4">
+                <label for="themeToggle" class="form-label">Mode Tampilan</label>
+                <select id="themeToggle" class="form-input">
+                    <option value="dark">Gelap</option>
+                    <option value="light">Terang</option>
+                </select>
+            </div>
+            <!-- Tambahkan bagian ini -->
+            <div class="mb-4">
+                <label for="languageSelect" class="form-label">Pilih Bahasa</label>
+                <select id="languageSelect" class="form-input">
+                    <option value="id">Bahasa Indonesia</option>
+                    <option value="en">English</option>
+                    <!-- Tambahkan opsi bahasa lain di sini -->
+                </select>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div id="infoModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeInfoModal()">×</span>
+                <h2 class="text-xl font-bold mb-4 text-mining">Informasi Target EGI</h2>
+                <div id="egiInfoModal"></div>
+            </div>
+        </div>
+
+        <!-- NEW: Container untuk tombol-tombol riwayat-->
+        <div class="history-button-container">
+            <button id="prevPageBtn" class="history-button" disabled>Sebelumnya</button>
+            <button id="clearHistoryBtn" class="history-button">Hapus Semua Riwayat</button>
+            <button id="nextPageBtn" class="history-button">Selanjutnya</button>
+        </div>
+        
+        <!-- Analytics Page -->
+        <div id="analyticsPage" class="page">
+            <h2 class="text-xl font-bold mb-4 text-mining">Analisis Data</h2>
+        
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="chart-container">
+                    <h3 class="text-lg font-semibold text-mining mb-2">Penggunaan Jenis EGI</h3>
+                    <canvas id="egiUsageChart" width="400" height="300"></canvas>
+                </div>
+    
+                <div class="chart-container">
+                    <h3 class="text-lg font-semibold text-mining mb-2">Rata-rata Produktivitas</h3>
+                    <p id="avgProductivity" class="text-xl"></p>
+                </div>
+    
+                <div class="chart-container">
+                    <h3 class="text-lg font-semibold text-mining mb-2">Distribusi Waktu Kerja Efektif (WKE)</h3>
+                    <canvas id="wkeDistributionChart"></canvas>
+                </div>
+    
+                <div class="chart-container">
+                    <h3 class="text-lg font-semibold text-mining mb-2">Distribusi Spotting Time</h3>
+                    <canvas id="spottingTimeChart"></canvas>
+                </div>
+    
+                <div class="chart-container">
+                    <h3 class="text-lg font-semibold text-mining mb-2">Distribusi Loading Time</h3>
+                    <canvas id="loadingTimeChart"></canvas>
+                </div>
+    
+                <div class="chart-container">
+                    <h3 class="text-lg font-semibold text-mining mb-2">Distribusi CT HD</h3>
+                    <canvas id="ctHDChart"></canvas>
+                </div>
+            </div>
+        </div>
+        </div>
+    
+    <style>
+    #analyticsPage .chart-container {
+        width: 100%;
+        max-width: 500px;
+        height: 300px;
+        overflow: hidden;
+    }
+    </style>
+
+
+    <!-- Bottom Navbar -->
+    <nav class="navbar-bottom">
+        <div class="nav-item-bottom">
+            <a class="nav-link-bottom active" href="#" onclick="showPage('homePage', this)">
+                <i class="fas fa-home nav-icon-bottom"></i>
+                Beranda
+            </a>
+        </div>
+        <div class="nav-item-bottom">
+            <a class="nav-link-bottom" href="#" onclick="showPage('historyPage', this)">
+                <i class="fas fa-history nav-icon-bottom"></i>
+                Riwayat
+            </a>
+        </div>
+        <div class="nav-item-bottom">
+            <a class="nav-link-bottom" href="#" onclick="showPage('infoEgiPage', this)">
+                <i class="fas fa-info-circle nav-icon-bottom"></i>
+                Info EGI
+            </a>
+        </div>
+        <div class="nav-item-bottom">
+            <a class="nav-link-bottom" href="#" onclick="showPage('analyticsPage', this)">
+                <i class="fas fa-chart-bar nav-icon-bottom"></i>
+                Analytics
+            </a>
+        </div>
+        <div class="nav-item-bottom">
+            <a class="nav-link-bottom" href="#" onclick="showPage('settingsPage', this)">
+                <i class="fas fa-cog nav-icon-bottom"></i>
+                Pengaturan
+            </a>
+        </div>
+    </nav>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Konfigurasi Toastr
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        // Data Target EGI
+        const targetValues = {
+            'PC1250': { ritase: 15, wke: 60, ct: 15, st: 10, produktivitas: 525, cycleTime: 24, lt: 3.9 },
+            'PC2000-8': { ritase: 21, wke: 60, ct: 14, st: 10, produktivitas: 800, cycleTime: 26, lt: 2.5 },
+            'PC2000-11R': { ritase: 24, wke: 60, ct: 11, st: 10, produktivitas: 950, cycleTime: 28, lt: 2.1 },
+            'EX2600': { ritase: 30, wke: 60, produktivitas: 1200, cycleTime: 30, lt: 1.75, st: 10, ct: 0 } //CT diisi 0 karena di table info tidak ada value nya
+        };
+
+        let ritaseChart;
+        let produktivitasChart;
+        let egiUsageChart;
+        let wkeDistributionChart;
+        let spottingTimeChart;
+        let loadingTimeChart;
+        let ctHDChart;
+
+        // Fungsi untuk mendapatkan data formulir
+        function getFormData() {
+            return {
+                vehicleType: document.getElementById('vehicleType').value,
+                wke: parseFloat(document.getElementById('wke').value),
+                st: parseFloat(document.getElementById('st').value),
+                lt: parseFloat(document.getElementById('lt').value),
+                ct: parseFloat(document.getElementById('ct').value),
+                n: parseFloat(document.getElementById('n').value),
+                s: parseFloat(document.getElementById('s').value),
+                v: parseFloat(document.getElementById('v').value)
+            };
+        }
+
+
+        // Fungsi untuk menampilkan pesan kesalahan
+        function showError(fieldId, message) {
+            const errorElement = document.getElementById(`${fieldId}-error`);
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.classList.remove('hidden');
+            } else {
+                toastr.error(message, "Error");
+            }
+        }
+
+        // Fungsi untuk menyembunyikan pesan kesalahan
+        function hideError(fieldId) {
+            const errorElement = document.getElementById(`${fieldId}-error`);
+            if (errorElement) {
+                errorElement.classList.add('hidden');
+            }
+        }
+
+        // Fungsi untuk validasi input
+        function validateForm(formData) {
+            let isValid = true;
+
+            // Validasi Waktu Kerja Efektif (WKE)
+            if (isNaN(formData.wke) || formData.wke <= 0) {
+                showError('wke', 'Waktu Kerja Efektif harus berupa angka dan lebih besar dari 0.');
+                isValid = false;
+            } else {
+                hideError('wke');
+            }
+
+            // Validasi Spotting Time (ST)
+            if (isNaN(formData.st) || formData.st < 0) {
+                showError('st', 'Spotting Time harus berupa angka positif.');
+                isValid = false;
+            } else {
+                hideError('st');
+            }
+
+            // Validasi Loading Time (LT)
+            if (isNaN(formData.lt) || formData.lt < 0) {
+                showError('lt', 'Loading Time harus berupa angka positif.');
+                isValid = false;
+            } else {
+                hideError('lt');
+            }
+
+            // Validasi CT HD
+            if (isNaN(formData.ct) || formData.ct < 0) {
+                showError('ct', 'CT HD harus berupa angka positif.');
+                isValid = false;
+            } else {
+                hideError('ct');
+            }
+
+            // Validasi Jumlah HD
+            if (isNaN(formData.n) || formData.n <= 0) {
+                showError('n', 'Jumlah HD harus berupa angka dan lebih besar dari 0.');
+                isValid = false;
+            } else {
+                hideError('n');
+            }
+
+            // Validasi Jarak Front Ke Disposal
+            if (isNaN(formData.s) || formData.s < 0) {
+                showError('s', 'Jarak Front Ke Disposal harus berupa angka positif.');
+                isValid = false;
+            } else {
+                hideError('s');
+            }
+
+            // Validasi Kecepatan HD
+            if (isNaN(formData.v) || formData.v < 0 || formData.v > 99.9) {
+                showError('v', 'Kecepatan HD harus berupa angka positif dan maksimal 99.9 km/jam.');
+                isValid = false;
+            } else {
+                hideError('v');
+            }
+
+            return isValid;
+        }
+
+        // Fungsi untuk melakukan perhitungan
+        function calculateResults(formData) {
+            const { vehicleType, wke, st, lt, ct, n, s, v } = formData;
+            const target = targetValues[vehicleType];
+
+            if (!target) {
+                toastr.error("Tipe kendaraan tidak valid.", "Error");
+                return null;
+            }
+
+            //Konversi satuan kecepatan dari Km/jam ke Km/menit
+            const kecepatanKmPerMenit = v / 60;
+
+            // Calculate target ideal CT
+            const targetIdealLt = target.lt;
+            const targetIdealSt = target.st / 60;
+            const targetIdealCt = (((s / 23) * 60) *2)+1;
+
+            // Calculate actual CT
+            const actualCt = (((s / v) * 60) *2)+1;
+
+            // Calculate ritase and productivity
+            const ritase = Math.round((wke / ((ct) + (st/60) + lt)) * n);
+            const produktivitas = Math.round(ritase * 42);
+
+            return {
+                ritase,
+                produktivitas,
+                targetRitase: target.ritase,
+                targetProduktivitas: target.produktivitas,
+                wke,
+                st,
+                v,
+                ct,
+                lt,
+                target,
+                targetIdealCt, //Hanya return target ideal CT, karena actual CT sudah dihapus
+                vehicleType
+            };
+        }
+
+        // Fungsi untuk menampilkan hasil perhitungan
+        function displayResults(results) {
+            if (!results) return;
+
+            document.getElementById('ritase').innerHTML = `<i class="fas fa-truck-loading mr-2"></i>Ritase: ${results.ritase} Rit/Jam`;
+            document.getElementById('produktivitas').innerHTML = `<i class="fas fa-mountain mr-2"></i>Produktivitas: ${results.produktivitas} Bcm/Jam`;
+            document.getElementById('results').classList.remove('hidden');
+        }
+
+        // Konfigurasi (Magic Numbers disimpan di sini untuk kemudahan pemeliharaan)
+        const konfigurasi = {
+            kecepatanIdealHD: 23, // Kecepatan ideal Hauling Truck (HD) dalam km/jam
+            waktuKerjaEfektifIdeal: 60 // Waktu Kerja Efektif (WKE) ideal dalam menit
+        };
+
+        // Data Target EGI (Letakkan di sini, sebelum fungsi lain)
+        const targetData = {
+            'PC1250': { targetSpottingTime: 10, loadingTimeMin: 3.6, loadingTimeMax: 3.9 },
+            'PC2000-8': { targetSpottingTime: 10, loadingTimeMin: 2.16, loadingTimeMax: 2.5 },
+            'PC2000-11R': { targetSpottingTime: 10, loadingTimeMin: 1.86, loadingTimeMax: 2.1 },
+            'EX2600': { targetSpottingTime: 10, loadingTimeMin: 1.5, loadingTimeMax: 1.75 }
+        };
+
+        /**
+         * Fungsi pembantu untuk membulatkan angka ke dua tempat desimal dan mengembalikan string.
+         * Digunakan untuk memastikan format angka yang konsisten.
+         * @param {number} num Angka yang akan dibulatkan.
+         * @returns {string} Angka yang dibulatkan sebagai string.
+         */
+        function roundToTwo(num) {
+            return +(Math.round(num + "e+2") + "e-2");
+        }
+
+        /**
+         * Fungsi pembantu untuk menghilangkan ".00" dari angka jika bilangan bulat.
+         * Contoh: 10.00 menjadi 10, 9.50 menjadi 9.5
+         * @param {number|string} num Angka yang akan diformat.
+         * @returns {string} Angka yang diformat sebagai string.
+         */
+        function formatNumberWithoutDecimals(num) {
+            const formattedNum = Number(num).toFixed(2);
+            const numStr = formattedNum.replace(/\.00$/, ''); // Hilangkan .00
+            return numStr.replace(/\.([0-9])0$/, '.$1'); // Hilangkan angka 0 di belakang koma (contoh: .70 menjadi .7)
+        }
+
+        /**
+         * Fungsi pembantu untuk membuat teks saran ritase.
+         * Menghitung dan menyajikan potensi perubahan ritase berdasarkan perbaikan yang disarankan.
+         * @param {number} perkiraanRitase Ritase yang diperkirakan setelah perbaikan.
+         * @param {number} targetRitase Target ritase yang diinginkan.
+         * @param {number} ritaseSaatIni Ritase saat ini.
+         * @returns {string} Teks saran ritase.
+         */
+        function createRitaseSuggestionText(perkiraanRitase, targetRitase, ritaseSaatIni) {
+            // Bulatkan semua nilai ritase *untuk ditampilkan* (tapi gunakan nilai aslinya untuk perhitungan)
+            const perkiraanRitaseBulat = formatNumberWithoutDecimals(perkiraanRitase);
+            const ritaseSaatIniBulat = Math.round(ritaseSaatIni);
+
+            const selisihRitase = perkiraanRitase - ritaseSaatIni; //Hitung selisihnya
+
+            if (selisihRitase < 0) {
+                // Perkiraan ritase lebih rendah, tampilkan pesan penurunan
+                const potensiPenurunanBulat = Math.round(Math.abs(selisihRitase));
+
+                return ` Perubahan ini berpotensi menurunkan ritase sekitar ${formatNumberWithoutDecimals(potensiPenurunanBulat)} rit/jam dari ritase saat ini ${formatNumberWithoutDecimals(ritaseSaatIniBulat)} rit/jam.`;
+            } else if (selisihRitase > 0) {
+                // Perkiraan ritase sama atau lebih tinggi, tampilkan pesan perbaikan
+                const peningkatanRitaseBulat = formatNumberWithoutDecimals(selisihRitase);
+
+                return `Perubahan ini berpotensi meningkatkan ritase sekitar ${formatNumberWithoutDecimals(peningkatanRitaseBulat)} rit/jam dari ritase saat ini ${formatNumberWithoutDecimals(ritaseSaatIniBulat)} rit/jam.`;
+            } else {
+                // Selisih ritase adalah 0, tampilkan pesan netral
+                return ` Perubahan ini diperkirakan tidak akan memengaruhi ritase.`;
+            }
+        }
+
+        /**
+         * Fungsi utama untuk menghasilkan peringatan dan saran berdasarkan hasil perhitungan dan data formulir.
+         * @param {object} results Objek yang berisi hasil perhitungan (ritase, produktivitas, dll.).
+         * @param {object} formData Objek yang berisi data formulir yang dimasukkan pengguna.
+         * @returns {string} HTML yang berisi peringatan dan saran
+         */
+        function generateWarnings(results, formData) {
+            let warnings = '';
+
+            try {
+                // Destructuring objek hasil dan formulir dengan nilai default untuk menghindari error
+                const {
+                    produktivitas = 0,
+                    targetRitase = 0,
+                    targetProduktivitas = 0,
+                    wke = 0,
+                    st = 0,
+                    v = 0,
+                    ct = 0,
+                    lt = 0,
+                    target = {}, // Objek default kosong
+                    targetIdealCt = 0,
+                    vehicleType = 'Unknown', // Nilai default string
+                    s: jarakHauling = 0 // Ganti 's' dengan nama yang lebih deskriptif, nilai default 0
+                } = results || {}; // Objek default kosong jika results undefined
+
+                const { n: jumlahHD = 1 } = formData || {}; // Jumlah HD, nilai default 1 jika undefined
+
+                console.log("Vehicle Type:", vehicleType);
+                console.log("ct (Cycle Time input pengguna):", ct);
+                console.log("jumlahHD (Jumlah HD):", jumlahHD); // Tambahkan log untuk jumlahHD
+                console.log("targetIdealCt (Target Ideal Cycle Time):", targetIdealCt);
+
+                const dataTargetEGI = targetData[vehicleType];
+
+                if (!dataTargetEGI) {
+                    console.warn("Jenis EGI tidak ditemukan dalam data target:", vehicleType);
+                    return `<p class="text-danger">Jenis EGI tidak dikenal: ${vehicleType}. Tidak dapat memberikan saran yang akurat.</p>`;
+                }
+                const targetIdealSt = dataTargetEGI.targetSpottingTime / 60; // Konversi ke menit
+                const targetIdealLt = dataTargetEGI.loadingTime;
+
+                // Hitung ritase awal menggunakan rumus yang sama *dengan jumlahHD*
+                const ritase = Math.round((wke / ((ct) + (st/60) + lt)) * jumlahHD);
+
+                // Periksa apakah target produktivitas dan ritase sudah tercapai
+                if (ritase >= targetRitase && produktivitas >= targetProduktivitas) {
+                    warnings = `<p class="text-success"><i class="fas fa-check-circle mr-2"></i>Target Produktivitas/Ritase sudah tercapai, PERTAHANKAN!!!</p>`;
+                } else {
+                    // Peringatan umum jika target belum tercapai
+                    warnings = `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Produktivitas di bawah target (${formatNumberWithoutDecimals(targetProduktivitas)} Bcm/Jam) dan/atau Ritase di bawah target (${formatNumberWithoutDecimals(targetRitase)} Rit/Jam).</p>`;
+                    warnings += '<p class="text-mining-light"><i class="fas fa-lightbulb mr-2"></i>Untuk mencapai target di atas, maka perlu beberapa perbaikan:</p>';
+
+                    // 1. Saran WKE (Waktu Kerja Efektif)
+                    if (wke !== konfigurasi.waktuKerjaEfektifIdeal) {
+                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Waktu Kerja Efektif idealnya ${formatNumberWithoutDecimals(konfigurasi.waktuKerjaEfektifIdeal)} menit.</p>`;
+                        const wkeDiff = Math.abs(wke - konfigurasi.waktuKerjaEfektifIdeal);
+                        const perkiraanWKEBaru = konfigurasi.waktuKerjaEfektifIdeal;
+
+                        // Hitung ritase baru *dengan WKE yang baru dan jumlahHD*
+                        const perkiraanRitaseKarenaWKE = Math.round((perkiraanWKEBaru / (ct + (st/60) + lt)) * jumlahHD);
+
+                        let ritaseSuggestionText = `Saran: ${wke > konfigurasi.waktuKerjaEfektifIdeal ? 'Kurangi' : 'Tingkatkan'} Waktu Kerja Efektif sebanyak ${formatNumberWithoutDecimals(wkeDiff)} menit.`;
+                        ritaseSuggestionText += createRitaseSuggestionText(perkiraanRitaseKarenaWKE, targetRitase, ritase);
+                        warnings += `<p class="text-mining-light"><i class="fas fa-tools mr-2"></i>${ritaseSuggestionText}</p>`;
+                    }
+
+                    // 2. Saran Spotting Time (ST)
+                    if (target && target.st !== undefined && st !== target.st) {
+                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Spotting Time sebaiknya ${formatNumberWithoutDecimals(target.st)} detik.</p>`;
+
+                        const stDiff = Math.abs(st - target.st);
+
+                        // Hitung ritase baru *dengan CT yang baru dan jumlahHD*
+                        const perkiraanRitaseKarenaST = Math.round((wke / ((ct) + targetIdealSt + lt)) * jumlahHD);
+
+                        let ritaseSuggestionText = `Saran: Kurangi Spotting Time sebanyak ${formatNumberWithoutDecimals(stDiff)} detik.`;
+                        ritaseSuggestionText += createRitaseSuggestionText(perkiraanRitaseKarenaST, targetRitase, ritase);
+                        warnings += `<p class="text-mining-light"><i class="fas fa-tools mr-2"></i>${ritaseSuggestionText}</p>`;
+                    }
+
+                     // 3. Saran Loading Time (LT)
+                    if (dataTargetEGI && dataTargetEGI.loadingTimeMin !== undefined && dataTargetEGI.loadingTimeMax !== undefined) {
+                        if (lt >= dataTargetEGI.loadingTimeMin && lt <= dataTargetEGI.loadingTimeMax) {
+                            warnings += `<p class="text-success"><i class="fas fa-check-circle mr-2"></i>Loading Time sudah ideal (di antara ${formatNumberWithoutDecimals(dataTargetEGI.loadingTimeMin)} dan ${formatNumberWithoutDecimals(dataTargetEGI.loadingTimeMax)} menit). PERTAHANKAN!</p>`;
+                        } else if (lt > dataTargetEGI.loadingTimeMax) {
+                            warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Loading Time saat ini melebihi batas atas target ideal. Loading Time sebaiknya dikurangi hingga maksimal ${formatNumberWithoutDecimals(dataTargetEGI.loadingTimeMax)} menit.</p>`;
+                            const ltDiff = Math.abs(lt - dataTargetEGI.loadingTimeMax);
+
+                            // Hitung ritase baru *dengan target Loading Time*
+                            const perkiraanRitaseKarenaLT = Math.round((wke / ((ct) + (st/60) + dataTargetEGI.loadingTimeMax)) * jumlahHD);
+
+                            let ritaseSuggestionText = `Saran: Kurangi Loading Time sebanyak ${formatNumberWithoutDecimals(ltDiff)} menit.`;
+                            ritaseSuggestionText += createRitaseSuggestionText(perkiraanRitaseKarenaLT, targetRitase, ritase);
+                            warnings += `<p class="text-mining-light"><i class="fas fa-tools mr-2"></i>${ritaseSuggestionText}</p>`;
+                        }
+                    }
+
+                    // 4. Saran Cycle Time HD (CT)
+                    if (ct > targetIdealCt) {
+                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: CT HD sebaiknya ${formatNumberWithoutDecimals(targetIdealCt)} menit.</p>`;
+                        const ctDiff = Math.abs(ct - targetIdealCt);
+
+                        // Hitung ritase baru *dengan CT yang baru dan jumlahHD*
+                        const perkiraanRitaseKarenaCT = Math.round((wke / ((targetIdealCt) + (st/60) + lt + 1)) * jumlahHD);
+
+                        let ritaseSuggestionText = `Saran: Kurangi CT HD sebanyak ${formatNumberWithoutDecimals(ctDiff)} menit, Cycle time Baru = ${formatNumberWithoutDecimals(targetIdealCt)} menit.`;
+                        ritaseSuggestionText += createRitaseSuggestionText(perkiraanRitaseKarenaCT, targetRitase, ritase);
+                        warnings += `<p class="text-mining-light"><i class="fas fa-tools mr-2"></i>${ritaseSuggestionText}</p>`;
+                    }
+
+                    // 5. Saran Jumlah HD (Hauling Truck)
+                    const targetJumlahHD = Math.round(targetRitase / (wke / (ct + (st / 60) + lt)));
+                    const hdDiff = targetJumlahHD - jumlahHD;
+                    
+                    if (hdDiff > 0) {
+                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Jumlah HD sebaiknya ditingkatkan sebanyak ${formatNumberWithoutDecimals(hdDiff)} unit.</p>`;
+                    
+                        // Hitung perkiraan ritase dengan jumlah HD yang baru
+                        const perkiraanRitaseKarenaHD = Math.round((wke / ((ct) + (st/60) + lt)) * (jumlahHD + hdDiff));
+                    
+                        let hdSuggestionTextSaran = `Saran: Tingkatkan Jumlah HD sebanyak ${formatNumberWithoutDecimals(hdDiff)} unit.`;
+                        // Tambahkan createRitaseSuggestionText hanya jika ritase belum melebihi target
+                        if (ritase < targetRitase) {
+                            hdSuggestionTextSaran += createRitaseSuggestionText(perkiraanRitaseKarenaHD, targetRitase, ritase);
+                        }
+                        warnings += `<p class="text-mining-light"><i class="fas fa-tools mr-2"></i>${hdSuggestionTextSaran}</p>`;
+                    }
+                    // 6. Saran Kecepatan HD
+                    if (v < konfigurasi.kecepatanIdealHD) {
+                        console.log("Saran Kecepatan HD: v =", v);
+                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Peringatan: Kecepatan HD sebaiknya ${formatNumberWithoutDecimals(konfigurasi.kecepatanIdealHD)} Km/jam.</p>`;
+                        const vDiff = Math.abs(v - konfigurasi.kecepatanIdealHD);
+                        const vTarget = konfigurasi.kecepatanIdealHD;
+
+                        // Ambil nilai jarakHauling dan kecepatan dari input dan trim spasi
+                        console.log("Mengambil nilai dari input...");
+                        const jarakHaulingStr = document.getElementById('s') ? document.getElementById('s').value.trim() : '0';
+                        const vStr = document.getElementById('v') ? document.getElementById('v').value.trim() : '0';
+
+                        // Konversi ke angka
+                        console.log("Konversi ke angka...");
+                        const jarakHauling = parseFloat(jarakHaulingStr);
+                        const kecepatanHDInput = parseFloat(vStr); // Variabel baru untuk nilai input
+
+                        // Pemeriksaan untuk nilai jarakHauling dan v yang valid
+                        console.log("Validasi nilai...");
+                        if (isNaN(jarakHauling) || jarakHauling <= 0) {
+                            console.error("Jarak (s) tidak valid!");
+                            warnings += `<p class="text-warning">Jarak Front Ke Disposal tidak valid, tidak dapat memberikan saran kecepatan.</p>`;
+                        } else if (isNaN(kecepatanHDInput) || kecepatanHDInput <= 0) {
+                            console.error("Kecepatan (v) tidak valid!");
+                            warnings += `<p class="text-warning">Kecepatan HD tidak valid, tidak dapat memberikan saran kecepatan.</p>`;
+                        } else {
+                            // Semua nilai valid, lakukan perhitungan
+                            console.log("Semua nilai valid, melakukan perhitungan...");
+                            const MINUTES_PER_HOUR = 60;
+                            const FIXED_TIME = 1;
+
+                            const ctSaatIni = (((jarakHauling / kecepatanHDInput) * MINUTES_PER_HOUR) + FIXED_TIME) + (st / MINUTES_PER_HOUR) + lt;
+                            const ctTarget = (((jarakHauling / vTarget) * MINUTES_PER_HOUR) + FIXED_TIME) + (st / MINUTES_PER_HOUR) + lt;
+                            const ctReduction = ctSaatIni - ctTarget;
+                            const perkiraanRitaseKarenaV = Math.round((wke / ((ctTarget) + targetIdealSt + targetIdealLt)) * jumlahHD);
+
+                            let vSuggestionText = `Saran: Tingkatkan kecepatan HD sebanyak ${formatNumberWithoutDecimals(vDiff)} km/jam. Ini berpotensi mengurangi Cycle Time HD sebanyak ${formatNumberWithoutDecimals(ctReduction)} menit.`;
+                            vSuggestionText += createRitaseSuggestionText(perkiraanRitaseKarenaV, targetRitase, ritase);
+                            warnings += `<p class="text-mining-light"><i class="fas fa-tools mr-2"></i>${vSuggestionText}</p>`;
+                        }
+                    }
+                }
+
+                // Saran untuk mengurangi jumlah HD jika ritase terlalu tinggi
+                if (ritase > targetRitase) {
+                    console.log("Ritase melebihi target!");
+                    const excessRitase = ritase - targetRitase;
+                    const hdReduction = Math.floor(excessRitase / 2);
+                    console.log("Kelebihan ritase:", excessRitase);
+                    console.log("Pengurangan HD:", hdReduction);
+                    if (hdReduction > 0) {
+                        warnings += `<p class="text-warning"><i class="fas fa-exclamation-triangle mr-2"></i> Sebaiknya kurangi jumlah HD sebanyak ${formatNumberWithoutDecimals(hdReduction)} unit.</p>`;
+                    }
+                }
+            } catch (error) {
+                console.error("Terjadi kesalahan dalam generateWarnings:", error);
+                warnings = `<p class="text-danger"><i class="fas fa-exclamation-circle mr-2"></i>Terjadi kesalahan: ${error.message}.  Periksa input Anda.</p>`;
+            }
+
+            return warnings;
+        }
+
+        // Contoh Penggunaan (Untuk Tujuan Pengujian)
+        const resultsExample = {
+            ritase: 9,
+            produktivitas: 378,
+            targetRitase: 15,
+            targetProduktivitas: 525,
+            wke: 58,
+            st: 40,
+            v: 20,
+            ct: 17,
+            lt: 3.4,
+            target: { st: 35, lt: 3.2 },
+            targetIdealCt: 12.21,
+            vehicleType: 'HD785',
+            s: 2
+        };
+        
+        const formDataExample = {
+            n: 7
+        };
+
+        const warningsHTML = generateWarnings(resultsExample, formDataExample);
+        console.log(warningsHTML);
+        
+        // Anda dapat menyisipkan warningsHTML ke dalam elemen HTML dengan ID "warningsContainer" seperti ini:
+        // document.getElementById('warningsContainer').innerHTML = warningsHTML;
+        
+        // Fungsi untuk memformat angka tanpa desimal jika bilangan bulat
+        function formatNumber(num) {
+          if (Number.isInteger(Number(num))) {
+            return Number(num);
+          } else {
+            return Number(num).toFixed(2);
+          }
+        }
+
+        // Fungsi untuk membuat atau memperbarui grafik
+        function createCharts(results) {
+            if (!results) return;
+
+            const { ritase, produktivitas, targetRitase, targetProduktivitas } = results;
+
+            const chartOptions = {
+                type: 'bar',
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Nilai'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Parameter'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    label += context.parsed.y;
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeInOutQuad'
+                    }
+                }
+            };
+
+            const ritaseData= {
+                labels: ['Ritase'],
+                datasets: [{
+                    label: 'Aktual',
+                    data: [ritase],
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Target',
+                    data: [targetRitase],
+                    backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            const produktivitasData = {
+                labels: ['Produktivitas'],
+                datasets: [{
+                    label: 'Aktual',
+                    data: [produktivitas],
+                    backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Target',
+                    data: [targetProduktivitas],
+                    backgroundColor: 'rgba(255, 206, 86, 0.7)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            createOrUpdateChart('ritaseChart', ritaseData, chartOptions);
+            createOrUpdateChart('produktivitasChart', produktivitasData, chartOptions);
+        }
+
+        function createOrUpdateChart(chartId, chartData, options) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+
+            if (ctx) {
+                // Hancurkan instance chart sebelumnya jika ada
+                if (chartId === 'ritaseChart' && ritaseChart) {
+                    ritaseChart.destroy();
+                } else if (chartId === 'produktivitasChart' && produktivitasChart) {
+                    produktivitasChart.destroy();
+                }
+
+                // Buat instance chart baru
+                if (chartId === 'ritaseChart') {
+                    ritaseChart = new Chart(ctx, {
+                        type: options.type,
+                        data: chartData,
+                        options: options.options
+                    });
+                } else if (chartId === 'produktivitasChart') {
+                    produktivitasChart = new Chart(ctx, {
+                        type: options.type,
+                        data: chartData,
+                        options: options.options
+                    });
+                }
+            } else {
+                console.error('Tidak dapat mendapatkan konteks 2D untuk ' + chartId);
+            }
+        }
+
+        // Array untuk menyimpan riwayat perhitungan
+        let calculationHistory = [];
+        const itemsPerPage = 5; // Jumlah item per halaman
+        let currentPage = 1;     // Halaman saat ini
+
+        // Fungsi untuk menyimpan perhitungan ke dalam riwayat
+        function saveToHistory(formData, results) {
+            const historyItem = {
+                timestamp: new Date().toLocaleString(),
+                formData: formData,
+                results: results
+            };
+        
+            // Periksa apakah item yang sama sudah ada
+            const alreadyExists = calculationHistory.some(item => {
+                return (
+                    item.timestamp === historyItem.timestamp &&
+                    JSON.stringify(item.formData) === JSON.stringify(historyItem.formData) &&
+                    JSON.stringify(item.results) === JSON.stringify(historyItem.results)
+                );
+            });
+        
+            if (!alreadyExists) {
+                calculationHistory.push(historyItem);
+                localStorage.setItem('calculationHistory', JSON.stringify(calculationHistory));
+                updateHistoryList();
+                updateAnalyticsDashboard();
+                
+                trackEvent('Calculation', 'Submit', formData.vehicleType);
+            } else {
+                console.log("Riwayat sudah ada, tidak disimpan lagi.");
+            }
+        }
+        
+        let historyLoaded = false; // Flag baru
+        
+        // Fungsi untuk memuat riwayat dari localStorage saat halaman dimuat
+        function loadHistory() {
+              console.log("loadHistory() dipanggil");
+              if (!historyLoaded) {
+                  const storedHistory = localStorage.getItem('calculationHistory');
+                  if (storedHistory) {
+                      calculationHistory = JSON.parse(storedHistory);
+                  }
+                  updateHistoryList();
+                  updateAnalyticsDashboard(); // Update analytics after loading history
+                  historyLoaded = true; // Set flag ke true
+                  
+                  // Track event: Calculation
+                  trackEvent('Calculation', 'Submit', formData.vehicleType);
+              } else {
+                  console.log("loadHistory() diabaikan: sudah dimuat sebelumnya");
+              }
+          }
+
+        // Fungsi untuk menampilkan detail riwayat dalam modal
+        function showHistoryDetail(index) {
+            const item = calculationHistory[index];
+            const detailContent = `
+                <p><strong>Waktu:</strong> ${item.timestamp}</p>
+                <p><strong>Jenis EGI:</strong> ${item.formData.vehicleType}</p>
+                <p><strong>Waktu Kerja Efektif:</strong> ${item.formData.wke}</p>
+                <p><strong>Spotting Time:</strong> ${item.formData.st}</p>
+                <p><strong>Loading Time:</strong> ${item.formData.lt}</p>
+                <p><strong>CT HD:</strong> ${item.formData.ct}</p>
+                <p><strong>Jumlah HD:</strong> ${item.formData.n}</p>
+                <p><strong>Jarak Front Ke Disposal:</strong> ${item.formData.s}</p>
+                <p><strong>Kecepatan HD:</strong> ${item.formData.v}</p>
+                <hr>
+                <p><strong>Ritase:</strong> ${item.results.ritase} Rit/Jam</p>
+                <p><strong>Produktivitas:</strong> ${item.results.produktivitas} Bcm/Jam</p>
+            `;
+            document.getElementById('historyDetailContent').innerHTML = detailContent;
+            document.getElementById('historyDetailModal').style.display = 'block';
+        }
+
+        // Fungsi untuk menutup modal detail riwayat
+        function closeHistoryDetailModal() {
+            document.getElementById('historyDetailModal').style.display = 'none';
+        }
+
+        // Fungsi untuk menghapus item riwayat
+        function deleteHistoryItem(index) {
+            calculationHistory.splice(index, 1);
+            localStorage.setItem('calculationHistory', JSON.stringify(calculationHistory));
+            updateHistoryList();
+            updateAnalyticsDashboard(); // Update analytics after deleting history item
+        }
+
+        // Fungsi untuk menghapus semua riwayat
+        function clearHistory() {
+             calculationHistory = [];
+            localStorage.removeItem('calculationHistory');
+            updateHistoryList();
+            updateAnalyticsDashboard(); // Update analytics after clearing history
+
+             // Track event: Clear History
+            trackEvent('History', 'Clear', 'All');
+        }
+
+        // Fungsi untuk mengupdate tampilan daftar riwayat dengan paginasi
+        function updateHistoryList() {
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+            
+            // Get sorting and filtering options
+            const sortOrder = document.getElementById('sortOrder').value;
+            const filterType = document.getElementById('filterType').value;
+
+            // Apply filtering
+            let filteredHistory = calculationHistory;
+            if (filterType !== 'all') {
+                filteredHistory = calculationHistory.filter(item => item.formData.vehicleType === filterType);
+            }
+            
+            // Apply sorting
+            filteredHistory.sort((a, b) => {
+                switch (sortOrder) {
+                    case 'timestamp_asc':
+                        return new Date(a.timestamp) - new Date(b.timestamp);
+                    case 'timestamp_desc':
+                        return new Date(b.timestamp) - new Date(a.timestamp);
+                    case 'vehicleType_asc':
+                        return a.formData.vehicleType.localeCompare(b.formData.vehicleType);
+                    case 'vehicleType_desc':
+                        return b.formData.vehicleType.localeCompare(a.formData.vehicleType);
+                    default:
+                        return 0;
+                }
+            });
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentHistory = filteredHistory.slice(startIndex, endIndex);
+
+            currentHistory.forEach((item, index) => {
+                const globalIndex = startIndex + index;  // index dalam array calculationHistory
+
+                const historyItemElement = document.createElement('div');
+                historyItemElement.classList.add('history-item');
+
+                const historyItemDetails = document.createElement('div');
+                historyItemDetails.classList.add('history-item-details');
+                historyItemDetails.innerHTML = `
+                    <p><strong>Waktu:</strong> ${item.timestamp}</p>
+                    <p><strong>Jenis EGI:</strong> ${item.formData.vehicleType}, <strong>WKE:</strong> ${item.formData.wke}, <strong>Jumlah HD:</strong> ${item.formData.n}</p>
+                    <p><strong>Ritase:</strong> ${item.results.ritase} Rit/Jam, <strong>Produktivitas:</strong> ${item.results.produktivitas} Bcm/Jam</p>
+                `;
+                historyItemElement.appendChild(historyItemDetails);
+
+                const historyItemActions = document.createElement('div');
+                historyItemActions.classList.add('history-item-actions');
+
+                const detailButton = document.createElement('button');
+                detailButton.textContent = 'Detail';
+                detailButton.classList.add('history-delete-btn'); // Menggunakan style yang sama dengan tombol delete
+                detailButton.onclick = () => showHistoryDetail(globalIndex);
+                historyItemActions.appendChild(detailButton);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Hapus';
+                deleteButton.classList.add('history-delete-btn');
+                deleteButton.onclick = () => deleteHistoryItem(globalIndex);
+                historyItemActions.appendChild(deleteButton);
+
+                historyItemElement.appendChild(historyItemActions);
+
+                historyList.appendChild(historyItemElement);
+            });
+
+            updatePaginationButtons();
+        }
+
+        // Fungsi untuk mengupdate tombol paginasi
+        function updatePaginationButtons() {
+            const prevPageBtn = document.getElementById('prevPageBtn');
+            const nextPageBtn = document.getElementById('nextPageBtn');
+
+            const sortOrder = document.getElementById('sortOrder').value;
+            const filterType = document.getElementById('filterType').value;
+
+            let filteredHistory = calculationHistory;
+            if (filterType !== 'all') {
+                filteredHistory = calculationHistory.filter(item => item.formData.vehicleType === filterType);
+            }
+
+            prevPageBtn.disabled = currentPage === 1;
+            nextPageBtn.disabled = currentPage * itemsPerPage >= filteredHistory.length;
+        }
+
+        // Event listener untuk tombol halaman sebelumnya
+        document.getElementById('prevPageBtn').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                updateHistoryList();
+            }
+        });
+
+         // Event listener untuk tombol halaman selanjutnya
+          document.getElementById('nextPageBtn').addEventListener('click', () => {
+               const sortOrder = document.getElementById('sortOrder').value;
+               const filterType = document.getElementById('filterType').value;
+  
+               let filteredHistory = calculationHistory;
+               if (filterType !== 'all') {
+                   filteredHistory = calculationHistory.filter(item => item.formData.vehicleType === filterType);
+               }
+  
+              if (currentPage * itemsPerPage < filteredHistory.length) {
+                  currentPage++;
+                  updateHistoryList();
+              }
+          });
+        
+         // Add event listeners for sorting and filtering
+         document.getElementById('sortOrder').addEventListener('change', () => {
+            currentPage = 1; // Reset ke halaman pertama saat penyortiran berubah
+            updateHistoryList();
+        });
+
+        document.getElementById('filterType').addEventListener('change', () => {
+            currentPage = 1; // Reset ke halaman pertama saat filter berubah
+            updateHistoryList();
+        });
+
+        // Event listener untuk tombol clear history
+        document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+            clearHistory();
+        });
+
+        // Event listener untuk form submit
+        document.getElementById('prodForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = getFormData();
+
+            if (validateForm(formData)) {
+                const results = calculateResults(formData);
+                if (results) {
+                    displayResults(results);
+                    const warnings = generateWarnings(results, formData);
+                    document.getElementById('warnings').innerHTML = warnings;
+                    document.getElementById('results').classList.remove('hidden');
+                    createCharts(results);
+                    saveToHistory(formData, results); // Simpan perhitungan ke riwayat
+                }
+            }
+        });
+
+        // Fungsi untuk menampilkan halaman dan mengatur tautan aktif
+        function showPage(pageId, link) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+              page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+
+            const links = document.querySelectorAll('.nav-link-bottom');
+            links.forEach(link => link.classList.remove('active'));
+            link.classList.add('active');
+
+              // Track event: Page Navigation
+              trackEvent('Navigation', 'Navigate', pageId);
+
+            // Jika halaman yang ditampilkan adalah riwayat, perbarui daftarnya
+            if (pageId === 'historyPage') {
+                updateHistoryList();
+            }
+
+             // If the displayed page is analytics, update dashboard
+            if (pageId === 'analyticsPage') {
+                updateAnalyticsDashboard();
+            }
+        }
+
+        // Fungsi untuk menutup modal info
+        function closeInfoModal() {
+            document.getElementById('infoModal').style.display = 'none';
+        }
+
+        // Fungsi untuk menampilkan info EGI
+        function displayEgiInfo() {
+            const egiInfoModal = document.getElementById('egiInfoModal');
+            let tableHTML = `<table class="egi-table">
+                                <thead>
+                                    <tr>
+                                        <th>Jenis EGI</th>
+                                        <th>Ritase (Target)</th>
+                                        <th>Waktu Kerja Efektif (menit)</th>
+                                        <th>CT HD tanpa serving time (menit)</th>
+                                        <th>Spotting Time (detik)</th>
+                                        <th>Produktivitas (Target)</th>
+                                        <th>Cycle Time (menit)</th>
+                                        <th>Loading Time (menit)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+
+            for (const vehicleType in targetValues) {
+                if (targetValues.hasOwnProperty(vehicleType)) {
+                    const egi = targetValues[vehicleType];
+                    tableHTML += `
+                        <tr>
+                            <td>${vehicleType}</td>
+                            <td>${egi.ritase}</td>
+                            <td>${egi.wke}</td>
+                            <td>${egi.ct}</td>
+                            <td>${egi.st}</td>
+                            <td>${egi.produktivitas}</td>
+                            <td>${egi.cycleTime}</td>
+                            <td>${egi.lt}</td>
+                        </tr>`;
+                }
+            }
+
+            tableHTML += `</tbody></table>`;
+            egiInfoModal.innerHTML = tableHTML;
+            document.getElementById('infoModal').style.display = 'block'; // Show the modal
+        }
+
+        // Fungsi untuk mengatur tema (terang/gelap)
+        function setTheme(theme) {
+            const body = document.body;
+            if (theme === 'light') {
+                body.classList.add('light-mode');
+            } else {
+                body.classList.remove('light-mode');
+            }
+            localStorage.setItem('theme', theme); // Simpan preferensi tema
+        }
+
+        // Event listener untuk pilihan tema
+        document.getElementById('themeToggle').addEventListener('change', function () {
+            setTheme(this.value);
+        });
+
+        // Inisialisasi saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+                document.getElementById('themeToggle').value = savedTheme;
+            }
+
+            const splashScreen = document.getElementById('splash-screen');
+            setTimeout(() => {
+                splashScreen.classList.add('hidden');
+            }, 2000);
+
+            loadHistory();
+        });
+        function exportToPDF() {
+            console.log("exportToPDF() dipanggil");
+            try {
+                const { jsPDF } = window.jspdf;
+                console.log("jsPDF loaded successfully");
+        
+                // Konfigurasi PDF
+                const pdf = new jsPDF({
+                    orientation: 'portrait', // Potrait or landscape
+                    unit: 'mm',         // Unit (mm, cm, in, pt, px)
+                    format: 'a4',         // Format page size
+                    margins: { top: 15, left: 10, right: 10, bottom: 10 } // Margin (top, left, right, bottom)
+                });
+                pdf.setFontSize(9);
+        
+                // Judul Dokumen
+                pdf.text("Hasil Perhitungan Produktivitas", 10, 10);
+        
+                let yOffset = 20; // Posisi awal untuk konten
+                const maxWidth = 180; // Lebar maksimum teks
+                const lineHeight = 5; // Tinggi baris
+        
+                // Fungsi untuk membagi teks menjadi beberapa baris
+                function splitTextToLines(text, maxWidth) {
+                    const words = text.split(' ');
+                    let lines = [];
+                    let currentLine = '';
+        
+                    for (let i = 0; i < words.length; i++) {
+                        const testLine = currentLine + words[i] + ' ';
+                        const testWidth = pdf.getTextWidth(testLine);
+        
+                        if (testWidth > maxWidth && i > 0) {
+                            lines.push(currentLine.trim());
+                            currentLine = words[i] + ' ';
+                        } else {
+                            currentLine = testLine;
+                        }
+                    }
+                    lines.push(currentLine.trim());
+                    return lines;
+                }
+        
+                // Hasil Ritase dan Produktivitas
+                const ritaseElement = document.getElementById('ritase');
+                const produktivitasElement = document.getElementById('produktivitas');
+        
+                if (!ritaseElement || !produktivitasElement) {
+                    console.warn("Elemen ritase atau produktivitas tidak ditemukan.");
+                    toastr.warning("Hasil ritase atau produktivitas tidak dapat diekspor.", "Peringatan");
+                    return; // Early exit if elements are not found
+                }
+        
+                const ritaseText = ritaseElement.textContent;
+                const produktivitasText = produktivitasElement.textContent;
+        
+                const linesRitase = splitTextToLines(ritaseText, maxWidth);
+                linesRitase.forEach(line => {
+                    pdf.text(line, 15, yOffset);
+                    yOffset += lineHeight;
+                });
+        
+                const linesProduktivitas = splitTextToLines(produktivitasText, maxWidth);
+                linesProduktivitas.forEach(line => {
+                    pdf.text(line, 15, yOffset);
+                    yOffset += lineHeight;
+                });
+        
+                yOffset += 5; // Spasi setelah hasil
+        
+                // Peringatan dan Saran
+                const warningsElement = document.getElementById('warnings');
+                if (warningsElement) {
+                    console.log("Menambahkan peringatan ke PDF");
+                    const warningElements = warningsElement.querySelectorAll('p');
+        
+                    warningElements.forEach(element => {
+                        const lines = splitTextToLines(element.textContent, maxWidth);
+                        lines.forEach(line => {
+                            pdf.text(line, 15, yOffset);
+                            yOffset += lineHeight;
+                        });
+                        yOffset += 2; // Tambahkan sedikit spasi setelah setiap paragraf
+                    });
+                }
+        
+                // Fungsi untuk menambahkan grafik ke PDF
+                function addChartToPdf(chartElement, pdf, yOffset, chartName) {
+                    if (chartElement) {
+                        try {
+                            console.log(`Mencoba mendapatkan data URL untuk ${chartName}`);
+                            const imgData = chartElement.toDataURL('image/png');
+                            console.log(`Data URL ${chartName} berhasil didapatkan:`, imgData.substring(0, 50) + "...");
+                            pdf.addImage(imgData, 'PNG', 15, yOffset, 180, 80);
+                            return yOffset + 85; // Kembalikan yOffset yang baru
+                        } catch (chartError) {
+                            console.error(`Error menambahkan ${chartName} ke PDF:`, chartError);
+                            toastr.error(`Gagal menambahkan grafik ${chartName} ke PDF.`, "Error");
+                            return yOffset; // Kembalikan yOffset yang tidak berubah jika terjadi kesalahan
+                        }
+                    } else {
+                        console.warn(`Elemen grafik ${chartName} tidak ditemukan.`);
+                        toastr.warning(`Grafik ${chartName} tidak dapat diekspor.`, "Peringatan");
+                        return yOffset; // Kembalikan yOffset yang tidak berubah jika elemen tidak ditemukan
+                    }
+                }
+        
+                // Tambahkan grafik ritase
+                yOffset = addChartToPdf(document.getElementById('ritaseChart'), pdf, yOffset, "ritaseChart");
+        
+                // Tambahkan grafik produktivitas
+                yOffset = addChartToPdf(document.getElementById('produktivitasChart'), pdf, yOffset, "produktivitasChart");
+        
+                try {
+                    const dataURI = pdf.output('datauristring');
+                    console.log("Data URI yang dihasilkan:", dataURI.substring(0, 50) + "...");
+        
+                    // Periksa apakah Android didefinisikan (berarti kita berada di WebView) dan fungsi getPdfData ada
+                    if (typeof Android !== 'undefined' && typeof Android.getPdfData === 'function') {
+                        console.log("Objek Android dan fungsi getPdfData terdeteksi, memanggil Android.getPdfData()");
+                        Android.getPdfData(dataURI);  // Panggil JavaScript Interface
+                    } else {
+                        console.log("Objek Android atau fungsi getPdfData tidak terdeteksi, mengunduh PDF di browser");
+                        // Kode untuk mengunduh PDF di browser
+                        pdf.save("hasil_produktivitas.pdf");
+                    }
+                } catch (outputError) {
+                    console.error("Gagal menghasilkan data URI:", outputError);
+                    toastr.error("Gagal menghasilkan data URI untuk PDF.", "Error");
+                }
+        
+            } catch (overallError) {
+                console.error("Terjadi kesalahan selama pembuatan PDF:", overallError);
+                let errorMessage = "Terjadi kesalahan selama pembuatan PDF.";
+                if (overallError instanceof Error && overallError.message) {
+                    errorMessage += " " + overallError.message;
+                } else {
+                    errorMessage += " (Detail tidak tersedia)";
+                }
+                toastr.error(errorMessage, "Error");
+            }
+        }
+        // Event listener untuk tombol ekspor PDF
+        document.getElementById('exportPdfBtn').addEventListener('click', function () {
+            console.log("Tombol exportPdfBtn diklik");
+            exportToPDF();
+        });
+        // Attach the displayEgiInfo function to the onclick event of the "Info EGI" navbar link
+        document.querySelector('.nav-link-bottom[href="#"]').addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent the default action
+            if (this.querySelector('.fa-info-circle')) {
+                displayEgiInfo();
+            }
+        });
+        
+        // Fungsi showPage yang diperbarui
+        function showPage(pageId, link) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+
+            const links = document.querySelectorAll('.nav-link-bottom');
+            links.forEach(link => link.classList.remove('active'));
+            link.classList.add('active');
+
+            // Track event: Page Navigation
+            trackEvent('Navigation', 'Navigate', pageId);
+
+            // Jika halaman yang ditampilkan adalah riwayat, perbarui daftarnya
+            if (pageId === 'historyPage') {
+                updateHistoryList();
+            }
+
+            // If the displayed page is analytics, update dashboard
+            if (pageId === 'analyticsPage') {
+                console.log("Menampilkan halaman analytics, memanggil updateAnalyticsDashboard()");
+                updateAnalyticsDashboard();
+            }
+        }
+
+        function updateAnalyticsDashboard() {
+            console.log("updateAnalyticsDashboard() dipanggil");
+            // Fungsi untuk menghitung rata-rata
+            function calculateAverage(data, key) {
+                if (!data || data.length === 0) return 0;
+                const sum = data.reduce((acc, item) => acc + item.results[key], 0);
+                return sum / data.length;
+            }
+
+            // 1. Penggunaan Jenis EGI
+            const egiCounts = {};
+            calculationHistory.forEach(item => {
+                const vehicleType = item.formData.vehicleType;
+                egiCounts[vehicleType] = (egiCounts[vehicleType] || 0) + 1;
+            });
+
+            const egiLabels = Object.keys(egiCounts);
+            const egiData = Object.values(egiCounts);
+
+            if (egiUsageChart) {
+                egiUsageChart.destroy();
+            }
+
+            const egiUsageCtx = document.getElementById('egiUsageChart').getContext('2d');
+            egiUsageChart = new Chart(egiUsageCtx, {
+                type: 'pie',
+                data: {
+                    labels: egiLabels,
+                    datasets: [{
+                        data: egiData,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+            // 2. Rata-rata Produktivitas
+            const avgProductivity = calculateAverage(calculationHistory, 'produktivitas');
+            document.getElementById('avgProductivity').textContent = `${avgProductivity.toFixed(2)} Bcm/Jam`;
+
+            // 3. Distribusi WKE
+            const wkeData = calculationHistory.map(item => item.formData.wke);
+            createDistributionChart('wkeDistributionChart', wkeData, 'Waktu Kerja Efektif (menit)');
+
+            // 4. Distribusi Spotting Time
+            const spottingTimeData = calculationHistory.map(item => item.formData.st);
+            createDistributionChart('spottingTimeChart', spottingTimeData, 'Spotting Time (detik)');
+
+            // 5. Distribusi Loading Time
+            const loadingTimeData = calculationHistory.map(item => item.formData.lt);
+            createDistributionChart('loadingTimeChart', loadingTimeData, 'Loading Time (menit)');
+
+            // 6. Distribusi CT HD
+            const ctHDData = calculationHistory.map(item => item.formData.ct);
+            createDistributionChart('ctHDChart', ctHDData, 'CT HD (menit)');
+        }
+
+        function createDistributionChart(chartId, data, label) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            if (!ctx) {
+                console.error(`Tidak dapat menemukan elemen canvas dengan ID "${chartId}"`);
+                return;
+            }
+        
+            // Hancurkan grafik yang ada sebelum membuat yang baru
+            if (Chart.getChart(ctx)) {
+                Chart.getChart(ctx).destroy();
+            }
+        
+            const chartData = {
+                labels: data.map((_, i) => i + 1),
+                datasets: [{
+                    label: label,
+                    data: data,
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1
+                }]
+            };
+        
+            const chartOptions = {
+                type: 'line',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: label
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Data Point'
+                            }
+                        }
+                    }
+                }
+            };
+                
+                // Hancurkan chart sebelumnya jika ada
+                let chart;
+                switch (chartId) {
+                    case 'wkeDistributionChart':
+                        if (wkeDistributionChart) wkeDistributionChart.destroy();
+                        wkeDistributionChart = new Chart(ctx, chartOptions);
+                        chart = wkeDistributionChart;
+                        break;
+                    case 'spottingTimeChart':
+                        if (spottingTimeChart) spottingTimeChart.destroy();
+                        spottingTimeChart = new Chart(ctx, chartOptions);
+                        chart = spottingTimeChart;
+                        break;
+                    case 'loadingTimeChart':
+                        if (loadingTimeChart) loadingTimeChart.destroy();
+                        loadingTimeChart = new Chart(ctx, chartOptions);
+                        chart = loadingTimeChart;
+                        break;
+                    case 'ctHDChart':
+                        if (ctHDChart) ctHDChart.destroy();
+                        ctHDChart = new Chart(ctx, chartOptions);
+                        chart = ctHDChart;
+                        break;
+                }
+            }
+                
+                // Pastikan updateAnalyticsDashboard() dipanggil setelah loadHistory()
+                function loadHistory() {
+                    console.log("loadHistory() dipanggil");
+                    if (!historyLoaded) {
+                        const storedHistory = localStorage.getItem('calculationHistory');
+                        if (storedHistory) {
+                            calculationHistory = JSON.parse(storedHistory);
+                        }
+                        updateHistoryList();
+                
+                        // Panggil updateAnalyticsDashboard() setelah daftar riwayat diperbarui
+                        console.log("Memanggil updateAnalyticsDashboard() setelah memuat riwayat");
+                        updateAnalyticsDashboard();
+                
+                        historyLoaded = true; // Set flag ke true
+                    } else {
+                        console.log("loadHistory() diabaikan: sudah dimuat sebelumnya");
+                    }
+                }
+        
+        /*
+         * Saran:
+         * - Pertimbangkan menggunakan linter (misalnya, ESLint) dan formatter (misalnya, Prettier)
+         *   untuk menjaga konsistensi kode dan menemukan potensi masalah lebih awal.
+         */
+    </script>
+</body>
+
+</html>
